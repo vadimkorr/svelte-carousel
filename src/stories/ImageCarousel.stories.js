@@ -1,19 +1,19 @@
-import ImageCarousel from './ImageCarousel.svelte';
+import ImageCarouselView from './ImageCarouselView.svelte';
 
 export default {
   title: 'ImageCarousel',
-  component: ImageCarousel,
+  component: ImageCarouselView,
   argTypes: {
-    title: { control: 'text' },
+    arrows: { control: 'boolean' },
   },
 };
 
 const Template = ({ ...args }) => ({
-  Component: ImageCarousel,
+  Component: ImageCarouselView,
   props: args,
 });
 
 export const Primary = Template.bind({});
 Primary.args = {
-  title: 'This is a title'
+  arrows: true
 };
