@@ -1,5 +1,6 @@
 <script>
   import ImageCarousel from '../ImageCarousel.svelte'
+  import CarouselChild from '../CarouselChild.svelte'
 
   /**
    * Enable Next/Previos arrows
@@ -8,9 +9,13 @@
 </script>
 
 <div class="main-container">
-  <ImageCarousel {arrows} >
-    <h1>Element 1</h1>
-    <h1>Element 2</h1>
+  <ImageCarousel {arrows}>
+    <CarouselChild>
+      <h1>Element 1</h1>
+    </CarouselChild>
+    <CarouselChild>
+      <h1>Element 2</h1>
+    </CarouselChild>
   </ImageCarousel>
 </div>
 

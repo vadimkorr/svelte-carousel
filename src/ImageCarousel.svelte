@@ -1,5 +1,8 @@
 <script>
+  // TODO: rename image carousel to just carousel
   import { onMount } from 'svelte'
+  import { store } from './store'
+
   /**
    * Enable Next/Previos arrows
    */
@@ -12,10 +15,11 @@
   })
 
   function handleLeftClick() {
-    // TODO: implement
+    store.prev()
   }
+  // TODO: rename to handleNextClick
   function handleRightClick() {
-    // TODO: implement
+    store.next()
   }
 </script>
 
