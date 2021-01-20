@@ -4,7 +4,7 @@
   import { store } from './store'
 
   /**
-   * Enable Next/Previos arrows
+   * Enable Next/Prev arrows
    */
   export let arrows = true;
   
@@ -14,11 +14,10 @@
     children = contentContainerElement.children
   })
 
-  function handleLeftClick() {
+  function handlePrevClick() {
     store.prev()
   }
-  // TODO: rename to handleNextClick
-  function handleRightClick() {
+  function handleNextClick() {
     store.next()
   }
 </script>
@@ -28,7 +27,7 @@
   <div class="side-container">
     <span
       class="clickable"
-      on:click={handleLeftClick}
+      on:click={handlePrevClick}
     >&lt;</span>
   </div>
   {/if}
@@ -39,7 +38,7 @@
   <div class="side-container">
     <span
       class="clickable"
-      on:click={handleRightClick}
+      on:click={handleNextClick}
     >&gt;</span>
   </div>
   {/if}
