@@ -11,10 +11,14 @@
 <div class="main-container">
   <ImageCarousel {arrows}>
     <CarouselChild>
-      <h1>Element 1</h1>
+      <div class="child-content-container">
+        <h1>Element 1</h1>
+      </div>
     </CarouselChild>
     <CarouselChild>
-      <h1>Element 2</h1>
+      <div class="child-content-container">
+        <h1>Element 2</h1>
+      </div>
     </CarouselChild>
   </ImageCarousel>
 </div>
@@ -23,5 +27,11 @@
   .main-container {
     display: flex;
     width: 100%;
+  }
+  .child-content-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
