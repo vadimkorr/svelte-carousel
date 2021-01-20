@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-
+import { getNextItemIndexFn, getPrevItemIndexFn } from './utils/item-index'
 
 function createStore() {
   const { subscribe, set, update } = writable({
@@ -18,13 +18,17 @@ function createStore() {
     }))
   }
 
-  function next() {
-    // TODO: move to utils functions and cover eoth tests
+  function removeItem(id) {
+    update(store => ({
+      ...store,
+      items: store.items.filter(item => item !== id)
+    }))
+  }
+
+  function next({ infinite }) {
     update(store => {
       const currentItemIndex = store.items.findIndex(item => item === store.currentItemId)
-      // TODO: infinite
-      // const newCurrentItemIndex = currentItemIndex + 1 > store.items.length - 1 ? 0 : currentItemIndex + 1
-      const newCurrentItemIndex = Math.min(currentItemIndex + 1, store.items.length - 1)
+      const newCurrentItemIndex = getNextItemIndexFn(infinite)(currentItemIndex, store.items)
       return {
         ...store,
         currentItemId: store.items[newCurrentItemIndex]
@@ -32,10 +36,10 @@ function createStore() {
     })
   }
 
-  function prev() {
+  function prev({ infinite }) {
     update(store => {
       const currentItemIndex = store.items.findIndex(item => item === store.currentItemId)
-      const newCurrentItemIndex = Math.max(0, currentItemIndex - 1)
+      const newCurrentItemIndex = getPrevItemIndexFn(infinite)(currentItemIndex, store.items)
       return {
         ...store,
         currentItemId: store.items[newCurrentItemIndex]
@@ -46,6 +50,7 @@ function createStore() {
   return {
     subscribe,
     setItem,
+    removeItem,
     next,
     prev
   };

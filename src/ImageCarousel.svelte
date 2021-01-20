@@ -7,6 +7,11 @@
    * Enable Next/Prev arrows
    */
   export let arrows = true;
+
+  /**
+   * Infinite looping
+   */
+  export let infinite	= true;
   
   let contentContainerElement
   let children
@@ -15,10 +20,10 @@
   })
 
   function handlePrevClick() {
-    store.prev()
+    store.prev({ infinite })
   }
   function handleNextClick() {
-    store.next()
+    store.next({ infinite })
   }
 </script>
 

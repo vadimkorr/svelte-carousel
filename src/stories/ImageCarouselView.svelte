@@ -5,11 +5,19 @@
   /**
    * Enable Next/Previos arrows
    */
-	export let arrows = true;
+  export let arrows = true;
+  
+  /**
+   * Infinite looping
+   */
+   export let infinite = true;
 </script>
 
 <div class="main-container">
-  <ImageCarousel {arrows}>
+  <ImageCarousel
+    {arrows}
+    {infinite}
+  >
     <CarouselChild>
       <div class="child-content-container">
         <h1>Element 1</h1>

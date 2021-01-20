@@ -8,6 +8,9 @@
   const id = generateId() 
   onMount(() => {
     store.setItem(id)
+    return () => {
+      store.removeItem(id)
+    }
   })
 </script>
 
