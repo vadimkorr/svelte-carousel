@@ -1,6 +1,5 @@
 <script>
   import ImageCarousel from '../ImageCarousel.svelte'
-  import CarouselChild from '../CarouselChild.svelte'
 
   /**
    * Enable Next/Previos arrows
