@@ -11,21 +11,28 @@
     getIsNotCompletePage
   } from './utils/size'
 
-
   /**
    * Enable Next/Prev arrows
    */
-  export let arrows = true;
+  export let arrows = true
 
   /**
    * Infinite looping
    */
-  export let infinite	= true;
+  export let infinite = true
+
+  /**
+   * Elements per page
+   */
+  export let perPage = 2
+
+  /**
+   * Page to start on
+   */
+  export let initialPage = 1
 
 
-  export let perPage = 2;
-
-
+  let pagesCount = 0
   let contentContainerWidth = 0
   let contentContainerElement
   let innerContentContainerElement
@@ -34,47 +41,47 @@
     const children = innerContentContainerElement.children
     contentContainerWidth = contentContainerElement.clientWidth
 
-    // TODO: add event listener on resize
     const slidesCount = children.length
-    const pagesCount = getPagesCount({ slidesCount, perPage })
+    pagesCount = getPagesCount({ slidesCount, perPage })
     const perPageTail = getPerPageTail({ pagesCount, perPage, slidesCount })
 
-    let pageIndex = 0; // TODO: init value from params
     for (let slideIndex=0; slideIndex<children.length; slideIndex++) {
-      pageIndex = getPageIndex({ slideIndex, perPage })
+      const pageIndex = getPageIndex({ slideIndex, perPage })
       const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
       const slideSizePx = getSlideSize({ isNotCompletePage, contentContainerWidth, perPage, perPageTail })
       children[slideIndex].style.minWidth = `${slideSizePx}px`
       children[slideIndex].style.maxWidth = `${slideSizePx}px`
-      store.setItem() // TODO: remove
     }
+    moveToPage(initialPage)
   }
-
-
   
   onMount(() => {
     store.reset() // to init after hot reload
-    store.setCurrentItemIndex(0) // to init index after hot reload, check one more time
     applySlideSizes()
 
     window.addEventListener('resize', applySlideSizes)
-
-
     return () => {
       window.removeEventListener('resize', applySlideSizes)
     }
-
-
   })
 
+  function moveToPage(pageIndex) {
+    store.moveToPage({ pageIndex, pagesCount })
+    applyOffset()
+  }
+
   let offset
-  function handlePrevClick() {
-    store.prev({ infinite, perPage })
+  function applyOffset() {
     offset = -$store.currentItemIndex * contentContainerWidth
   }
+
+  function handlePrevClick() {
+    store.prev({ infinite, pagesCount })
+    applyOffset()
+  }
   function handleNextClick() {
-    store.next({ infinite, perPage })
-    offset = -$store.currentItemIndex * contentContainerWidth
+    store.next({ infinite, pagesCount })
+    applyOffset()
   }
 </script>
 

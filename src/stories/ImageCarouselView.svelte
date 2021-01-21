@@ -11,12 +11,24 @@
    * Infinite looping
    */
    export let infinite = true;
+
+  /**
+   * Elements per page
+   */
+  export let perPage = 2;
+
+  /**
+   * Page to start on
+   */
+   export let initialPage = 1
 </script>
 
 <div class="main-container">
   <ImageCarousel
     {arrows}
     {infinite}
+    {perPage}
+    {initialPage}
   >
     <div
       class="child-content-container"

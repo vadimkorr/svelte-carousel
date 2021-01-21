@@ -10,10 +10,6 @@
   const id = generateId() 
   onMount(() => {
     store.setItem(id)
-    // console.log(container)
-    return () => {
-      store.removeItem(id)
-    }
   })
 
   let isActive = false
