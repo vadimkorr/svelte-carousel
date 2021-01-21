@@ -36,6 +36,11 @@
    */
   export let autoplaySpeed = 3000
 
+  /**
+   * Auto play change direction ('next', 'prev')
+   */
+  export let autoplayDirection = 'next'
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -59,6 +64,7 @@
     {speed}
     {autoplay}
     {autoplaySpeed}
+    {autoplayDirection}
   >
     {#each colors as color (color)}
       <div

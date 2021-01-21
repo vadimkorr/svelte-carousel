@@ -46,6 +46,11 @@
    */
   export let autoplaySpeed = 3000
 
+  /**
+   * Auto play change direction ('next', 'prev')
+   */
+  export let autoplayDirection = 'next'
+
   let pagesCount = 0
   let contentContainerWidth = 0
   let offset
@@ -67,14 +72,18 @@
       children[slideIndex].style.minWidth = `${slideSizePx}px`
       children[slideIndex].style.maxWidth = `${slideSizePx}px`
     }
-    moveToPage(initialPage)
+    showPage(initialPage)
   }
 
   function applyAutoplay() {
+    const autoplayDirectionFnDescription = {
+      'next': showNextPage,
+      'prev': showPrevPage
+    }
     let interval
     if (autoplay) {
       interval = setInterval(() => {
-        showNextPage()
+        autoplayDirectionFnDescription[autoplayDirection]()
       }, autoplaySpeed)
     }
     return {
@@ -97,15 +106,14 @@
     }
   })
 
-  function moveToPage(pageIndex) {
-    store.moveToPage({ pageIndex, pagesCount })
-    applyOffset()
-  }
-
   function applyOffset() {
     offset = -$store.currentItemIndex * contentContainerWidth
   }
 
+  function showPage(pageIndex) {
+    store.moveToPage({ pageIndex, pagesCount })
+    applyOffset()
+  }
   function showPrevPage() {
     store.prev({ infinite, pagesCount })
     applyOffset()
