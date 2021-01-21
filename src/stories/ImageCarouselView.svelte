@@ -24,7 +24,17 @@
   /**
    * Transition speed (ms)
    */
-   export let speed = 500
+  export let speed = 500
+
+  /**
+   * Enables auto play of slides
+   */
+  export let autoplay = false
+
+  /**
+   * Auto play change interval
+   */
+  export let autoplaySpeed = 3000
 
   const colors = [
     '#e5f9f0',
@@ -47,6 +57,8 @@
     {slidesToShow}
     {initialPage}
     {speed}
+    {autoplay}
+    {autoplaySpeed}
   >
     {#each colors as color (color)}
       <div

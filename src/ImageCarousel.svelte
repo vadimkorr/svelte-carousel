@@ -36,6 +36,16 @@
    */
   export let speed = 500
 
+  /**
+   * Enables auto play of slides
+   */
+  export let autoplay = false
+
+  /**
+   * Auto play change interval
+   */
+  export let autoplaySpeed = 3000
+
   let pagesCount = 0
   let contentContainerWidth = 0
   let offset
@@ -59,14 +69,31 @@
     }
     moveToPage(initialPage)
   }
+
+  function applyAutoplay() {
+    let interval
+    if (autoplay) {
+      interval = setInterval(() => {
+        showNextPage()
+      }, autoplaySpeed)
+    }
+    return {
+      teardownAutoplay: () => {
+        interval && clearInterval(interval)
+      }
+    }
+  }
   
   onMount(() => {
     store.reset() // to init after hot reload
     applySlideSizes()
 
+    const { teardownAutoplay } = applyAutoplay()
+
     window.addEventListener('resize', applySlideSizes)
     return () => {
       window.removeEventListener('resize', applySlideSizes)
+      teardownAutoplay()
     }
   })
 
@@ -79,11 +106,11 @@
     offset = -$store.currentItemIndex * contentContainerWidth
   }
 
-  function handlePrevClick() {
+  function showPrevPage() {
     store.prev({ infinite, pagesCount })
     applyOffset()
   }
-  function handleNextClick() {
+  function showNextPage() {
     store.next({ infinite, pagesCount })
     applyOffset()
   }
@@ -94,7 +121,7 @@
   <div class="side-container">
     <span
       class="clickable"
-      on:click={handlePrevClick}
+      on:click={showPrevPage}
     >&lt;</span>
   </div>
   {/if}
@@ -116,7 +143,7 @@
   <div class="side-container">
     <span
       class="clickable"
-      on:click={handleNextClick}
+      on:click={showNextPage}
     >&gt;</span>
   </div>
   {/if}
