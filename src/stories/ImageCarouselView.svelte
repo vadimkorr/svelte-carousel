@@ -18,16 +18,28 @@
     {arrows}
     {infinite}
   >
-    <CarouselChild>
-      <div class="child-content-container">
+ 
+      <div
+        class="child-content-container"
+        style="background-color: green;"
+      >
         <h1>Element 1</h1>
       </div>
-    </CarouselChild>
-    <CarouselChild>
-      <div class="child-content-container">
+
+      <div
+        class="child-content-container"
+        style="background-color: yellow;"
+      >
         <h1>Element 2</h1>
       </div>
-    </CarouselChild>
+
+      <div
+        class="child-content-container"
+        style="background-color: blue;"
+      >
+        <h1>Element 3</h1>
+      </div>
+
   </ImageCarousel>
 </div>
 
@@ -37,8 +49,8 @@
     width: 100%;
   }
   .child-content-container {
-    width: 100%;
-    display: flex;
+    width: 500px;
+    height: 100px;
     align-items: center;
     justify-content: center;
   }
