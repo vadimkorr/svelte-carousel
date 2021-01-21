@@ -21,6 +21,11 @@
    */
   export let initialPage = 1
 
+  /**
+   * Transition speed (ms)
+   */
+   export let speed = 500
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -41,6 +46,7 @@
     {infinite}
     {perPage}
     {initialPage}
+    {speed}
   >
     {#each colors as color (color)}
       <div

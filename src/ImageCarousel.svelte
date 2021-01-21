@@ -31,8 +31,14 @@
    */
   export let initialPage = 1
 
+  /**
+   * Transition speed (ms)
+   */
+  export let speed = 500
+
   let pagesCount = 0
   let contentContainerWidth = 0
+  let offset
   let contentContainerElement
   let innerContentContainerElement
 
@@ -69,7 +75,6 @@
     applyOffset()
   }
 
-  let offset
   function applyOffset() {
     offset = -$store.currentItemIndex * contentContainerWidth
   }
@@ -98,7 +103,10 @@
     bind:this={contentContainerElement}
   >
     <div
-      style="transform: translateX({offset}px);"
+      style="
+        transform: translateX({offset}px);
+        transition-duration: {speed}ms;
+      "
       bind:this={innerContentContainerElement}
     >
       <slot></slot>
@@ -128,7 +136,8 @@
   .content-container > div {
     width: 100%;
     display: flex; /* to put child elements in one row */
-    transition: transform 1s ease-in-out; /* pass transition duration as param */
+    transition-timing-function: ease-in-out;
+    transition-property: transform;
   }
   .side-container {
     background-color: cornflowerblue;
