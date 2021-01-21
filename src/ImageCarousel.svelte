@@ -3,8 +3,14 @@
   // TODO: seems CarouselChild component can be removed
   import { onMount } from 'svelte'
   import { store } from './store'
+  import {
+    getPageIndex,
+    getPagesCount,
+    getPerPageTail,
+    getSlideSize,
+    getIsNotCompletePage
+  } from './utils/size'
 
-  console.log('init')
 
   /**
    * Enable Next/Prev arrows
@@ -17,50 +23,58 @@
   export let infinite	= true;
 
 
-  export let perPage = 3;
+  export let perPage = 2;
 
-  
+
+  let contentContainerWidth = 0
   let contentContainerElement
   let innerContentContainerElement
-  let children
-  let w = 0
+
+  function applySlideSizes() {
+    const children = innerContentContainerElement.children
+    contentContainerWidth = contentContainerElement.clientWidth
+
+    // TODO: add event listener on resize
+    const slidesCount = children.length
+    const pagesCount = getPagesCount({ slidesCount, perPage })
+    const perPageTail = getPerPageTail({ pagesCount, perPage, slidesCount })
+
+    let pageIndex = 0; // TODO: init value from params
+    for (let slideIndex=0; slideIndex<children.length; slideIndex++) {
+      pageIndex = getPageIndex({ slideIndex, perPage })
+      const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
+      const slideSizePx = getSlideSize({ isNotCompletePage, contentContainerWidth, perPage, perPageTail })
+      children[slideIndex].style.minWidth = `${slideSizePx}px`
+      children[slideIndex].style.maxWidth = `${slideSizePx}px`
+      store.setItem() // TODO: remove
+    }
+  }
+
+
+  
   onMount(() => {
     store.reset() // to init after hot reload
-    console.log('mounted!')
     store.setCurrentItemIndex(0) // to init index after hot reload, check one more time
-    children = innerContentContainerElement.children
-    console.log('children', children.length)
-    w = contentContainerElement.clientWidth
+    applySlideSizes()
 
-    let pageIndex = 0;
-    let pagesCount = Math.ceil(children.length/perPage)
-    // TODO: add event listener on resize
-    const perPageTail = children.length - perPage * (pagesCount - 1)
-    console.log('perPageTail', perPageTail)
-    for (let i=0; i<children.length; i++) {
-      pageIndex = Math.floor(i/perPage)
-      // handle tail page where might be less than perPage slides
-      const childWidth = pageIndex === pagesCount - 1 && pagesCount !== 1
-        ? Math.round(w/perPageTail) // last page 
-        : Math.round(w/perPage) // full page children.length - i >= perPage ? Math.round(w/perPage) : Math.round(w/perPageTail)
-      console.log('childWidth', pageIndex === pagesCount - 1, Math.round(w/perPageTail), Math.round(w/perPage))
-      children[i].style.minWidth = `${childWidth}px`
-      children[i].style.maxWidth = `${childWidth}px`
-      console.log('children', w)
-      store.setItem()
+    window.addEventListener('resize', applySlideSizes)
+
+
+    return () => {
+      window.removeEventListener('resize', applySlideSizes)
     }
+
+
   })
 
   let offset
   function handlePrevClick() {
     store.prev({ infinite, perPage })
-    offset = -$store.currentItemIndex * w // children[$store.currentItemIndex].clientWidth
+    offset = -$store.currentItemIndex * contentContainerWidth
   }
   function handleNextClick() {
     store.next({ infinite, perPage })
-    // console.log('children.length', children.length, $store.currentItemIndex)
-    offset = -$store.currentItemIndex * w // children[$store.currentItemIndex].clientWidth
-    // console.log('offset', offset, children[$store.currentItemIndex].clientWidth)
+    offset = -$store.currentItemIndex * contentContainerWidth
   }
 </script>
 
@@ -103,6 +117,7 @@
     flex: 1;
     display: flex;
     overflow: hidden;
+    box-sizing: border-box;
   }
   .content-container > div {
     width: 100%;
