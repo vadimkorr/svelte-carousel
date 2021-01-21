@@ -7,7 +7,7 @@ import { getNextItemIndexFn, getPrevItemIndexFn } from './utils/item-index'
 
 const initState = {
   items: [],
-  currentItemId: null,
+  // currentItemId: null,
   currentItemIndex: null,
   action: 'next'
 }
@@ -22,7 +22,7 @@ function createStore() {
   function setItem(id = uuid()) {
     update(store => ({
       ...store,
-      currentItemId: id, // TODO: seems is not used at all, can be removed
+      // currentItemId: id, // TODO: seems is not used at all, can be removed
       items: [
         ...store.items,
         id
@@ -44,28 +44,28 @@ function createStore() {
     }))
   }
 
-  function next({ infinite }) {
+  function next({ infinite, perPage }) {
     update(store => {
       const currentItemIndex = store.currentItemIndex // store.items.findIndex(item => item === store.currentItemId)
-      console.log('next old currentItemIndex', currentItemIndex)
-      const newCurrentItemIndex = getNextItemIndexFn(infinite)(currentItemIndex, store.items)
+      // console.log('next old currentItemIndex', currentItemIndex)
+      const newCurrentItemIndex = getNextItemIndexFn(infinite)(currentItemIndex, Math.ceil(store.items.length / perPage))
       // console.log('newCurrentItemIndex', newCurrentItemIndex)
       return {
         ...store,
-        currentItemId: store.items[newCurrentItemIndex],
+        // currentItemId: store.items[newCurrentItemIndex],
         currentItemIndex: newCurrentItemIndex,
         action: 'next'
       }
     })
   }
 
-  function prev({ infinite }) {
+  function prev({ infinite, perPage }) {
     update(store => {
       const currentItemIndex = store.currentItemIndex // store.items.findIndex(item => item === store.currentItemId)
-      const newCurrentItemIndex = getPrevItemIndexFn(infinite)(currentItemIndex, store.items)
+      const newCurrentItemIndex = getPrevItemIndexFn(infinite)(currentItemIndex, Math.ceil(store.items.length / perPage))
       return {
         ...store,
-        currentItemId: store.items[newCurrentItemIndex],
+        // currentItemId: store.items[newCurrentItemIndex],
         currentItemIndex: newCurrentItemIndex,
         action: 'prev'
       }

@@ -36,6 +36,18 @@
     >
       <h1>Element 3</h1>
     </div>
+    <div
+      class="child-content-container"
+      style="background-color: pink;"
+    >
+      <h1>Element 4</h1>
+    </div>
+    <!-- <div
+      class="child-content-container"
+      style="background-color: lightblue;"
+    >
+      <h1>Element 5</h1>
+    </div> -->
   </ImageCarousel>
 </div>
 
@@ -45,7 +57,7 @@
     width: 100%;
   }
   .child-content-container {
-    min-width: 100%;
+    /* min-width: 100%; */
     height: 100px;
     display: flex;
     align-items: center;

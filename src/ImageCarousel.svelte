@@ -15,6 +15,10 @@
    * Infinite looping
    */
   export let infinite	= true;
+
+
+  export let perPage = 3;
+
   
   let contentContainerElement
   let innerContentContainerElement
@@ -27,21 +31,36 @@
     children = innerContentContainerElement.children
     console.log('children', children.length)
     w = contentContainerElement.clientWidth
+
+    let pageIndex = 0;
+    let pagesCount = Math.ceil(children.length/perPage)
+    // TODO: add event listener on resize
+    const perPageTail = perPage * (1 - pagesCount) + children.length
+    console.log('perPageTail', perPageTail)
     for (let i=0; i<children.length; i++) {
+      pageIndex = Math.floor(i/perPage)
+      // handle tail page where might be less than perPage slides
+      const childWidth = pageIndex === pagesCount - 1 && pagesCount !== 1
+        ? Math.round(w/perPageTail) // last page 
+        : Math.round(w/perPage) // full page children.length - i >= perPage ? Math.round(w/perPage) : Math.round(w/perPageTail)
+      console.log('childWidth', pageIndex === pagesCount - 1, Math.round(w/perPageTail), Math.round(w/perPage))
+      children[i].style.minWidth = `${childWidth}px`
+      children[i].style.maxWidth = `${childWidth}px`
+      console.log('children', w)
       store.setItem()
     }
   })
 
   let offset
   function handlePrevClick() {
-    store.prev({ infinite })
-    offset = -$store.currentItemIndex * children[$store.currentItemIndex].clientWidth
+    store.prev({ infinite, perPage })
+    offset = -$store.currentItemIndex * w // children[$store.currentItemIndex].clientWidth
   }
   function handleNextClick() {
-    store.next({ infinite })
-    console.log('children.length', children.length, $store.currentItemIndex)
-    offset = -$store.currentItemIndex * children[$store.currentItemIndex].clientWidth
-    console.log('offset', offset, children[$store.currentItemIndex].clientWidth)
+    store.next({ infinite, perPage })
+    // console.log('children.length', children.length, $store.currentItemIndex)
+    offset = -$store.currentItemIndex * w // children[$store.currentItemIndex].clientWidth
+    // console.log('offset', offset, children[$store.currentItemIndex].clientWidth)
   }
 </script>
 
@@ -88,8 +107,7 @@
   .content-container > div {
     width: 100%;
     display: flex; /* to put child elements in one row */
-    transition: transform 1s ease-in-out;
-    background-color: chocolate;
+    transition: transform 1s ease-in-out; /* pass transition duration as param */
   }
   .side-container {
     background-color: cornflowerblue;
