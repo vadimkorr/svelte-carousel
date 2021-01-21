@@ -12,9 +12,9 @@
   export let infinite = true;
 
   /**
-   * Elements per page
+   * Number of slides to show at a time
    */
-  export let perPage = 1;
+  export let slidesToShow = 1;
 
   /**
    * Page to start on
@@ -44,7 +44,7 @@
   <ImageCarousel
     {arrows}
     {infinite}
-    {perPage}
+    {slidesToShow}
     {initialPage}
     {speed}
   >

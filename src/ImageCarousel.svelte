@@ -6,7 +6,7 @@
   import {
     getPageIndex,
     getPagesCount,
-    getPerPageTail,
+    getSlidesToShowTail,
     getSlideSize,
     getIsNotCompletePage
   } from './utils/size'
@@ -22,9 +22,9 @@
   export let infinite = true
 
   /**
-   * Elements per page
+   * Number of slides to show at a time
    */
-  export let perPage = 1
+  export let slidesToShow = 1
 
   /**
    * Page to start on
@@ -47,13 +47,13 @@
     contentContainerWidth = contentContainerElement.clientWidth
 
     const slidesCount = children.length
-    pagesCount = getPagesCount({ slidesCount, perPage })
-    const perPageTail = getPerPageTail({ pagesCount, perPage, slidesCount })
+    pagesCount = getPagesCount({ slidesCount, slidesToShow })
+    const slidesToShowTail = getSlidesToShowTail({ pagesCount, slidesToShow, slidesCount })
 
     for (let slideIndex=0; slideIndex<children.length; slideIndex++) {
-      const pageIndex = getPageIndex({ slideIndex, perPage })
+      const pageIndex = getPageIndex({ slideIndex, slidesToShow })
       const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
-      const slideSizePx = getSlideSize({ isNotCompletePage, contentContainerWidth, perPage, perPageTail })
+      const slideSizePx = getSlideSize({ isNotCompletePage, contentContainerWidth, slidesToShow, slidesToShowTail })
       children[slideIndex].style.minWidth = `${slideSizePx}px`
       children[slideIndex].style.maxWidth = `${slideSizePx}px`
     }

@@ -1,13 +1,13 @@
-export function getPagesCount({ slidesCount, perPage }) {
-  return Math.ceil(slidesCount/perPage)
+export function getPagesCount({ slidesCount, slidesToShow }) {
+  return Math.ceil(slidesCount/slidesToShow)
 }
 
-export function getPerPageTail({
-  perPage,
+export function getSlidesToShowTail({
+  slidesToShow,
   slidesCount,
   pagesCount
 }) {
-  return slidesCount - perPage * (pagesCount - 1)
+  return slidesCount - slidesToShow * (pagesCount - 1)
 }
 
 export function getIsNotCompletePage({
@@ -19,15 +19,15 @@ export function getIsNotCompletePage({
 
 export function getSlideSize({
   contentContainerWidth,
-  perPage,
-  perPageTail,
+  slidesToShow,
+  slidesToShowTail,
   isNotCompletePage
 }) {
   return isNotCompletePage
-    ? Math.round(contentContainerWidth/perPageTail) 
-    : Math.round(contentContainerWidth/perPage)
+    ? Math.round(contentContainerWidth/slidesToShowTail) 
+    : Math.round(contentContainerWidth/slidesToShow)
 }
 
-export function getPageIndex({ slideIndex, perPage }) {
-  return Math.floor(slideIndex/perPage)
+export function getPageIndex({ slideIndex, slidesToShow }) {
+  return Math.floor(slideIndex/slidesToShow)
 }
