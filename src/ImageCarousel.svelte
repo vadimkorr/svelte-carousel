@@ -24,13 +24,12 @@
   /**
    * Elements per page
    */
-  export let perPage = 2
+  export let perPage = 1
 
   /**
    * Page to start on
    */
   export let initialPage = 1
-
 
   let pagesCount = 0
   let contentContainerWidth = 0

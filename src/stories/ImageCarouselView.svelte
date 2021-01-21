@@ -9,17 +9,30 @@
   /**
    * Infinite looping
    */
-   export let infinite = true;
+  export let infinite = true;
 
   /**
    * Elements per page
    */
-  export let perPage = 2;
+  export let perPage = 1;
 
   /**
    * Page to start on
    */
-   export let initialPage = 1
+  export let initialPage = 1
+
+  const colors = [
+    '#e5f9f0',
+    '#ccf3e2',
+    '#b2edd3',
+    '#99e7c5',
+    '#7fe1b7',
+    '#66dba8',
+    '#4cd59a',
+    '#32cf8b',
+    '#19c97d',
+    '#00c36f'
+  ]
 </script>
 
 <div class="main-container">
@@ -29,36 +42,14 @@
     {perPage}
     {initialPage}
   >
-    <div
-      class="child-content-container"
-      style="background-color: green;"
-    >
-      <h1>Element 1</h1>
-    </div>
-    <div
-      class="child-content-container"
-      style="background-color: yellow;"
-    >
-      <h1>Element 2</h1>
-    </div>
-    <div
-      class="child-content-container"
-      style="background-color: blue;"
-    >
-      <h1>Element 3</h1>
-    </div>
-    <div
-      class="child-content-container"
-      style="background-color: pink;"
-    >
-      <h1>Element 4</h1>
-    </div>
-    <!-- <div
-      class="child-content-container"
-      style="background-color: lightblue;"
-    >
-      <h1>Element 5</h1>
-    </div> -->
+    {#each colors as color (color)}
+      <div
+        class="color-container"
+        style="background-color: {color};"
+      >
+        <p>{color}</p>
+      </div>
+    {/each}
   </ImageCarousel>
 </div>
 
@@ -67,11 +58,15 @@
     display: flex;
     width: 100%;
   }
-  .child-content-container {
-    /* min-width: 100%; */
+  .color-container {
     height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .color-container > p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-size: 18px;
   }
 </style>
