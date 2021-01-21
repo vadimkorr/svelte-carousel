@@ -35,7 +35,7 @@
     let pageIndex = 0;
     let pagesCount = Math.ceil(children.length/perPage)
     // TODO: add event listener on resize
-    const perPageTail = perPage * (1 - pagesCount) + children.length
+    const perPageTail = children.length - perPage * (pagesCount - 1)
     console.log('perPageTail', perPageTail)
     for (let i=0; i<children.length; i++) {
       pageIndex = Math.floor(i/perPage)
