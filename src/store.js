@@ -2,24 +2,38 @@ import { writable } from 'svelte/store';
 import { v4 as uuid } from 'uuid'
 import { getNextItemIndexFn, getPrevItemIndexFn } from './utils/item-index'
 
+// TODO: try to split writable store items
+// or try to use immer
+
+const initState = {
+  items: [],
+  currentItemId: null,
+  currentItemIndex: null,
+  action: 'next'
+}
 
 function createStore() {
-  const { subscribe, set, update } = writable({
-    items: [],
-    currentItemId: null,
-    currentItemIndex: null,
-    action: 'next'
-  });
+  const { subscribe, set, update } = writable(initState);
+
+  function reset() {
+    set(initState)
+  }
 
   function setItem(id = uuid()) {
     update(store => ({
       ...store,
-      currentItemId: id,
-      currentItemIndex: 0, // store.items.length - 1, TODO: use as a param
+      currentItemId: id, // TODO: seems is not used at all, can be removed
       items: [
         ...store.items,
         id
       ]
+    }))
+  }
+
+  function setCurrentItemIndex(index) {
+    update(store => ({
+      ...store,
+      currentItemIndex: index,
     }))
   }
 
@@ -33,7 +47,9 @@ function createStore() {
   function next({ infinite }) {
     update(store => {
       const currentItemIndex = store.currentItemIndex // store.items.findIndex(item => item === store.currentItemId)
+      console.log('next old currentItemIndex', currentItemIndex)
       const newCurrentItemIndex = getNextItemIndexFn(infinite)(currentItemIndex, store.items)
+      // console.log('newCurrentItemIndex', newCurrentItemIndex)
       return {
         ...store,
         currentItemId: store.items[newCurrentItemIndex],
@@ -61,7 +77,9 @@ function createStore() {
     setItem,
     removeItem,
     next,
-    prev
+    prev,
+    setCurrentItemIndex,
+    reset
   };
 }
 

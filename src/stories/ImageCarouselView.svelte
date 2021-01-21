@@ -18,28 +18,24 @@
     {arrows}
     {infinite}
   >
- 
-      <div
-        class="child-content-container"
-        style="background-color: green;"
-      >
-        <h1>Element 1</h1>
-      </div>
-
-      <div
-        class="child-content-container"
-        style="background-color: yellow;"
-      >
-        <h1>Element 2</h1>
-      </div>
-
-      <div
-        class="child-content-container"
-        style="background-color: blue;"
-      >
-        <h1>Element 3</h1>
-      </div>
-
+    <div
+      class="child-content-container"
+      style="background-color: green;"
+    >
+      <h1>Element 1</h1>
+    </div>
+    <div
+      class="child-content-container"
+      style="background-color: yellow;"
+    >
+      <h1>Element 2</h1>
+    </div>
+    <div
+      class="child-content-container"
+      style="background-color: blue;"
+    >
+      <h1>Element 3</h1>
+    </div>
   </ImageCarousel>
 </div>
 
@@ -49,8 +45,9 @@
     width: 100%;
   }
   .child-content-container {
-    width: 500px;
+    min-width: 100%;
     height: 100px;
+    display: flex;
     align-items: center;
     justify-content: center;
   }

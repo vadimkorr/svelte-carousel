@@ -1,7 +1,10 @@
 <script>
   // TODO: rename image carousel to just carousel
+  // TODO: seems CarouselChild component can be removed
   import { onMount } from 'svelte'
   import { store } from './store'
+
+  console.log('init')
 
   /**
    * Enable Next/Prev arrows
@@ -18,6 +21,9 @@
   let children
   let w = 0
   onMount(() => {
+    store.reset() // to init after hot reload
+    console.log('mounted!')
+    store.setCurrentItemIndex(0) // to init index after hot reload, check one more time
     children = innerContentContainerElement.children
     console.log('children', children.length)
     w = contentContainerElement.clientWidth
@@ -33,7 +39,7 @@
   }
   function handleNextClick() {
     store.next({ infinite })
-    console.log('currentItemId', $store.currentItemId)
+    console.log('children.length', children.length, $store.currentItemIndex)
     offset = -$store.currentItemIndex * children[$store.currentItemIndex].clientWidth
     console.log('offset', offset, children[$store.currentItemIndex].clientWidth)
   }
@@ -80,7 +86,8 @@
     overflow: hidden;
   }
   .content-container > div {
-    display: flex;
+    width: 100%;
+    display: flex; /* to put child elements in one row */
     transition: transform 1s ease-in-out;
     background-color: chocolate;
   }
