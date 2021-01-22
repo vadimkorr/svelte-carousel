@@ -1,6 +1,5 @@
 <script>
   // TODO: rename image carousel to just carousel
-  // TODO: subscribe on mount and unsubscribe on destroy to
   import { onDestroy, onMount } from 'svelte'
   import { store } from '../store'
   import {
@@ -70,7 +69,7 @@
   })
 
   function applySlideSizes() {
-    const children = innerContentContainerElement.children
+    const children = innerContentContainerElement ? innerContentContainerElement.children : []
     pageWidth = contentContainerElement.clientWidth
 
     const slidesCount = children.length

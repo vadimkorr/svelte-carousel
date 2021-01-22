@@ -1,5 +1,5 @@
 <script>
-  import ImageCarousel from './ImageCarousel.svelte'
+  import Carousel from './Carousel.svelte'
 
   /**
    * Enable Next/Previos arrows
@@ -46,10 +46,6 @@
    */
   export let dots = true
 
-  function onPageChange(event, showPage) {
-    showPage(event.target.value)
-  }
-
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -65,7 +61,7 @@
 </script>
 
 <div class="main-container">
-  <ImageCarousel
+  <Carousel
     {arrows}
     {infinite}
     {slidesToShow}
@@ -75,9 +71,8 @@
     {autoplaySpeed}
     {autoplayDirection}
     {dots}
-    let:currentPageIndex
-    let:pagesCount
-    let:showPage
+    let:showPrevPage
+    let:showNextPage
   >
     {#each colors as color (color)}
       <div
@@ -87,22 +82,17 @@
         <p>{color}</p>
       </div>
     {/each}
-    <div slot="dots">
-      <div class="select-container">
-        <select
-          value={currentPageIndex}
-          on:change="{(event) => onPageChange(event, showPage)}"
-          on:blur="{(event) => onPageChange(event, showPage)}"
-        >
-          {#each  Array(pagesCount) as _, pageIndex (pageIndex)}
-            <option value={pageIndex} class:active={currentPageIndex === pageIndex}>
-              {pageIndex}
-            </option>
-          {/each}
-        </select>
+    <div slot="prev" class="arrow-container">
+      <div class="arrow" on:click={showPrevPage}>
+        <span>&lt;&lt;&lt;</span>
       </div>
     </div>
-  </ImageCarousel>
+    <div slot="next" class="arrow-container">
+      <div class="arrow" on:click={showNextPage}>
+        <span>&gt;&gt;&gt;</span>
+      </div>
+    </div>
+  </Carousel>
 </div>
 
 <style>
@@ -121,19 +111,19 @@
     font-style: italic;
     font-size: 18px;
   }
-  .active {
-    background-color: grey;
-    color: white;
-  }
 
-  .select-container {
-    padding: 5px 0;
+  .arrow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
   }
-  .select-container > select {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-style: italic;
-    height: 25px;
-    width: 100px;
+  .arrow {
+    background-color: darkgray;
     border-radius: 5px;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
   }
 </style>

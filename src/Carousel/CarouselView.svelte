@@ -1,5 +1,5 @@
 <script>
-  import ImageCarousel from './ImageCarousel.svelte'
+  import Carousel from './Carousel.svelte'
 
   /**
    * Enable Next/Previos arrows
@@ -61,7 +61,7 @@
 </script>
 
 <div class="main-container">
-  <ImageCarousel
+  <Carousel
     {arrows}
     {infinite}
     {slidesToShow}
@@ -71,8 +71,6 @@
     {autoplaySpeed}
     {autoplayDirection}
     {dots}
-    let:showPrevPage
-    let:showNextPage
   >
     {#each colors as color (color)}
       <div
@@ -82,17 +80,7 @@
         <p>{color}</p>
       </div>
     {/each}
-    <div slot="prev" class="arrow-container">
-      <div class="arrow" on:click={showPrevPage}>
-        <span>&lt;&lt;&lt;</span>
-      </div>
-    </div>
-    <div slot="next" class="arrow-container">
-      <div class="arrow" on:click={showNextPage}>
-        <span>&gt;&gt;&gt;</span>
-      </div>
-    </div>
-  </ImageCarousel>
+  </Carousel>
 </div>
 
 <style>
@@ -110,20 +98,5 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-style: italic;
     font-size: 18px;
-  }
-
-  .arrow-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  .arrow {
-    background-color: darkgray;
-    border-radius: 5px;
-    padding: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    user-select: none;
   }
 </style>

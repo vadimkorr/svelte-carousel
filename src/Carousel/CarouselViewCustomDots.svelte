@@ -1,11 +1,11 @@
 <script>
-  import ImageCarousel from './ImageCarousel.svelte'
+  import Carousel from './Carousel.svelte'
 
   /**
    * Enable Next/Previos arrows
    */
   export let arrows = true;
-  
+
   /**
    * Infinite looping
    */
@@ -46,6 +46,10 @@
    */
   export let dots = true
 
+  function onPageChange(event, showPage) {
+    showPage(event.target.value)
+  }
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -61,7 +65,7 @@
 </script>
 
 <div class="main-container">
-  <ImageCarousel
+  <Carousel
     {arrows}
     {infinite}
     {slidesToShow}
@@ -71,6 +75,9 @@
     {autoplaySpeed}
     {autoplayDirection}
     {dots}
+    let:currentPageIndex
+    let:pagesCount
+    let:showPage
   >
     {#each colors as color (color)}
       <div
@@ -80,7 +87,22 @@
         <p>{color}</p>
       </div>
     {/each}
-  </ImageCarousel>
+    <div slot="dots">
+      <div class="select-container">
+        <select
+          value={currentPageIndex}
+          on:change="{(event) => onPageChange(event, showPage)}"
+          on:blur="{(event) => onPageChange(event, showPage)}"
+        >
+          {#each  Array(pagesCount) as _, pageIndex (pageIndex)}
+            <option value={pageIndex} class:active={currentPageIndex === pageIndex}>
+              {pageIndex}
+            </option>
+          {/each}
+        </select>
+      </div>
+    </div>
+  </Carousel>
 </div>
 
 <style>
@@ -98,5 +120,20 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-style: italic;
     font-size: 18px;
+  }
+  .active {
+    background-color: grey;
+    color: white;
+  }
+
+  .select-container {
+    padding: 5px 0;
+  }
+  .select-container > select {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    height: 25px;
+    width: 100px;
+    border-radius: 5px;
   }
 </style>
