@@ -1,8 +1,7 @@
 <script>
   // TODO: rename image carousel to just carousel
   // TODO: subscribe on mount and unsubscribe on destroy to
-  // $store.currentPageIndex to avoid multiple subscriptions
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { store } from '../store'
   import {
     getPageIndex,
@@ -59,11 +58,16 @@
    */
   export let dots = true
 
+  let currentPageIndex = 0 
   let pagesCount = 0
   let pageWidth = 0
   let offset
   let contentContainerElement
   let innerContentContainerElement
+
+  const unsubscribe = store.subscribe(value => {
+    currentPageIndex = value.currentPageIndex
+  })
 
   function applySlideSizes() {
     const children = innerContentContainerElement.children
@@ -113,12 +117,16 @@
     }
   })
 
+  onDestroy(() => {
+    unsubscribe()
+  })
+
   function handlePageChange(event) {
     showPage(event.detail)
   }
 
   function applyOffset() {
-    offset = -$store.currentPageIndex * pageWidth
+    offset = -currentPageIndex * pageWidth
   }
 
   function showPage(pageIndex) {
@@ -169,13 +177,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={$store.currentPageIndex}
+      currentPageIndex={currentPageIndex}
       {pagesCount}
       {showPage}
     >
       <Dots
         {pagesCount}
-        currentPageIndex={$store.currentPageIndex}
+        currentPageIndex={currentPageIndex}
         on:pageChange={handlePageChange}
       ></Dots>
     </slot>

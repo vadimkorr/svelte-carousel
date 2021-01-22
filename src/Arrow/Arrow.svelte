@@ -29,6 +29,7 @@
     align-items: center;
     justify-content: center;
     transition: opacity 100ms ease;
+    cursor: pointer;
   }
   .circle:hover {
     opacity: 0.9;
