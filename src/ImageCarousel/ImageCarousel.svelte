@@ -140,7 +140,7 @@
 <div class="main-container">
   <div class="carousel-container">
     {#if arrows}
-      <slot name="prev">
+      <slot name="prev" {showPrevPage}>
         <div class="side-container">
           <Arrow direction="prev" on:click={showPrevPage} />
         </div>
@@ -161,7 +161,7 @@
       </div>
     </div>
     {#if arrows}
-      <slot name="next">
+      <slot name="next" {showNextPage}>
         <div class="side-container">
           <Arrow direction="next" on:click={showNextPage} />
         </div>
