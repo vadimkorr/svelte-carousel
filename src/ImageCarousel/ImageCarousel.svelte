@@ -1,8 +1,7 @@
 <script>
   // TODO: rename image carousel to just carousel
-  // TODO: seems CarouselChild component can be removed
   // TODO: subscribe on mount and unsubscribe on destroy to
-  // $store.currentItemIndex to avoid multiple subscriptions
+  // $store.currentPageIndex to avoid multiple subscriptions
   import { onMount } from 'svelte'
   import { store } from '../store'
   import {
@@ -33,7 +32,7 @@
   /**
    * Page to start on
    */
-  export let initialPage = 1
+  export let initialPageIndex = 1
 
   /**
    * Transition speed (ms)
@@ -61,14 +60,14 @@
   export let dots = true
 
   let pagesCount = 0
-  let contentContainerWidth = 0
+  let pageWidth = 0
   let offset
   let contentContainerElement
   let innerContentContainerElement
 
   function applySlideSizes() {
     const children = innerContentContainerElement.children
-    contentContainerWidth = contentContainerElement.clientWidth
+    pageWidth = contentContainerElement.clientWidth
 
     const slidesCount = children.length
     pagesCount = getPagesCount({ slidesCount, slidesToShow })
@@ -77,11 +76,10 @@
     for (let slideIndex=0; slideIndex<children.length; slideIndex++) {
       const pageIndex = getPageIndex({ slideIndex, slidesToShow })
       const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
-      const slideSizePx = getSlideSize({ isNotCompletePage, contentContainerWidth, slidesToShow, slidesToShowTail })
+      const slideSizePx = getSlideSize({ isNotCompletePage, pageWidth, slidesToShow, slidesToShowTail })
       children[slideIndex].style.minWidth = `${slideSizePx}px`
       children[slideIndex].style.maxWidth = `${slideSizePx}px`
     }
-    showPage(initialPage)
   }
 
   function applyAutoplay() {
@@ -103,7 +101,7 @@
   }
   
   onMount(() => {
-    store.reset() // to init after hot reload
+    store.init(initialPageIndex)
     applySlideSizes()
 
     const { teardownAutoplay } = applyAutoplay()
@@ -120,7 +118,7 @@
   }
 
   function applyOffset() {
-    offset = -$store.currentItemIndex * contentContainerWidth
+    offset = -$store.currentPageIndex * pageWidth
   }
 
   function showPage(pageIndex) {
@@ -171,13 +169,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPage={$store.currentItemIndex}
+      currentPageIndex={$store.currentPageIndex}
       {pagesCount}
       {showPage}
     >
       <Dots
         {pagesCount}
-        currentPageIndex={$store.currentItemIndex}
+        currentPageIndex={$store.currentPageIndex}
         on:pageChange={handlePageChange}
       ></Dots>
     </slot>

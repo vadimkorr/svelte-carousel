@@ -19,7 +19,7 @@
   /**
    * Page to start on
    */
-  export let initialPage = 1
+  export let initialPageIndex = 1
 
   /**
    * Transition speed (ms)
@@ -69,13 +69,13 @@
     {arrows}
     {infinite}
     {slidesToShow}
-    {initialPage}
+    {initialPageIndex}
     {speed}
     {autoplay}
     {autoplaySpeed}
     {autoplayDirection}
     {dots}
-    let:currentPage
+    let:currentPageIndex
     let:pagesCount
     let:showPage
   >
@@ -90,12 +90,12 @@
     <div slot="dots">
       <div class="select-container">
         <select
-          value={currentPage}
+          value={currentPageIndex}
           on:change="{(event) => onPageChange(event, showPage)}"
           on:blur="{(event) => onPageChange(event, showPage)}"
         >
           {#each  Array(pagesCount) as _, pageIndex (pageIndex)}
-            <option value={pageIndex} class:active={currentPage === pageIndex}>
+            <option value={pageIndex} class:active={currentPageIndex === pageIndex}>
               {pageIndex}
             </option>
           {/each}

@@ -18,14 +18,14 @@ export function getIsNotCompletePage({
 }
 
 export function getSlideSize({
-  contentContainerWidth,
+  pageWidth,
   slidesToShow,
   slidesToShowTail,
   isNotCompletePage
 }) {
   return isNotCompletePage
-    ? Math.round(contentContainerWidth/slidesToShowTail) 
-    : Math.round(contentContainerWidth/slidesToShow)
+    ? Math.round(pageWidth/slidesToShowTail) 
+    : Math.round(pageWidth/slidesToShow)
 }
 
 export function getPageIndex({ slideIndex, slidesToShow }) {
