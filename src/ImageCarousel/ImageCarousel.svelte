@@ -13,6 +13,7 @@
     getIsNotCompletePage
   } from '../utils/size'
   import Dots from '../Dots/Dots.svelte'
+  import Arrow from '../Arrow/Arrow.svelte'
 
   /**
    * Enable Next/Prev arrows
@@ -139,12 +140,11 @@
 <div class="main-container">
   <div class="carousel-container">
     {#if arrows}
-    <div class="side-container">
-      <span
-        class="clickable"
-        on:click={showPrevPage}
-      >&lt;</span>
-    </div>
+      <slot name="prev">
+        <div class="side-container">
+          <Arrow direction="prev" on:click={showPrevPage} />
+        </div>
+      </slot>
     {/if}
     <div
       class="content-container"
@@ -161,12 +161,11 @@
       </div>
     </div>
     {#if arrows}
-    <div class="side-container">
-      <span
-        class="clickable"
-        on:click={showNextPage}
-      >&gt;</span>
-    </div>
+      <slot name="next">
+        <div class="side-container">
+          <Arrow direction="next" on:click={showNextPage} />
+        </div>
+      </slot>
     {/if}
   </div>
   {#if dots}
@@ -209,15 +208,11 @@
     transition-property: transform;
   }
   .side-container {
-    background-color: cornflowerblue;
     height: 100%;
     padding: 5px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .clickable {
-    cursor: pointer;
   }
 </style>
