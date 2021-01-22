@@ -1,0 +1,48 @@
+<script>
+  import { createEventDispatcher } from 'svelte'
+  import Dot from '../Dot/Dot.svelte'
+
+  const dispatch = createEventDispatcher()
+
+  /**
+   * Amount of pages (amount of dots)
+   */
+  export let pagesCount = 1
+
+  /**
+   * Index of the current page
+   */
+  export let currentPageIndex = 0
+
+  function handleDotClick(pageIndex) {
+    dispatch('pageChange', pageIndex)
+  }
+</script>
+
+<div class="main-container">
+  {#each Array(pagesCount) as _, pageIndex (pageIndex)}
+    <div class="dot-container">
+      <Dot
+        active={currentPageIndex === pageIndex}
+        on:click={() => handleDotClick(pageIndex)}
+      ></Dot>
+    </div>
+  {/each}  
+</div>
+
+<style>
+  :root {
+    --dot-size: 10px; 
+  }
+  .main-container {
+    display: flex;
+    align-items: center;
+  }
+  .dot-container {
+    height: calc(var(--dot-size) + 10px);
+    width: calc(var(--dot-size) + 10x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
