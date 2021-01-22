@@ -1,11 +1,14 @@
 <script>
-	import { tweened } from 'svelte/motion';
-	import { cubicInOut } from 'svelte/easing';
+  import { tweened } from 'svelte/motion';
+  import { cubicInOut } from 'svelte/easing';
 
-	const size = tweened(10, {
-		duration: 100,
-		easing: cubicInOut
-	});
+  const sizePx = 5
+  const sizeCurrentPx = 8
+
+  const size = tweened(sizePx, {
+    duration: 250,
+    easing: cubicInOut
+  });
 
   /**
    * Indicates if dot is active
@@ -13,7 +16,7 @@
   export let active = false
 
   $: {
-    size.set(active ? 13 : 10)
+    size.set(active ? sizeCurrentPx : sizePx)
   }
 </script>
 
