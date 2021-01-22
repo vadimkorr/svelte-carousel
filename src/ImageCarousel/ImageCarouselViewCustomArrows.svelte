@@ -19,7 +19,7 @@
   /**
    * Page to start on
    */
-  export let initialPage = 1
+  export let initialPageIndex = 1
 
   /**
    * Transition speed (ms)
@@ -46,10 +46,6 @@
    */
   export let dots = true
 
-  function onPageChange(event, showPage) {
-    showPage(event.target.value)
-  }
-
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -69,7 +65,7 @@
     {arrows}
     {infinite}
     {slidesToShow}
-    {initialPage}
+    {initialPageIndex}
     {speed}
     {autoplay}
     {autoplaySpeed}

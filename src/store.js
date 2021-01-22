@@ -1,24 +1,24 @@
 import { writable } from 'svelte/store';
-import { getNextItemIndexFn, getPrevItemIndexFn } from './utils/item-index'
-
-// TODO: try to split writable store items
-// or try to use immer
+import { getNextPageIndexFn, getPrevPageIndexFn } from './utils/page-index'
 
 const initState = {
-  currentItemIndex: null,
+  currentPageIndex: 0,
 }
 
 function createStore() {
   const { subscribe, set, update } = writable(initState);
 
-  function reset() {
-    set(initState)
+  function init(initialPageIndex) {
+    set({
+      ...initState,
+      currentPageIndex: initialPageIndex
+    })
   }
 
-  function setCurrentItemIndex(index) {
+  function setCurrentPageIndex(index) {
     update(store => ({
       ...store,
-      currentItemIndex: index,
+      currentPageIndex: index,
     }))
   }
 
@@ -26,29 +26,27 @@ function createStore() {
     update(store => {
       return {
         ...store,
-        currentItemIndex: pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1),
+        currentPageIndex: pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1),
       }
     })
   }
 
   function next({ infinite, pagesCount }) {
     update(store => {
-      const currentItemIndex = store.currentItemIndex
-      const newCurrentItemIndex = getNextItemIndexFn(infinite)(currentItemIndex, pagesCount)
+      const newCurrentPageIndex = getNextPageIndexFn(infinite)(store.currentPageIndex, pagesCount)
       return {
         ...store,
-        currentItemIndex: newCurrentItemIndex,
+        currentPageIndex: newCurrentPageIndex,
       }
     })
   }
 
   function prev({ infinite, pagesCount }) {
     update(store => {
-      const currentItemIndex = store.currentItemIndex
-      const newCurrentItemIndex = getPrevItemIndexFn(infinite)(currentItemIndex, pagesCount)
+      const newCurrentPageIndex = getPrevPageIndexFn(infinite)(store.currentPageIndex, pagesCount)
       return {
         ...store,
-        currentItemIndex: newCurrentItemIndex,
+        currentPageIndex: newCurrentPageIndex,
       }
     })
   }
@@ -57,8 +55,8 @@ function createStore() {
     subscribe,
     next,
     prev,
-    setCurrentItemIndex,
-    reset,
+    setCurrentPageIndex,
+    init,
     moveToPage,
   };
 }

@@ -19,7 +19,7 @@
   /**
    * Page to start on
    */
-  export let initialPage = 1
+  export let initialPageIndex = 1
 
   /**
    * Transition speed (ms)
@@ -65,7 +65,7 @@
     {arrows}
     {infinite}
     {slidesToShow}
-    {initialPage}
+    {initialPageIndex}
     {speed}
     {autoplay}
     {autoplaySpeed}
