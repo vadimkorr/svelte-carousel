@@ -12,6 +12,16 @@
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../direction'
+  import { swipeable } from '../swipeable'
+  import {
+    addResizeEventListener,
+    removeResizeEventListener
+  } from '../utils/event'
+
+  const directionFnDescription = {
+    [NEXT]: showNextPage,
+    [PREV]: showPrevPage
+  }
 
   /**
    * Enable Next/Prev arrows
@@ -37,6 +47,7 @@
    * Transition speed (ms)
    */
   export let speed = 500
+  let _speed = speed
 
   /**
    * Enables auto play of slides
@@ -61,8 +72,8 @@
   let currentPageIndex = 0 
   let pagesCount = 0
   let pageWidth = 0
-  let offset
-  let pageWindow
+  let offset = 0
+  let pageWindowElement
   let pagesElement
 
   const unsubscribe = store.subscribe(value => {
@@ -71,7 +82,7 @@
 
   function applySlideSizes() {
     const children = pagesElement ? pagesElement.children : []
-    pageWidth = pageWindow.clientWidth
+    pageWidth = pageWindowElement.clientWidth
 
     const slidesCount = children.length
     pagesCount = getPagesCount({ slidesCount, slidesToShow })
@@ -87,14 +98,10 @@
   }
 
   function applyAutoplay() {
-    const autoplayDirectionFnDescription = {
-      [NEXT]: showNextPage,
-      [PREV]: showPrevPage
-    }
     let interval
     if (autoplay) {
       interval = setInterval(() => {
-        autoplayDirectionFnDescription[autoplayDirection]()
+        directionFnDescription[autoplayDirection]()
       }, autoplaySpeed)
     }
     return {
@@ -105,14 +112,15 @@
   }
   
   onMount(() => {
-    store.init(initialPageIndex)
     applySlideSizes()
+    store.init(initialPageIndex)
+    applyOffset()
 
     const { teardownAutoplay } = applyAutoplay()
 
-    window.addEventListener('resize', applySlideSizes)
+    addResizeEventListener(applySlideSizes)
     return () => {
-      window.removeEventListener('resize', applySlideSizes)
+      removeResizeEventListener(applySlideSizes)
       teardownAutoplay()
     }
   })
@@ -141,6 +149,21 @@
     store.next({ infinite, pagesCount })
     applyOffset()
   }
+
+  function handleSwipeStart() {
+    _speed = 0
+  }
+  function handleThreshold(event) {
+    _speed = speed
+    directionFnDescription[event.detail.direction]()
+  }
+  function handleSwipeMove(event) {
+    offset += event.detail.dx
+  }
+  function handleSwipeEnd() {
+    _speed = speed
+    showPage(currentPageIndex)
+  }
 </script>
 
 <div class="main-container">
@@ -154,17 +177,22 @@
     {/if}
     <div
       class="content-container"
-      bind:this={pageWindow}
+      bind:this={pageWindowElement}
     >
       <div
+        use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
+        on:start={handleSwipeStart}
+        on:move={handleSwipeMove}
+        on:end={handleSwipeEnd}
+        on:threshold={handleThreshold}
         style="
           transform: translateX({offset}px);
-          transition-duration: {speed}ms;
+          transition-duration: {_speed}ms;
         "
         bind:this={pagesElement}
       >
         <slot></slot>
-      </div>
+      </div>    
     </div>
     {#if arrows}
       <slot name="next" {showNextPage}>
