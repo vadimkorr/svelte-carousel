@@ -1,5 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte'
+  import Dot from '../Dot/Dot.svelte'
+
   const dispatch = createEventDispatcher()
 
   /**
@@ -18,13 +20,12 @@
 </script>
 
 <div class="main-container">
-  {#each Array(pagesCount) as _, pageIndex}
+  {#each Array(pagesCount) as _, pageIndex (pageIndex)}
     <div class="dot-container">
-      <div
-        class="dot"
-        class:current="{currentPageIndex === pageIndex}"
+      <Dot
+        active={currentPageIndex === pageIndex}
         on:click={() => handleDotClick(pageIndex)}
-      ></div>
+      ></Dot>
     </div>
   {/each}  
 </div>
@@ -43,23 +44,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .dot {
-    height: var(--dot-size);
-    width: var(--dot-size);
-    background-color: #aaa;
-    border-radius: 50%;
-    display: inline-block;
-    opacity: 0.5;
-    margin: 3px;
-    cursor: pointer;
-  }
-  .dot:hover {
-    opacity: 0.9;
-  }
-  .current {
-    height: calc(var(--dot-size) + 3px);
-    width: calc(var(--dot-size) + 3px);
-    opacity: 0.7;
   }
 </style>

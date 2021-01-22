@@ -2,15 +2,15 @@
   // TODO: rename image carousel to just carousel
   // TODO: seems CarouselChild component can be removed
   import { onMount } from 'svelte'
-  import { store } from './store'
+  import { store } from '../store'
   import {
     getPageIndex,
     getPagesCount,
     getSlidesToShowTail,
     getSlideSize,
     getIsNotCompletePage
-  } from './utils/size'
-  import Dots from './Dots.svelte'
+  } from '../utils/size'
+  import Dots from '../Dots/Dots.svelte'
 
   /**
    * Enable Next/Prev arrows
