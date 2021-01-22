@@ -1,6 +1,8 @@
 <script>
   // TODO: rename image carousel to just carousel
   // TODO: seems CarouselChild component can be removed
+  // TODO: subscribe on mount and unsubscribe on destroy to
+  // $store.currentItemIndex to avoid multiple subscriptions
   import { onMount } from 'svelte'
   import { store } from '../store'
   import {
@@ -168,11 +170,18 @@
     {/if}
   </div>
   {#if dots}
-    <Dots
+    <slot
+      name="dots"
+      currentPage={$store.currentItemIndex}
       {pagesCount}
-      currentPageIndex={$store.currentItemIndex}
-      on:pageChange={handlePageChange}
-    ></Dots>
+      {showPage}
+    >
+      <Dots
+        {pagesCount}
+        currentPageIndex={$store.currentItemIndex}
+        on:pageChange={handlePageChange}
+      ></Dots>
+    </slot>
   {/if}
 </div>
 
