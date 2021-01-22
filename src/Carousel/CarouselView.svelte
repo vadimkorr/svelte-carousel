@@ -94,6 +94,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
   }
   .color-container > p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
