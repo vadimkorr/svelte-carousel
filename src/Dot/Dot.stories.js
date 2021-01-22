@@ -1,7 +1,7 @@
 import DotView from './DotView.svelte';
 
 export default {
-  title: 'Dot',
+  title: 'Default Components/Dot',
   component: DotView
 };
 

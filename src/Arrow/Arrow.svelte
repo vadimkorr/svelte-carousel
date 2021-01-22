@@ -1,8 +1,9 @@
 <script>
+  import { NEXT, PREV } from '../direction'
   /**
    * Indicates direction of the arrow ('next', 'prev')
    */
-  export let direction = 'next'
+  export let direction = NEXT
 </script>
 
 <div
@@ -11,8 +12,8 @@
 >
   <i
     class="arrow"
-    class:next={direction === 'next'}
-    class:prev={direction === 'prev'}
+    class:next={direction === NEXT}
+    class:prev={direction === PREV}
   ></i>
 </div>
 

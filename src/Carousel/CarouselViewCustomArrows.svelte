@@ -1,5 +1,6 @@
 <script>
   import Carousel from './Carousel.svelte'
+  import { NEXT } from '../direction'
 
   /**
    * Enable Next/Previos arrows
@@ -39,7 +40,7 @@
   /**
    * Auto play change direction ('next', 'prev')
    */
-  export let autoplayDirection = 'next'
+  export let autoplayDirection = NEXT
 
   /**
    * Current page indicator dots

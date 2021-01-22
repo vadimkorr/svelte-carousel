@@ -11,6 +11,7 @@
   } from '../utils/size'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
+  import { NEXT, PREV } from '../direction'
 
   /**
    * Enable Next/Prev arrows
@@ -50,7 +51,7 @@
   /**
    * Auto play change direction ('next', 'prev')
    */
-  export let autoplayDirection = 'next'
+  export let autoplayDirection = NEXT
 
   /**
    * Current page indicator dots
@@ -61,16 +62,16 @@
   let pagesCount = 0
   let pageWidth = 0
   let offset
-  let contentContainerElement
-  let innerContentContainerElement
+  let pageWindow
+  let pagesElement
 
   const unsubscribe = store.subscribe(value => {
     currentPageIndex = value.currentPageIndex
   })
 
   function applySlideSizes() {
-    const children = innerContentContainerElement ? innerContentContainerElement.children : []
-    pageWidth = contentContainerElement.clientWidth
+    const children = pagesElement ? pagesElement.children : []
+    pageWidth = pageWindow.clientWidth
 
     const slidesCount = children.length
     pagesCount = getPagesCount({ slidesCount, slidesToShow })
@@ -87,8 +88,8 @@
 
   function applyAutoplay() {
     const autoplayDirectionFnDescription = {
-      'next': showNextPage,
-      'prev': showPrevPage
+      [NEXT]: showNextPage,
+      [PREV]: showPrevPage
     }
     let interval
     if (autoplay) {
@@ -146,28 +147,28 @@
   <div class="carousel-container">
     {#if arrows}
       <slot name="prev" {showPrevPage}>
-        <div class="side-container">
+        <div class="arrow-container">
           <Arrow direction="prev" on:click={showPrevPage} />
         </div>
       </slot>
     {/if}
     <div
       class="content-container"
-      bind:this={contentContainerElement}
+      bind:this={pageWindow}
     >
       <div
         style="
           transform: translateX({offset}px);
           transition-duration: {speed}ms;
         "
-        bind:this={innerContentContainerElement}
+        bind:this={pagesElement}
       >
         <slot></slot>
       </div>
     </div>
     {#if arrows}
       <slot name="next" {showNextPage}>
-        <div class="side-container">
+        <div class="arrow-container">
           <Arrow direction="next" on:click={showNextPage} />
         </div>
       </slot>
@@ -212,7 +213,7 @@
     transition-timing-function: ease-in-out;
     transition-property: transform;
   }
-  .side-container {
+  .arrow-container {
     height: 100%;
     padding: 5px;
     box-sizing: border-box;

@@ -1,7 +1,7 @@
 import Arrow from './Arrow.svelte';
 
 export default {
-  title: 'Arrow',
+  title: 'Default Components/Arrow',
   component: Arrow,
   argTypes: {
     onClick: { action: 'onClick' }
