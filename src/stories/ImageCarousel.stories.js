@@ -2,18 +2,12 @@ import ImageCarouselView from './ImageCarouselView.svelte';
 
 export default {
   title: 'ImageCarousel',
-  component: ImageCarouselView,
-  argTypes: {
-    arrows: { control: 'boolean' },
-  },
+  component: ImageCarouselView
 };
 
 const Template = ({ ...args }) => ({
   Component: ImageCarouselView,
-  props: args,
+  props: args
 });
 
 export const Primary = Template.bind({});
-Primary.args = {
-  arrows: true
-};

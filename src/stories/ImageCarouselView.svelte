@@ -41,6 +41,11 @@
    */
   export let autoplayDirection = 'next'
 
+  /**
+   * Current page indicator dots
+   */
+  export let dots = true
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -65,6 +70,7 @@
     {autoplay}
     {autoplaySpeed}
     {autoplayDirection}
+    {dots}
   >
     {#each colors as color (color)}
       <div

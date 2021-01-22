@@ -10,6 +10,7 @@
     getSlideSize,
     getIsNotCompletePage
   } from './utils/size'
+  import Dots from './Dots.svelte'
 
   /**
    * Enable Next/Prev arrows
@@ -50,6 +51,11 @@
    * Auto play change direction ('next', 'prev')
    */
   export let autoplayDirection = 'next'
+
+  /**
+   * Current page indicator dots
+   */
+  export let dots = true
 
   let pagesCount = 0
   let contentContainerWidth = 0
@@ -106,6 +112,10 @@
     }
   })
 
+  function handlePageChange(event) {
+    showPage(event.detail)
+  }
+
   function applyOffset() {
     offset = -$store.currentItemIndex * contentContainerWidth
   }
@@ -125,40 +135,55 @@
 </script>
 
 <div class="main-container">
-  {#if arrows}
-  <div class="side-container">
-    <span
-      class="clickable"
-      on:click={showPrevPage}
-    >&lt;</span>
-  </div>
-  {/if}
-  <div
-    class="content-container"
-    bind:this={contentContainerElement}
-  >
-    <div
-      style="
-        transform: translateX({offset}px);
-        transition-duration: {speed}ms;
-      "
-      bind:this={innerContentContainerElement}
-    >
-      <slot></slot>
+  <div class="carousel-container">
+    {#if arrows}
+    <div class="side-container">
+      <span
+        class="clickable"
+        on:click={showPrevPage}
+      >&lt;</span>
     </div>
+    {/if}
+    <div
+      class="content-container"
+      bind:this={contentContainerElement}
+    >
+      <div
+        style="
+          transform: translateX({offset}px);
+          transition-duration: {speed}ms;
+        "
+        bind:this={innerContentContainerElement}
+      >
+        <slot></slot>
+      </div>
+    </div>
+    {#if arrows}
+    <div class="side-container">
+      <span
+        class="clickable"
+        on:click={showNextPage}
+      >&gt;</span>
+    </div>
+    {/if}
   </div>
-  {#if arrows}
-  <div class="side-container">
-    <span
-      class="clickable"
-      on:click={showNextPage}
-    >&gt;</span>
-  </div>
+  {#if dots}
+    <Dots
+      {pagesCount}
+      currentPageIndex={$store.currentItemIndex}
+      on:pageChange={handlePageChange}
+    ></Dots>
   {/if}
 </div>
 
 <style>
   .main-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+  .carousel-container {
     display: flex;
     width: 100%;
   }
