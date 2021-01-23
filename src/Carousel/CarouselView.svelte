@@ -13,11 +13,6 @@
   export let infinite = true;
 
   /**
-   * Number of slides to show at a time
-   */
-  export let slidesToShow = 1;
-
-  /**
    * Page to start on
    */
   export let initialPageIndex = 1
@@ -28,7 +23,7 @@
   export let speed = 500
 
   /**
-   * Enables auto play of slides
+   * Enables auto play of pages
    */
   export let autoplay = false
 
@@ -65,7 +60,6 @@
   <Carousel
     {arrows}
     {infinite}
-    {slidesToShow}
     {initialPageIndex}
     {speed}
     {autoplay}

@@ -2,13 +2,6 @@
   // TODO: rename image carousel to just carousel
   import { onDestroy, onMount } from 'svelte'
   import { store } from '../store'
-  import {
-    getPageIndex,
-    getPagesCount,
-    getSlidesToShowTail,
-    getSlideSize,
-    getIsNotCompletePage
-  } from '../utils/size'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../direction'
@@ -34,11 +27,6 @@
   export let infinite = true
 
   /**
-   * Number of slides to show at a time
-   */
-  export let slidesToShow = 1
-
-  /**
    * Page to start on
    */
   export let initialPageIndex = 1
@@ -50,7 +38,7 @@
   let _speed = speed
 
   /**
-   * Enables auto play of slides
+   * Enables auto play of pages
    */
   export let autoplay = false
 
@@ -82,20 +70,15 @@
     currentPageIndex = value.currentPageIndex
   })
 
-  function applySlideSizes() {
+  function applyPageSizes() {
     const children = pagesElement ? pagesElement.children : []
     pageWidth = pageWindowElement.clientWidth
 
-    const slidesCount = children.length
-    pagesCount = getPagesCount({ slidesCount, slidesToShow })
-    const slidesToShowTail = getSlidesToShowTail({ pagesCount, slidesToShow, slidesCount })
+    pagesCount = children.length
 
-    for (let slideIndex=0; slideIndex<slidesCount; slideIndex++) {
-      const pageIndex = getPageIndex({ slideIndex, slidesToShow })
-      const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
-      const slideSizePx = getSlideSize({ isNotCompletePage, pageWidth, slidesToShow, slidesToShowTail })
-      children[slideIndex].style.minWidth = `${slideSizePx}px`
-      children[slideIndex].style.maxWidth = `${slideSizePx}px`
+    for (let pageIndex=0; pageIndex<pagesCount; pageIndex++) {
+      children[pageIndex].style.minWidth = `${pageWidth}px`
+      children[pageIndex].style.maxWidth = `${pageWidth}px`
     }
   }
 
@@ -122,15 +105,15 @@
 
   onMount(() => {
     infinite && addClones()
-    applySlideSizes()
+    applyPageSizes()
     store.init(initialPageIndex + Number(infinite))
     offsetPage(false)
 
     const { teardownAutoplay } = applyAutoplay()
 
-    addResizeEventListener(applySlideSizes)
+    addResizeEventListener(applyPageSizes)
     return () => {
-      removeResizeEventListener(applySlideSizes)
+      removeResizeEventListener(applyPageSizes)
       teardownAutoplay()
     }
   })

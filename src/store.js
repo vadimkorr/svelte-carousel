@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { getNextPageIndexFn, getPrevPageIndexFn } from './utils/page-index'
+import { getNextPageIndexFn, getPrevPageIndexFn } from './utils/page'
 
 const initState = {
   currentPageIndex: 0,
