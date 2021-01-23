@@ -173,7 +173,11 @@
     {#if arrows}
       <slot name="prev" {showPrevPage}>
         <div class="arrow-container">
-          <Arrow direction="prev" on:click={showPrevPage} />
+          <Arrow
+            direction="prev"
+            disabled={!infinite && originalCurrentPageIndex === 0}
+            on:click={showPrevPage}
+          />
         </div>
       </slot>
     {/if}
@@ -199,7 +203,11 @@
     {#if arrows}
       <slot name="next" {showNextPage}>
         <div class="arrow-container">
-          <Arrow direction="next" on:click={showNextPage} />
+          <Arrow
+            direction="next"
+            disabled={!infinite && originalCurrentPageIndex === originalPagesCount - 1}
+            on:click={showNextPage}
+          />
         </div>
       </slot>
     {/if}

@@ -4,10 +4,16 @@
    * Indicates direction of the arrow ('next', 'prev')
    */
   export let direction = NEXT
+
+  /**
+   * Indicates if button disabled
+   */
+  export let disabled = false
 </script>
 
 <div
   class="circle"
+  class:disabled
   on:click
 >
   <i
@@ -48,5 +54,9 @@
   .prev {
     transform: rotate(135deg);
     right: calc(var(--size) / -2);
+  }
+  .disabled,
+  .disabled:hover {
+    opacity: 0.5;
   }
 </style>
