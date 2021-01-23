@@ -88,7 +88,7 @@
     pagesCount = getPagesCount({ slidesCount, slidesToShow })
     const slidesToShowTail = getSlidesToShowTail({ pagesCount, slidesToShow, slidesCount })
 
-    for (let slideIndex=0; slideIndex<children.length; slideIndex++) {
+    for (let slideIndex=0; slideIndex<slidesCount; slideIndex++) {
       const pageIndex = getPageIndex({ slideIndex, slidesToShow })
       const isNotCompletePage = getIsNotCompletePage({ pageIndex, pagesCount })
       const slideSizePx = getSlideSize({ isNotCompletePage, pageWidth, slidesToShow, slidesToShowTail })
