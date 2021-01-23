@@ -4,12 +4,28 @@
   "description": "Svelte carousel",
   "main": "dist/index.js",
   "author": "vadimkorr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vadimkorr/svelte-carousel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vadimkorr/svelte-carousel/issues"
+  },
+  "homepage": "https://github.com/vadimkorr/svelte-carousel#readme",
+  "keywords": [
+    "svelte",
+    "carousel",
+    "slider",
+    "svelte carousel",
+    "image carousel"
+  ],
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
