@@ -70,7 +70,9 @@
   export let dots = true
 
   let currentPageIndex = 0
+  $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
   let pagesCount = 0
+  $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 0) // without clones
   let pageWidth = 0
   let offset = 0
   let pageWindowElement
@@ -111,10 +113,18 @@
     }
   }
   
+  function addClones() {
+    const first = pagesElement.firstChild
+    const last = pagesElement.children[pagesElement.children.length - 1]
+    pagesElement.prepend(last.cloneNode(true))
+    pagesElement.append(first.cloneNode(true))
+  }
+
   onMount(() => {
+    infinite && addClones()
     applySlideSizes()
-    store.init(initialPageIndex)
-    applyOffset()
+    store.init(initialPageIndex + Number(infinite))
+    offsetPage(false)
 
     const { teardownAutoplay } = applyAutoplay()
 
@@ -130,24 +140,34 @@
   })
 
   function handlePageChange(event) {
-    showPage(event.detail)
+    showPage(event.detail + Number(infinite), { offsetDelay: 0, animated: true })
   }
 
-  function applyOffset() {
+  function offsetPage(animated) {
+    _speed = animated ? speed : 0
     offset = -currentPageIndex * pageWidth
+    if (infinite) {
+      if (currentPageIndex === 0) {
+        showPage(pagesCount - 2, { offsetDelay: speed, animated: false })
+      } else if (currentPageIndex === pagesCount - 1) {
+        showPage(1, { offsetDelay: speed, animated: false })
+      }
+    }
   }
 
-  function showPage(pageIndex) {
+  function showPage(pageIndex, { offsetDelay, animated }) {
     store.moveToPage({ pageIndex, pagesCount })
-    applyOffset()
+    setTimeout(() => {
+      offsetPage(animated)
+    }, offsetDelay)
   }
   function showPrevPage() {
     store.prev({ infinite, pagesCount })
-    applyOffset()
+    offsetPage(true)
   }
   function showNextPage() {
     store.next({ infinite, pagesCount })
-    applyOffset()
+    offsetPage(true)
   }
 
   // gestures
@@ -155,15 +175,13 @@
     _speed = 0
   }
   function handleThreshold(event) {
-    _speed = speed
     directionFnDescription[event.detail.direction]()
   }
   function handleSwipeMove(event) {
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
-    _speed = speed
-    showPage(currentPageIndex)
+    showPage(currentPageIndex, { offsetDelay: 0, animated: true })
   }
 </script>
 
@@ -206,13 +224,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={currentPageIndex}
-      {pagesCount}
-      {showPage}
+      currentPageIndex={originalCurrentPageIndex}
+      pagesCount={originalPagesCount}
+      showPage={pageIndex => showPage(pageIndex, { offsetDelay: 0, animated: true })}
     >
       <Dots
-        {pagesCount}
-        currentPageIndex={currentPageIndex}
+        pagesCount={originalPagesCount}
+        currentPageIndex={originalCurrentPageIndex}
         on:pageChange={handlePageChange}
       ></Dots>
     </slot>
