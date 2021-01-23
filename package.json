@@ -1,6 +1,9 @@
 {
-  "name": "svelte-app",
-  "version": "1.0.0",
+  "name": "svelte-carousel",
+  "version": "1.0.0-rc1",
+  "description": "Svelte carousel",
+  "main": "dist/index.js",
+  "author": "vadimkorr",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",

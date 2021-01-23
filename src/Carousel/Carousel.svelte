@@ -1,6 +1,5 @@
 <script>
-  // TODO: rename image carousel to just carousel
-  import { onDestroy, onMount } from 'svelte'
+  import { onDestroy, onMount, tick } from 'svelte'
   import { store } from '../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
@@ -71,7 +70,7 @@
   })
 
   function applyPageSizes() {
-    const children = pagesElement ? pagesElement.children : []
+    const children = pagesElement.children
     pageWidth = pageWindowElement.clientWidth
 
     pagesCount = children.length
@@ -80,6 +79,9 @@
       children[pageIndex].style.minWidth = `${pageWidth}px`
       children[pageIndex].style.maxWidth = `${pageWidth}px`
     }
+
+    store.init(initialPageIndex + Number(infinite))
+    offsetPage(false)
   }
 
   function applyAutoplay() {
@@ -103,11 +105,12 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  onMount(() => {
-    infinite && addClones()
-    applyPageSizes()
-    store.init(initialPageIndex + Number(infinite))
-    offsetPage(false)
+  onMount(async () => {
+    await tick()
+    if (pagesElement && pageWindowElement) {
+      infinite && addClones()
+      applyPageSizes()
+    }
 
     const { teardownAutoplay } = applyAutoplay()
 
@@ -252,7 +255,6 @@
     transition-property: transform;
   }
   .arrow-container {
-    height: 100%;
     padding: 5px;
     box-sizing: border-box;
     display: flex;
