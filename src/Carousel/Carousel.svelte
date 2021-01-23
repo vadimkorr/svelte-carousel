@@ -69,7 +69,7 @@
    */
   export let dots = true
 
-  let currentPageIndex = 0 
+  let currentPageIndex = 0
   let pagesCount = 0
   let pageWidth = 0
   let offset = 0
@@ -150,6 +150,7 @@
     applyOffset()
   }
 
+  // gestures
   function handleSwipeStart() {
     _speed = 0
   }
