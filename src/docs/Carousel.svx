@@ -1,0 +1,62 @@
+<script>
+  import Carousel from '../components/Carousel/Carousel.svelte'
+
+  const colorGroups = [
+    [
+      { color: '#e5f9f0', text: '#e5f9f0' },
+      { color: '#ccf3e2', text: '#ccf3e2' },
+      { color: '#b2edd3', text: '#b2edd3' },
+    ], [
+      { color: '#99e7c5', text: '#99e7c5' },
+      { color: '#7fe1b7', text: '#7fe1b7' },
+      { color: '#66dba8', text: '#66dba8' },
+    ], [
+      { color: '#4cd59a', text: '#4cd59a' },
+      { color: '#32cf8b', text: '#32cf8b' },
+      { color: '#19c97d', text: '#19c97d' },
+    ]
+  ]
+</script>
+
+## Single item
+<Carousel>
+  {#each colorGroups.flat() as { color, text } (color)}
+    <div
+      class="color-container"
+      style="background-color: {color};"
+    >
+      <p>{text}</p>
+    </div>
+  {/each}
+</Carousel>
+
+## Multiple items
+<Carousel>
+  {#each colorGroups as colorGroup, groupIndex (groupIndex)}
+    <div style="display: flex;">
+      {#each colorGroup as { color, text } (color)}
+        <div
+          class="color-container"
+          style="background-color: {color}; width: 33.33%;"
+        >
+          <p>{text}</p>
+        </div>
+      {/each}
+    </div>
+  {/each}
+</Carousel>
+
+<style>
+  .color-container {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .color-container > p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-size: 18px;
+  }
+</style>
