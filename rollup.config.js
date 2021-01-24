@@ -9,12 +9,12 @@ import { mdsvex } from "mdsvex";
 const production = !process.env.ROLLUP_WATCH;
 
 const docsConfig = {
-  input: 'src/main.js',
+  input: 'src/docs/main.js',
   outputFormat: 'iife',
   outputFile: 'docs/index.js'
 }
 const packageConfig = {
-  input: 'src/docs/main.js',
+  input: 'src/main.js',
   outputFormat: 'es',
   outputFile: 'dist/index.js'
 }
