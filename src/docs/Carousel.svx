@@ -54,6 +54,4 @@
 </Carousel>
 ```
 
-<style>
 
-</style>

@@ -1,3 +1,4 @@
+import { join } from 'path';
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
@@ -61,7 +62,11 @@ export default {
       },
       // tell svelte to handle mdsvex files
       extensions: [".svelte", ".svx"],
-      preprocess: mdsvex()
+      preprocess: mdsvex({
+        layout: {
+          _: join(__dirname, './src/docs/Layouts/Main.svelte')
+        }
+      })
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
