@@ -1,6 +1,6 @@
 <script>
   import Carousel from './Carousel.svelte'
-  import { NEXT } from '../direction'
+  import { NEXT } from '../../direction'
 
   /**
    * Enable Next/Previos arrows
@@ -43,16 +43,16 @@
   export let dots = true
 
   const colors = [
-    '#e5f9f0',
-    '#ccf3e2',
-    '#b2edd3',
-    '#99e7c5',
-    '#7fe1b7',
-    '#66dba8',
-    '#4cd59a',
-    '#32cf8b',
-    '#19c97d',
-    '#00c36f'
+    { color: '#e5f9f0', text: '0' },
+    { color: '#ccf3e2', text: '1' },
+    { color: '#b2edd3', text: '2' },
+    { color: '#99e7c5', text: '3' },
+    { color: '#7fe1b7', text: '4' },
+    { color: '#66dba8', text: '5' },
+    { color: '#4cd59a', text: '6' },
+    { color: '#32cf8b', text: '7' },
+    { color: '#19c97d', text: '8' },
+    { color: '#00c36f', text: '9' }
   ]
 </script>
 
@@ -66,27 +66,15 @@
     {autoplaySpeed}
     {autoplayDirection}
     {dots}
-    let:showPrevPage
-    let:showNextPage
   >
-    {#each colors as color (color)}
+    {#each colors as { color, text } (color)}
       <div
         class="color-container"
         style="background-color: {color};"
       >
-        <p>{color}</p>
+        <p>{text}</p>
       </div>
     {/each}
-    <div slot="prev" class="arrow-container">
-      <div class="arrow" on:click={showPrevPage}>
-        <span>&lt;&lt;&lt;</span>
-      </div>
-    </div>
-    <div slot="next" class="arrow-container">
-      <div class="arrow" on:click={showNextPage}>
-        <span>&gt;&gt;&gt;</span>
-      </div>
-    </div>
   </Carousel>
 </div>
 
@@ -100,25 +88,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
   }
   .color-container > p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-style: italic;
     font-size: 18px;
-  }
-
-  .arrow-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  .arrow {
-    background-color: darkgray;
-    border-radius: 5px;
-    padding: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    user-select: none;
   }
 </style>

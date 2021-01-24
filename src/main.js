@@ -1,3 +1,3 @@
-import Carousel from './Carousel/Carousel.svelte'
+import Carousel from './components/Carousel/Carousel.svelte'
 
 export default Carousel;

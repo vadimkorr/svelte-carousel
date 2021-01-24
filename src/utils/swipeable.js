@@ -1,4 +1,4 @@
-import { NEXT, PREV } from './direction'
+import { NEXT, PREV } from '../direction'
 import {
   addStartEventListener,
   removeStartEventListener,
@@ -7,7 +7,7 @@ import {
   addEndEventListener,
   removeEndEventListener,
   createDispatcher
-} from './utils/event'
+} from './event'
 
 function getCoords(event) {
   if (event instanceof TouchEvent) {
@@ -23,7 +23,6 @@ function getCoords(event) {
   }
 }
 
-// TODO: rename to slidable
 export function swipeable(node, { thresholdProvider }) {
   const dispatch = createDispatcher(node)
   let x

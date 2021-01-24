@@ -1,5 +1,5 @@
 <script>
-  import { NEXT, PREV } from '../direction'
+  import { NEXT, PREV } from '../../direction'
   /**
    * Indicates direction of the arrow ('next', 'prev')
    */

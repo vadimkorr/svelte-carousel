@@ -1,14 +1,14 @@
 <script>
   import { onDestroy, onMount, tick } from 'svelte'
-  import { store } from '../store'
+  import { store } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
-  import { NEXT, PREV } from '../direction'
-  import { swipeable } from '../swipeable'
+  import { NEXT, PREV } from '../../direction'
+  import { swipeable } from '../../utils/swipeable'
   import {
     addResizeEventListener,
     removeResizeEventListener
-  } from '../utils/event'
+  } from '../../utils/event'
 
   const directionFnDescription = {
     [NEXT]: showNextPage,
