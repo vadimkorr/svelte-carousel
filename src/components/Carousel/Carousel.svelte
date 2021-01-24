@@ -96,7 +96,7 @@
   }
   
   function addClones() {
-    const first = pagesElement.firstChild
+    const first = pagesElement.children[0]
     const last = pagesElement.children[pagesElement.children.length - 1]
     pagesElement.prepend(last.cloneNode(true))
     pagesElement.append(first.cloneNode(true))
