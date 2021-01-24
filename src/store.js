@@ -61,4 +61,4 @@ function createStore() {
   };
 }
 
-export const store = createStore();
+export { createStore };

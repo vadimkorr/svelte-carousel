@@ -1,6 +1,6 @@
 <script>
-  import { onDestroy, onMount, tick } from 'svelte'
-  import { store } from '../../store'
+  import { onMount, tick } from 'svelte'
+  import { createStore } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../../direction'
@@ -56,6 +56,7 @@
    */
   export let dots = true
 
+  let store = createStore()
   let currentPageIndex = 0
   $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
   let pagesCount = 0
@@ -64,10 +65,6 @@
   let offset = 0
   let pageWindowElement
   let pagesElement
-
-  const unsubscribe = store.subscribe(value => {
-    currentPageIndex = value.currentPageIndex
-  })
 
   function applyPageSizes() {
     const children = pagesElement.children
@@ -107,6 +104,9 @@
 
   onMount(async () => {
     await tick()
+    const unsubscribe = store.subscribe(value => {
+      currentPageIndex = value.currentPageIndex
+    })
     if (pagesElement && pageWindowElement) {
       infinite && addClones()
       applyPageSizes()
@@ -118,11 +118,8 @@
     return () => {
       removeResizeEventListener(applyPageSizes)
       teardownAutoplay()
+      unsubscribe()
     }
-  })
-
-  onDestroy(() => {
-    unsubscribe()
   })
 
   function handlePageChange(event) {

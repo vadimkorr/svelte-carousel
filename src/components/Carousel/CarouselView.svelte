@@ -54,6 +54,12 @@
     { color: '#19c97d', text: '8' },
     { color: '#00c36f', text: '9' }
   ]
+
+  const colors2 = [
+    { color: '#e5f9f0', text: '0' },
+    { color: '#ccf3e2', text: '1' },
+    { color: '#b2edd3', text: '2' }
+  ]
 </script>
 
 <div class="main-container">
@@ -76,11 +82,32 @@
       </div>
     {/each}
   </Carousel>
+
+  <Carousel
+    {arrows}
+    {infinite}
+    {initialPageIndex}
+    {speed}
+    {autoplay}
+    {autoplaySpeed}
+    {autoplayDirection}
+    {dots}
+  >
+    {#each colors2 as { color, text } (color)}
+      <div
+        class="color-container"
+        style="background-color: {color};"
+      >
+        <p>{text}</p>
+      </div>
+    {/each}
+  </Carousel>
 </div>
 
 <style>
   .main-container {
     display: flex;
+    flex-direction: column;
     width: 100%;
   }
   .color-container {
