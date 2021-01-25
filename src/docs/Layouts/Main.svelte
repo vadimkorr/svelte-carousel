@@ -17,7 +17,7 @@
 }
 @media screen and (min-width: 0px) {
   .docs__main-layout__content-inner-container {
-    width: 100%;
+    width: 95%;
   }
 }
 @media screen and (min-width: 768px) {

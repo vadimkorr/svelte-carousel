@@ -66,6 +66,14 @@
   let pageWindowElement
   let pagesElement
 
+  // used for lazy loading images, preloaded only current, adjacent and cloanable images
+  $: loaded = [
+    ...new Set([
+      0, originalPagesCount-1,
+      originalCurrentPageIndex - 1, originalCurrentPageIndex, originalCurrentPageIndex + 1
+    ])
+  ].filter(index => index >= 0)
+
   function applyPageSizes() {
     const children = pagesElement.children
     pageWidth = pageWindowElement.clientWidth
@@ -197,10 +205,7 @@
         "
         bind:this={pagesElement}
       >
-        <slot
-          currentPageIndex={originalCurrentPageIndex}
-        >
-        </slot>
+        <slot {loaded}></slot>
       </div>    
     </div>
     {#if arrows}

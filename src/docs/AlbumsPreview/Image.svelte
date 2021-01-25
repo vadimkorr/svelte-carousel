@@ -1,10 +1,13 @@
 <script>
   export let src
   export let alt
+  export let loaded
 </script>
 
 <div class="image-container">
-  <img {src} {alt} />
+  {#if loaded}
+    <img {src} {alt} />
+  {/if}
 </div>
 
 <style>

@@ -9,7 +9,10 @@
       images: [
         'https://cdn.pixabay.com/photo/2017/04/09/09/56/avenue-2215317_1280.jpg',
         'https://cdn.pixabay.com/photo/2017/11/12/13/37/forest-2942477_1280.jpg',
-        'https://cdn.pixabay.com/photo/2016/08/11/23/55/trees-1587301_1280.jpg'
+        'https://cdn.pixabay.com/photo/2016/08/11/23/55/trees-1587301_1280.jpg',
+        'https://cdn.pixabay.com/photo/2016/08/16/19/09/forest-1598756_1280.jpg',
+        'https://cdn.pixabay.com/photo/2016/11/29/07/12/forest-1868028_1280.jpg',
+        'https://cdn.pixabay.com/photo/2015/03/26/09/45/woods-690257_1280.jpg'
       ]
     },
     birds: {
@@ -50,12 +53,17 @@
       <Carousel
         let:showPrevPage
         let:showNextPage
+        let:loaded
       >
         <div slot="prev" class="album-arrow album-arrow-prev" on:click={showPrevPage}>
           <i />
         </div>
         {#each album.images as imageSrc, imageIndex (imageSrc)}
-          <Image src={imageSrc} alt={album.title} />
+          <Image
+            src={imageSrc}
+            alt={album.title}
+            loaded={loaded.includes(imageIndex)}
+          />
         {/each}
         <div slot="next" class="album-arrow album-arrow-next" on:click={showNextPage}>
           <i />
