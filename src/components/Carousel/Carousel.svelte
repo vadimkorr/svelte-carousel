@@ -28,7 +28,7 @@
   /**
    * Page to start on
    */
-  export let initialPageIndex = 1
+  export let initialPageIndex = 0
 
   /**
    * Transition speed (ms)
@@ -197,7 +197,10 @@
         "
         bind:this={pagesElement}
       >
-        <slot></slot>
+        <slot
+          currentPageIndex={originalCurrentPageIndex}
+        >
+        </slot>
       </div>    
     </div>
     {#if arrows}
@@ -236,6 +239,7 @@
     align-items: center;
   }
   .carousel-container {
+    position: relative;
     display: flex;
     width: 100%;
   }

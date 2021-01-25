@@ -2,17 +2,18 @@
   import _ from 'lodash'
   import Carousel from '../components/Carousel/Carousel.svelte'
   import Color from './Color.svelte'
+  import AlbumsPreview from './AlbumsPreview/AlbumsPreview.svelte'
 
   const colors = [
-    { color: '#e5f9f0', text: '#e5f9f0' },
-    { color: '#ccf3e2', text: '#ccf3e2' },
-    { color: '#b2edd3', text: '#b2edd3' },
-    { color: '#99e7c5', text: '#99e7c5' },
-    { color: '#7fe1b7', text: '#7fe1b7' },
-    { color: '#66dba8', text: '#66dba8' },
-    { color: '#4cd59a', text: '#4cd59a' },
-    { color: '#32cf8b', text: '#32cf8b' },
-    { color: '#19c97d', text: '#19c97d' },
+    { color: '#85d78b', text: '#85d78b' },
+    { color: '#71d077', text: '#71d077' },
+    { color: '#5dca64', text: '#5dca64' },
+    { color: '#49c351', text: '#49c351' },
+    { color: '#35bd3e', text: '#35bd3e' },
+    { color: '#2faa37', text: '#2faa37' },
+    { color: '#2a9731', text: '#2a9731' },
+    { color: '#25842b', text: '#25842b' },
+    { color: '#1f7125', text: '#1f7125' },
   ]
 </script>
 
@@ -54,4 +55,6 @@
 </Carousel>
 ```
 
+## Albums preview or Marketplace item pictures
 
+<AlbumsPreview />

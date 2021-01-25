@@ -1,10 +1,16 @@
-<div class="docs__main-layout__content-container">
-  <div class="docs__main-layout__content-inner-container">
-    <slot></slot>
+<div class="docs__main-layout__main-container">
+  <div class="docs__main-layout__content-container">
+    <div class="docs__main-layout__content-inner-container">
+      <slot></slot>
+    </div>
   </div>
 </div>
 
 <style>
+.docs__main-layout__main-container {
+  background-color: #eaeaea;
+}
+
 .docs__main-layout__content-container {
   display: flex;
   justify-content: center;
