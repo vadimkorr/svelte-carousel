@@ -127,6 +127,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
   }
   .album-arrow > i{
     border: solid #1e1e1e;
