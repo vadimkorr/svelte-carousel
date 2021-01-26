@@ -1,7 +1,7 @@
 <script>
   export let src
   export let alt
-  export let loaded
+  export let loaded = false
 </script>
 
 <div class="image-container">

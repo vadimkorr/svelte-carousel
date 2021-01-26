@@ -116,6 +116,9 @@
       currentPageIndex = value.currentPageIndex
     })
     if (pagesElement && pageWindowElement) {
+      // load first and last child to clone them 
+      loaded = [0, pagesElement.children.length - 1]
+      await tick()
       infinite && addClones()
       applyPageSizes()
     }
