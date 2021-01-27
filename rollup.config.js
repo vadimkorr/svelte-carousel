@@ -5,6 +5,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import babel from 'rollup-plugin-babel';
 import css from 'rollup-plugin-css-only';
 import { mdsvex } from "mdsvex";
 
@@ -97,6 +98,10 @@ export default {
     production && terser(),
 
     json(),
+
+    babel({
+      exclude: 'node_modules/**',
+    })
   ],
   watch: {
     clearScreen: false
