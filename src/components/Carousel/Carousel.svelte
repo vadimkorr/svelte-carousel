@@ -179,11 +179,11 @@
   }
 </script>
 
-<div class="main-container">
-  <div class="carousel-container">
+<div class="carousel__carousel-container">
+  <div class="carousel__content-container">
     {#if arrows}
       <slot name="prev" {showPrevPage}>
-        <div class="arrow-container">
+        <div class="carousel__arrow-container">
           <Arrow
             direction="prev"
             disabled={!infinite && originalCurrentPageIndex === 0}
@@ -193,10 +193,11 @@
       </slot>
     {/if}
     <div
-      class="content-container"
+      class="carousel__pages-window"
       bind:this={pageWindowElement}
     >
       <div
+        class="carousel__pages-container"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
         on:start={handleSwipeStart}
         on:move={handleSwipeMove}
@@ -213,7 +214,7 @@
     </div>
     {#if arrows}
       <slot name="next" {showNextPage}>
-        <div class="arrow-container">
+        <div class="carousel__arrow-container">
           <Arrow
             direction="next"
             disabled={!infinite && originalCurrentPageIndex === originalPagesCount - 1}
@@ -240,30 +241,30 @@
 </div>
 
 <style>
-  .main-container {
+  .carousel__carousel-container {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
   }
-  .carousel-container {
+  .carousel__content-container {
     position: relative;
     display: flex;
     width: 100%;
   }
-  .content-container {
+  .carousel__pages-window {
     flex: 1;
     display: flex;
     overflow: hidden;
     box-sizing: border-box;
   }
-  .content-container > div {
+  .carousel__pages-container {
     width: 100%;
     display: flex; /* to put child elements in one row */
     transition-timing-function: ease-in-out;
     transition-property: transform;
   }
-  .arrow-container {
+  .carousel__arrow-container {
     padding: 5px;
     box-sizing: border-box;
     display: flex;
