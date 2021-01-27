@@ -78,7 +78,7 @@ This slot is used for customizing dots appearance.
 Slot props:
 
 | Prop                | Type         | Description                                  | 
-|---------------------|----------  --|----------------------------------------------|
+|---------------------|--------------|----------------------------------------------|
 | `currentPageIndex`  | `number`     | Represents current page index (start from 0) |
 | `pagesCount`        | `number`     | Total pages amount                           |
 | `showPage`          | `function`   | Takes index as page to be shown              |
