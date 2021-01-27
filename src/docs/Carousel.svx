@@ -82,7 +82,7 @@
   {#each images as src, imageIndex (src)}
     <div class="img-container">
       {#if loaded.includes(imageIndex)}
-        <img {src} />
+        <img {src} alt="nature" />
       {/if}
     </div>
   {/each}
@@ -95,10 +95,45 @@
   {#each images as src, imageIndex (src)}
     <div class="img-container">
       {#if loaded.includes(imageIndex)}
-        <img {src} />
+        <img {src} alt="nature" />
       {/if}
     </div>
   {/each}
+</Carousel>
+```
+
+<Divider />
+
+## Arrows customizing
+<Carousel
+  let:showPrevPage
+  let:showNextPage
+>
+  <div slot="prev" on:click={showPrevPage} class="custom-arrow custom-arrow-prev">
+    <i />
+  </div>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+  <div slot="next" on:click={showNextPage} class="custom-arrow custom-arrow-next">
+    <i />
+  </div>
+</Carousel>
+
+```jsx
+<Carousel
+  let:showPrevPage
+  let:showNextPage
+>
+  <div slot="prev" on:click={showPrevPage} class="custom-arrow custom-arrow-prev">
+    <i />
+  </div>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+  <div slot="next" on:click={showNextPage} class="custom-arrow custom-arrow-next">
+    <i />
+  </div>
 </Carousel>
 ```
 
@@ -210,26 +245,68 @@ Slot props:
 <Divider />
 
 <style>
-.img-container {
-  display: block;
-  width: 100%;
-  height: 200px;
-}
-.img-container > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  -webkit-user-drag: none;
-}
+  .img-container {
+    display: block;
+    width: 100%;
+    height: 200px;
+  }
+  .img-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-user-drag: none;
+  }
 
-/* table */
-table {
-  border-collapse: collapse;
-}
-tr {
-  border-bottom: 2px solid #009800;
-}
-td {
-  padding: 2px 10px;
-}
+  /* table */
+  table {
+    border-collapse: collapse;
+  }
+  tr {
+    border-bottom: 2px solid #009800;
+  }
+  td {
+    padding: 2px 10px;
+  }
+  th {
+    padding: 5px 10px;
+  }
+
+  /* custom arrows */
+  .custom-arrow {
+    width: 20px;
+    background-color: #000000;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    transition: opacity 150ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .custom-arrow:hover {
+    opacity: 0.5;
+  }
+  .custom-arrow > i {
+    border: solid #1e1e1e;
+    border-width: 0 5px 5px 0;
+    padding: 5px;
+    position: relative;
+  }
+  .custom-arrow-prev {
+    left: 0;
+  }
+  .custom-arrow-prev > i {
+    transform: rotate(135deg);
+    right: -4px;
+  }
+  .custom-arrow-next {
+    right: 0;
+  }
+  .custom-arrow-next > i {
+    transform: rotate(-45deg);
+    left: -4px;
+  }
 </style>
