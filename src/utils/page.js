@@ -23,3 +23,7 @@ export function getPrevPageIndexInfinte(currentPageIndex, pagesCount) {
 export function getPrevPageIndexFn(infinite) {
   return infinite ? getPrevPageIndexInfinte : getPrevPageIndexLimited
 }
+
+export function getPageIndex(pageIndex, pagesCount) {
+  return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
+}

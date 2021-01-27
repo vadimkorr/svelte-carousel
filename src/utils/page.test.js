@@ -2,7 +2,8 @@ import {
   getNextPageIndexLimited,
   getNextPageIndexInfinte,
   getPrevPageIndexLimited,
-  getPrevPageIndexInfinte
+  getPrevPageIndexInfinte,
+  getPageIndex
 } from './page.js';
 
 describe('getNextPageIndexLimited', () => {
@@ -61,6 +62,21 @@ describe('getPrevPageIndexInfinte', () => {
     ]
     testCases.forEach(({ currentPageIndex, pagesCount, expected }) => {
       expect(getPrevPageIndexInfinte(currentPageIndex, pagesCount)).toBe(expected);
+    });
+  });
+});
+
+describe('getPageIndex', () => {
+  it('returns normalized page index as expected', () => {
+    const testCases = [
+      { pageIndex: -5, pagesCount: 3, expected: 0 },
+      { pageIndex: 0, pagesCount: 3, expected: 0 },
+      { pageIndex: 1, pagesCount: 3, expected: 1 },
+      { pageIndex: 2, pagesCount: 3, expected: 2 },
+      { pageIndex: 7, pagesCount: 3, expected: 2 },
+    ]
+    testCases.forEach(({ pageIndex, pagesCount, expected }) => {
+      expect(getPageIndex(pageIndex, pagesCount)).toBe(expected);
     });
   });
 });
