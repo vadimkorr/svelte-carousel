@@ -2,10 +2,10 @@
   import { tweened } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
 
-  const sizePx = 5
-  const sizeCurrentPx = 8
+  const DOT_SIZE_PX = 5
+  const ACTIVE_DOT_SIZE_PX = 8
 
-  const size = tweened(sizePx, {
+  const size = tweened(DOT_SIZE_PX, {
     duration: 250,
     easing: cubicInOut
   });
@@ -16,14 +16,14 @@
   export let active = false
 
   $: {
-    size.set(active ? sizeCurrentPx : sizePx)
+    size.set(active ? ACTIVE_DOT_SIZE_PX : DOT_SIZE_PX)
   }
 </script>
 
 <div class="sc-carousel-dot__container">
   <div
     class="sc-carousel-dot__dot"
-    class:sc-carousel-dot__dot_current={active}
+    class:sc-carousel-dot__dot_active={active}
     style="
       height: {$size}px;
       width: {$size}px;
@@ -51,7 +51,7 @@
   .sc-carousel-dot__dot:hover {
     opacity: 0.9;
   }
-  .sc-carousel-dot__dot_current {
+  .sc-carousel-dot__dot_active {
     opacity: 0.7;
   }
 </style>

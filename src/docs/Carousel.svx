@@ -4,6 +4,7 @@
   import Color from './components/Color.svelte'
   import AlbumsPreview from './components/AlbumsPreview/AlbumsPreview.svelte'
   import Divider from './components/Divider.svelte'
+  import CustomDot from './components/CustomDot.svelte'
   import images from './data/images.json'
   import colors from './data/colors.json'
 </script>
@@ -104,7 +105,7 @@
 
 <Divider />
 
-## Arrows customizing
+## Arrows customization
 <Carousel
   let:showPrevPage
   let:showNextPage
@@ -134,6 +135,49 @@
   <div slot="next" on:click={showNextPage} class="custom-arrow custom-arrow-next">
     <i />
   </div>
+</Carousel>
+```
+
+<Divider />
+
+## Dots customization
+<Carousel
+  let:currentPageIndex
+  let:pagesCount
+  let:showPage
+>
+  <div slot="dots" class="custom-dots">
+    {#each Array(pagesCount) as _, pageIndex (pageIndex)}
+      <CustomDot
+        symbol={pageIndex + 1}
+        active={currentPageIndex === pageIndex}
+        on:click={() => showPage(pageIndex)}
+      ></CustomDot>
+    {/each}
+  </div>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  let:currentPageIndex
+  let:pagesCount
+  let:showPage
+>
+  <div slot="dots" class="custom-dots">
+    {#each Array(pagesCount) as _, pageIndex (pageIndex)}
+      <CustomDot
+        symbol={pageIndex + 1}
+        active={currentPageIndex === pageIndex}
+        on:click={() => showPage(pageIndex)}
+      ></CustomDot>
+    {/each}
+  </div>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
 </Carousel>
 ```
 
@@ -308,5 +352,14 @@ Slot props:
   .custom-arrow-next > i {
     transform: rotate(-45deg);
     left: -4px;
+  }
+
+  /* custom dots */
+  .custom-dots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
   }
 </style>

@@ -129,8 +129,8 @@
     }
   })
 
-  function handlePageChange(event) {
-    showPage(event.detail + Number(infinite), { offsetDelay: 0, animated: true })
+  function handlePageChange(pageIndex) {
+    showPage(pageIndex + Number(infinite), { offsetDelay: 0, animated: true })
   }
 
   function offsetPage(animated) {
@@ -225,12 +225,12 @@
       name="dots"
       currentPageIndex={originalCurrentPageIndex}
       pagesCount={originalPagesCount}
-      showPage={pageIndex => showPage(pageIndex, { offsetDelay: 0, animated: true })}
+      showPage={handlePageChange}
     >
       <Dots
         pagesCount={originalPagesCount}
         currentPageIndex={originalCurrentPageIndex}
-        on:pageChange={handlePageChange}
+        on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
     </slot>
   {/if}
