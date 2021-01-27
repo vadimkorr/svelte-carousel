@@ -37,6 +37,9 @@
   .sc-carousel-dots__container {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 30px;
   }
   .sc-carousel-dots__dot-container {
     height: calc(var(--dot-size) + 10px);
