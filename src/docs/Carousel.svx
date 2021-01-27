@@ -1,29 +1,11 @@
 <script>
   import _ from 'lodash'
   import Carousel from '../components/Carousel/Carousel.svelte'
-  import Color from './Color.svelte'
-  import AlbumsPreview from './AlbumsPreview/AlbumsPreview.svelte'
-  import Divider from './Divider.svelte'
-
-  const colors = [
-    { color: '#85d78b', text: '#85d78b' },
-    { color: '#71d077', text: '#71d077' },
-    { color: '#5dca64', text: '#5dca64' },
-    { color: '#49c351', text: '#49c351' },
-    { color: '#35bd3e', text: '#35bd3e' },
-    { color: '#2faa37', text: '#2faa37' },
-    { color: '#2a9731', text: '#2a9731' },
-    { color: '#25842b', text: '#25842b' },
-    { color: '#1f7125', text: '#1f7125' },
-  ]
-
-  const images = [
-    'https://cdn.pixabay.com/photo/2017/03/13/10/25/hummingbird-2139278_1280.jpg',
-    'https://cdn.pixabay.com/photo/2016/03/27/19/49/nature-1283976_1280.jpg',
-    'https://cdn.pixabay.com/photo/2018/07/09/18/17/apple-3526737_1280.jpg',
-    'https://cdn.pixabay.com/photo/2016/08/30/16/05/leaf-1631181_1280.jpg',
-    'https://cdn.pixabay.com/photo/2019/11/13/11/01/meadow-4623279_1280.jpg'
-  ]
+  import Color from './components/Color.svelte'
+  import AlbumsPreview from './components/AlbumsPreview/AlbumsPreview.svelte'
+  import Divider from './components/Divider.svelte'
+  import images from './data/images.json'
+  import colors from './data/colors.json'
 </script>
 
 # Features
