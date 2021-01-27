@@ -18,9 +18,9 @@
   export let initialPageIndex = 1
 
   /**
-   * Transition speed (ms)
+   * Transition duration (ms)
    */
-  export let speed = 500
+  export let duration = 500
 
   /**
    * Enables auto play of pages
@@ -30,7 +30,7 @@
   /**
    * Auto play change interval
    */
-  export let autoplaySpeed = 3000
+  export let autoplayDuration = 3000
 
   /**
    * Auto play change direction ('next', 'prev')
@@ -67,9 +67,9 @@
     {arrows}
     {infinite}
     {initialPageIndex}
-    {speed}
+    {duration}
     {autoplay}
-    {autoplaySpeed}
+    {autoplayDuration}
     {autoplayDirection}
     {dots}
   >
@@ -87,9 +87,9 @@
     {arrows}
     {infinite}
     {initialPageIndex}
-    {speed}
+    {duration}
     {autoplay}
-    {autoplaySpeed}
+    {autoplayDuration}
     {autoplayDirection}
     {dots}
   >

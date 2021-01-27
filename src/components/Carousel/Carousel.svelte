@@ -32,10 +32,10 @@
   export let initialPageIndex = 0
 
   /**
-   * Transition speed (ms)
+   * Transition duration (ms)
    */
-  export let speed = 500
-  let _speed = speed
+  export let duration = 500
+  let _duration = duration
 
   /**
    * Enables auto play of pages
@@ -45,7 +45,7 @@
   /**
    * Auto play change interval
    */
-  export let autoplaySpeed = 3000
+  export let autoplayDuration = 3000
 
   /**
    * Auto play change direction ('next', 'prev')
@@ -90,7 +90,7 @@
     if (autoplay) {
       interval = setInterval(() => {
         directionFnDescription[autoplayDirection]()
-      }, autoplaySpeed)
+      }, autoplayDuration)
     }
     return {
       teardownAutoplay: () => {
@@ -134,13 +134,13 @@
   }
 
   function offsetPage(animated) {
-    _speed = animated ? speed : 0
+    _duration = animated ? duration : 0
     offset = -currentPageIndex * pageWidth
     if (infinite) {
       if (currentPageIndex === 0) {
-        showPage(pagesCount - 2, { offsetDelay: speed, animated: false })
+        showPage(pagesCount - 2, { offsetDelay: duration, animated: false })
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelay: speed, animated: false })
+        showPage(1, { offsetDelay: duration, animated: false })
       }
     }
   }
@@ -162,7 +162,7 @@
 
   // gestures
   function handleSwipeStart() {
-    _speed = 0
+    _duration = 0
   }
   function handleThreshold(event) {
     directionFnDescription[event.detail.direction]()
@@ -201,7 +201,7 @@
         on:threshold={handleThreshold}
         style="
           transform: translateX({offset}px);
-          transition-duration: {_speed}ms;
+          transition-duration: {_duration}ms;
         "
         bind:this={pagesElement}
       >
