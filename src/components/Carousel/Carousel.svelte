@@ -68,7 +68,7 @@
   let pagesElement
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
-  $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount)
+  $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount, infinite)
 
   function applyPageSizes() {
     const children = pagesElement.children
