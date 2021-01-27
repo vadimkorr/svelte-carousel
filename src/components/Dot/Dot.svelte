@@ -20,10 +20,10 @@
   }
 </script>
 
-<div class="carousel-dot__container">
+<div class="sc-carousel-dot__container">
   <div
-    class="carousel-dot__dot"
-    class:carousel-dot__dot_current={active}
+    class="sc-carousel-dot__dot"
+    class:sc-carousel-dot__dot_current={active}
     style="
       height: {$size}px;
       width: {$size}px;
@@ -33,14 +33,14 @@
 </div>
 
 <style>
-  .carousel-dot__container {
+  .sc-carousel-dot__container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 16px;
     width: 16px;
   }
-  .carousel-dot__dot {
+  .sc-carousel-dot__dot {
     background-color: #5d5d5d;
     border-radius: 50%;
     display: inline-block;
@@ -48,10 +48,10 @@
     cursor: pointer;
     transition: opacity 100ms ease;
   }
-  .carousel-dot__dot:hover {
+  .sc-carousel-dot__dot:hover {
     opacity: 0.9;
   }
-  .carousel-dot__dot_current {
+  .sc-carousel-dot__dot_current {
     opacity: 0.7;
   }
 </style>

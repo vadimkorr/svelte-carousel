@@ -179,11 +179,11 @@
   }
 </script>
 
-<div class="carousel__carousel-container">
-  <div class="carousel__content-container">
+<div class="sc-carousel__carousel-container">
+  <div class="sc-carousel__content-container">
     {#if arrows}
       <slot name="prev" {showPrevPage}>
-        <div class="carousel__arrow-container">
+        <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
             disabled={!infinite && originalCurrentPageIndex === 0}
@@ -193,11 +193,11 @@
       </slot>
     {/if}
     <div
-      class="carousel__pages-window"
+      class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
     >
       <div
-        class="carousel__pages-container"
+        class="sc-carousel__pages-container"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
         on:start={handleSwipeStart}
         on:move={handleSwipeMove}
@@ -214,7 +214,7 @@
     </div>
     {#if arrows}
       <slot name="next" {showNextPage}>
-        <div class="carousel__arrow-container">
+        <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
             disabled={!infinite && originalCurrentPageIndex === originalPagesCount - 1}
@@ -241,30 +241,30 @@
 </div>
 
 <style>
-  .carousel__carousel-container {
+  .sc-carousel__carousel-container {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
   }
-  .carousel__content-container {
+  .sc-carousel__content-container {
     position: relative;
     display: flex;
     width: 100%;
   }
-  .carousel__pages-window {
+  .sc-carousel__pages-window {
     flex: 1;
     display: flex;
     overflow: hidden;
     box-sizing: border-box;
   }
-  .carousel__pages-container {
+  .sc-carousel__pages-container {
     width: 100%;
     display: flex; /* to put child elements in one row */
     transition-timing-function: ease-in-out;
     transition-property: transform;
   }
-  .carousel__arrow-container {
+  .sc-carousel__arrow-container {
     padding: 5px;
     box-sizing: border-box;
     display: flex;

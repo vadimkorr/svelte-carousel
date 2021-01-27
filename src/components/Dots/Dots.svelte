@@ -19,9 +19,9 @@
   }
 </script>
 
-<div class="carousel-dots__container">
+<div class="sc-carousel-dots__container">
   {#each Array(pagesCount) as _, pageIndex (pageIndex)}
-    <div class="carousel-dots__dot-container">
+    <div class="sc-carousel-dots__dot-container">
       <Dot
         active={currentPageIndex === pageIndex}
         on:click={() => handleDotClick(pageIndex)}
@@ -34,11 +34,11 @@
   :root {
     --dot-size: 10px; 
   }
-  .carousel-dots__container {
+  .sc-carousel-dots__container {
     display: flex;
     align-items: center;
   }
-  .carousel-dots__dot-container {
+  .sc-carousel-dots__dot-container {
     height: calc(var(--dot-size) + 10px);
     width: calc(var(--dot-size) + 10x);
     display: flex;
