@@ -26,8 +26,8 @@ npm install svelte-carousel
 Import component and styles in App component
 ```jsx
 <script>
-  import 'svelte-carousel/dist/index.css'
   import Carousel from 'svelte-carousel'
+  import 'svelte-carousel/dist/index.css'
   // ...
 </script>
 ```
