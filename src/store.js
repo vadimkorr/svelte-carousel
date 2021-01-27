@@ -1,5 +1,9 @@
 import { writable } from 'svelte/store';
-import { getNextPageIndexFn, getPrevPageIndexFn } from './utils/page'
+import {
+  getNextPageIndexFn,
+  getPrevPageIndexFn,
+  getPageIndex
+} from './utils/page'
 
 const initState = {
   currentPageIndex: 0,
@@ -26,7 +30,7 @@ function createStore() {
     update(store => {
       return {
         ...store,
-        currentPageIndex: pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1),
+        currentPageIndex: getPageIndex(pageIndex, pagesCount),
       }
     })
   }
