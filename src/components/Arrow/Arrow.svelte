@@ -1,5 +1,6 @@
 <script>
   import { NEXT, PREV } from '../../direction'
+
   /**
    * Indicates direction of the arrow ('next', 'prev')
    */
@@ -12,14 +13,14 @@
 </script>
 
 <div
-  class="circle"
-  class:disabled
+  class="carousel-arrow__circle"
+  class:carousel-arrow__circle_disabled={disabled}
   on:click
 >
   <i
-    class="arrow"
-    class:next={direction === NEXT}
-    class:prev={direction === PREV}
+    class="carousel-arrow__arrow"
+    class:carousel-arrow__arrow-next={direction === NEXT}
+    class:carousel-arrow__arrow-prev={direction === PREV}
   ></i>
 </div>
 
@@ -27,7 +28,7 @@
   :root {
     --size: 2px
   }
-  .circle {
+  .carousel-arrow__circle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -38,25 +39,25 @@
     transition: opacity 100ms ease;
     cursor: pointer;
   }
-  .circle:hover {
+  .carousel-arrow__circle:hover {
     opacity: 0.9;
   }
-  .arrow {
+  .carousel-arrow__arrow {
     border: solid #1e1e1e;
     border-width: 0 var(--size) var(--size) 0;
     padding: var(--size);
     position: relative;
   }
-  .next {
+  .carousel-arrow__arrow-next {
     transform: rotate(-45deg);
     left: calc(var(--size) / -2);
   }
-  .prev {
+  .carousel-arrow__arrow-prev {
     transform: rotate(135deg);
     right: calc(var(--size) / -2);
   }
-  .disabled,
-  .disabled:hover {
+  .carousel-arrow__circle_disabled,
+  .carousel-arrow__circle_disabled:hover {
     opacity: 0.5;
   }
 </style>
