@@ -9,6 +9,7 @@
     addResizeEventListener,
     removeResizeEventListener
   } from '../../utils/event'
+  import { getAdjacentIndexes } from '../../utils/page'
 
   const directionFnDescription = {
     [NEXT]: showNextPage,
@@ -60,19 +61,14 @@
   let currentPageIndex = 0
   $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
   let pagesCount = 0
-  $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 0) // without clones
+  $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 1) // without clones
   let pageWidth = 0
   let offset = 0
   let pageWindowElement
   let pagesElement
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
-  $: loaded = [
-    ...new Set([
-      0, originalPagesCount-1,
-      originalCurrentPageIndex - 1, originalCurrentPageIndex, originalCurrentPageIndex + 1
-    ])
-  ].filter(index => index >= 0)
+  $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount)
 
   function applyPageSizes() {
     const children = pagesElement.children
