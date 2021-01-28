@@ -25,11 +25,12 @@
     background-color: #727272;
     border-radius: 50%;
     opacity: 0.7;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 5px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .custom-dot__dot-container:hover {
     opacity: 0.9;

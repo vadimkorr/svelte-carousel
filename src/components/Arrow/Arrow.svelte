@@ -38,6 +38,7 @@
     justify-content: center;
     transition: opacity 100ms ease;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .sc-carousel-arrow__circle:hover {
     opacity: 0.9;

@@ -348,6 +348,7 @@ Slot props:
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .custom-arrow:hover {
     opacity: 0.5;

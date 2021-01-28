@@ -89,6 +89,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .album-arrow > i{
     border: solid #1e1e1e;

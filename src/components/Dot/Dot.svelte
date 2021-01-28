@@ -45,8 +45,9 @@
     border-radius: 50%;
     display: inline-block;
     opacity: 0.5;
-    cursor: pointer;
     transition: opacity 100ms ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
   .sc-carousel-dot__dot:hover {
     opacity: 0.9;

@@ -119,6 +119,6 @@
     padding: 5px;
     font-weight: bold;
     cursor: pointer;
-    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 </style>
