@@ -39,6 +39,8 @@
   }
   .docs__main-layout__logo {
     height: 80%;
+    max-width: 100%;
+    object-fit: contain;
   }
   .docs__main-layout__links-container {
     display: flex;
@@ -48,6 +50,7 @@
   .docs__main-layout__links-container > a {
     text-decoration: none;
     color: #009800;
+    font-size: 18px;
   }
   .docs__main-layout__links-container > a:not(:last-child) {
     margin-right: 10px;

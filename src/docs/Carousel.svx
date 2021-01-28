@@ -202,6 +202,8 @@ Import component and styles in App component
 ```
 
 # Props
+<div class="table-wrapper">
+
 | Prop                 | Type       | Default     | Description                                   | 
 |----------------------|------------|-------------|-----------------------------------------------|
 | arrows               | boolean    | true        | Enable Next/Prev arrows                       |
@@ -213,6 +215,8 @@ Import component and styles in App component
 | autoplayDirection    | string     | 3000        | Auto play change direction (`next` or `prev`) |
 | dots                 | boolean    | true        | Current page indicator dots                   |
 
+</div>
+
 # Slots
 
 ## `prev` and `next`
@@ -220,10 +224,14 @@ They are used for customizing prev and next buttons.
 
 Slot props:
 
+<div class="table-wrapper">
+
 | Prop               | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
 | `showPrevPage`     | `function`  | Call it to switch to the previos page |
 | `showNextPage`     | `function`  | Call it to switch to the next page    |
+
+</div>
 
 ```jsx
 <Carousel
@@ -245,12 +253,15 @@ Slot props:
 This slot is used for customizing dots appearance.
 
 Slot props:
+<div class="table-wrapper">
 
 | Prop                | Type         | Description                                  | 
 |---------------------|----------  --|----------------------------------------------|
 | `currentPageIndex`  | `number`     | Represents current page index (start from 0) |
 | `pagesCount`        | `number`     | Total pages amount                           |
 | `showPage`          | `function`   | Takes index as page to be shown              |
+
+</div>
 
 ```jsx
 <Carousel
@@ -271,9 +282,13 @@ This slot takes content for the carousel.
 
 Slot props:
 
+<div class="table-wrapper">
+
 | Prop              | Type       | Description                                                          | 
 |-------------------|------------|----------------------------------------------------------------------|
 | `loaded`          | `number[]` | Contains indexes of pages to be loaded. Can be used for lazy loading |
+
+</div>
 
 ```jsx
 <Carousel
@@ -302,6 +317,10 @@ Slot props:
   }
 
   /* table */
+  .table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+  }
   table {
     border-collapse: collapse;
   }
