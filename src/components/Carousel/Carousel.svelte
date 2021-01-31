@@ -144,19 +144,35 @@
     }
   }
 
-  function showPage(pageIndex, { offsetDelay, animated }) {
-    store.moveToPage({ pageIndex, pagesCount })
+  let disabled = false
+  function safeChangePage(cb) {
+    if (disabled) return
+    cb()
+    disabled = true
     setTimeout(() => {
-      offsetPage(animated)
-    }, offsetDelay)
+      disabled = false
+    }, duration)
+  }
+
+  function showPage(pageIndex, { offsetDelay, animated }) {
+    safeChangePage(() => {
+      store.moveToPage({ pageIndex, pagesCount })
+      setTimeout(() => {
+        offsetPage(animated)
+      }, offsetDelay)
+    })
   }
   function showPrevPage() {
-    store.prev({ infinite, pagesCount })
-    offsetPage(true)
+    safeChangePage(() => {
+      store.prev({ infinite, pagesCount })
+      offsetPage(true)
+    })
   }
   function showNextPage() {
-    store.next({ infinite, pagesCount })
-    offsetPage(true)
+    safeChangePage(() => {
+      store.next({ infinite, pagesCount })
+      offsetPage(true)
+    })
   }
 
   // gestures
