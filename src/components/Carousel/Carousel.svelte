@@ -1,5 +1,5 @@
 <script>
-  import { onMount, tick } from 'svelte'
+  import { onDestroy, onMount, tick } from 'svelte'
   import { createStore } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
@@ -92,10 +92,8 @@
         directionFnDescription[autoplayDirection]()
       }, autoplayDuration)
     }
-    return {
-      teardownAutoplay: () => {
-        interval && clearInterval(interval)
-      }
+    return () => {
+      interval && clearInterval(interval)
     }
   }
   
@@ -106,27 +104,28 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  onMount(async () => {
-    await tick()
-    const unsubscribe = store.subscribe(value => {
-      currentPageIndex = value.currentPageIndex
-    })
-    if (pagesElement && pageWindowElement) {
-      // load first and last child to clone them 
-      loaded = [0, pagesElement.children.length - 1]
+  let cleanupFns = []
+  onMount(() => {
+    (async () => {
       await tick()
-      infinite && addClones()
-      applyPageSizes()
-    }
+      cleanupFns.push(store.subscribe(value => {
+        currentPageIndex = value.currentPageIndex
+      }))
+      if (pagesElement && pageWindowElement) {
+        // load first and last child to clone them 
+        loaded = [0, pagesElement.children.length - 1]
+        await tick()
+        infinite && addClones()
+        applyPageSizes()
+      }
+      cleanupFns.push(applyAutoplay())
+      addResizeEventListener(applyPageSizes)
+    })()
+  })
 
-    const { teardownAutoplay } = applyAutoplay()
-
-    addResizeEventListener(applyPageSizes)
-    return () => {
-      removeResizeEventListener(applyPageSizes)
-      teardownAutoplay()
-      unsubscribe()
-    }
+  onDestroy(() => {
+    removeResizeEventListener(applyPageSizes)
+    cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
 
   function handlePageChange(pageIndex) {
@@ -145,19 +144,35 @@
     }
   }
 
-  function showPage(pageIndex, { offsetDelay, animated }) {
-    store.moveToPage({ pageIndex, pagesCount })
+  let disabled = false
+  function safeChangePage(cb) {
+    if (disabled) return
+    cb()
+    disabled = true
     setTimeout(() => {
-      offsetPage(animated)
-    }, offsetDelay)
+      disabled = false
+    }, duration)
+  }
+
+  function showPage(pageIndex, { offsetDelay, animated }) {
+    safeChangePage(() => {
+      store.moveToPage({ pageIndex, pagesCount })
+      setTimeout(() => {
+        offsetPage(animated)
+      }, offsetDelay)
+    })
   }
   function showPrevPage() {
-    store.prev({ infinite, pagesCount })
-    offsetPage(true)
+    safeChangePage(() => {
+      store.prev({ infinite, pagesCount })
+      offsetPage(true)
+    })
   }
   function showNextPage() {
-    store.next({ infinite, pagesCount })
-    offsetPage(true)
+    safeChangePage(() => {
+      store.next({ infinite, pagesCount })
+      offsetPage(true)
+    })
   }
 
   // gestures
