@@ -72,6 +72,9 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
+    on:pageChange={
+      event => console.log(`Current page index: ${event.detail}`)
+    }
   >
     {#each colors as { color, text } (color)}
       <div

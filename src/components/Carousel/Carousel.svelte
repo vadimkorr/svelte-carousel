@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, onMount, tick } from 'svelte'
+  import { onDestroy, onMount, tick, createEventDispatcher } from 'svelte'
   import { createStore } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
@@ -10,6 +10,8 @@
     removeResizeEventListener
   } from '../../utils/event'
   import { getAdjacentIndexes } from '../../utils/page'
+
+  const dispatch = createEventDispatcher()
 
   const directionFnDescription = {
     [NEXT]: showNextPage,
@@ -60,6 +62,8 @@
   let store = createStore()
   let currentPageIndex = 0
   $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
+  $: dispatch('pageChange', originalCurrentPageIndex)
+
   let pagesCount = 0
   $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 1) // without clones
   let pageWidth = 0
