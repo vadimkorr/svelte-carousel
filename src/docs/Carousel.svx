@@ -217,6 +217,29 @@ Import component and styles in App component
 
 </div>
 
+# Event
+
+## `pageChange`
+Is dispatched on page change
+
+<div class="table-wrapper">
+
+| Payload field      | Type        | Description                           | 
+|--------------------|-------------|---------------------------------------|
+| `event.detail`     | `number`    | Current page index                    |
+
+</div>
+
+```jsx
+<Carousel
+  on:pageChange={
+    event => console.log(`Current page index: ${event.detail}`)
+  }
+>
+  <!-- -->
+</Carousel>
+```
+
 # Slots
 
 ## `prev` and `next`

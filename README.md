@@ -44,6 +44,26 @@ Import component and styles in App component
 | `autoplayDirection`  | `string`   | `'next'`    | Auto play change direction (`next` or `prev`) |
 | `dots`               | `boolean`  | `true`      | Current page indicator dots                   |
 
+
+# Event
+
+## `pageChange`
+Is dispatched on page change
+
+| Payload field      | Type        | Description                           | 
+|--------------------|-------------|---------------------------------------|
+| `event.detail`     | `number`    | Current page index                    |
+
+```jsx
+<Carousel
+  on:pageChange={
+    event => console.log(`Current page index: ${event.detail}`)
+  }
+>
+  <!-- -->
+</Carousel>
+```
+
 ## Slots
 
 ### `prev` and `next`
