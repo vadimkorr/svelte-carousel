@@ -215,7 +215,6 @@
     >
       <div
         class="sc-carousel__pages-container"
-        style="transition-timing-function: {timingFunction};"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
         on:start={handleSwipeStart}
         on:move={handleSwipeMove}
@@ -224,6 +223,7 @@
         style="
           transform: translateX({offset}px);
           transition-duration: {_duration}ms;
+          transition-timing-function: {timingFunction};
         "
         bind:this={pagesElement}
       >
