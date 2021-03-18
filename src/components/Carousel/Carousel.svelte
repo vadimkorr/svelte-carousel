@@ -18,6 +18,8 @@
     [PREV]: showPrevPage
   }
 
+  export let timingFunction = "ease-in-out";
+
   /**
    * Enable Next/Prev arrows
    */
@@ -213,6 +215,7 @@
     >
       <div
         class="sc-carousel__pages-container"
+        style="transition-timing-function: {timingFunction};"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
         on:start={handleSwipeStart}
         on:move={handleSwipeMove}
@@ -276,7 +279,6 @@
   .sc-carousel__pages-container {
     width: 100%;
     display: flex; /* to put child elements in one row */
-    transition-timing-function: ease-in-out;
     transition-property: transform;
   }
   .sc-carousel__arrow-container {
