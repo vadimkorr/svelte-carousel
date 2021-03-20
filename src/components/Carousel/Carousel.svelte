@@ -18,7 +18,10 @@
     [PREV]: showPrevPage
   }
 
-  export let timingFunction = "ease-in-out";
+  /**
+   * CSS animation timing function
+   */
+  export let timingFunction = 'ease-in-out';
 
   /**
    * Enable Next/Prev arrows
