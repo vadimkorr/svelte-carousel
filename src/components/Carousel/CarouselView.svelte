@@ -3,6 +3,11 @@
   import { NEXT } from '../../direction'
 
   /**
+   * CSS animation timing function
+   */
+  export let timingFunction = "ease-in-out";
+
+  /**
    * Enable Next/Previos arrows
    */
   export let arrows = true;
@@ -72,6 +77,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
+    {timingFunction}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }

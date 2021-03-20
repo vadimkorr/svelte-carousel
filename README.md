@@ -33,19 +33,19 @@ Import component and styles in App component
 ```
 
 ## Props
-| Prop                 | Type       | Default     | Description                                   | 
-|----------------------|------------|-------------|-----------------------------------------------|
-| `arrows`             | `boolean`  | `true`      | Enable Next/Prev arrows                       |
-| `infinite`           | `boolean`  | `true`      | Infinite looping                              |
-| `initialPageIndex`   | `number`   | `0`         | Page to start on                              |
-| `duration`           | `number`   | `500`       | Transition duration (ms)                      |
-| `autoplay`           | `boolean`  | `false`     | Enables auto play of pages                    |
-| `autoplayDuration`   | `number`   | `3000`      | Auto play change interval (ms)                |
-| `autoplayDirection`  | `string`   | `'next'`    | Auto play change direction (`next` or `prev`) |
-| `dots`               | `boolean`  | `true`      | Current page indicator dots                   |
+| Prop                 | Type       | Default         | Description                                   | 
+|----------------------|------------|-----------------|-----------------------------------------------|
+| `arrows`             | `boolean`  | `true`          | Enable Next/Prev arrows                       |
+| `infinite`           | `boolean`  | `true`          | Infinite looping                              |
+| `initialPageIndex`   | `number`   | `0`             | Page to start on                              |
+| `duration`           | `number`   | `500`           | Transition duration (ms)                      |
+| `autoplay`           | `boolean`  | `false`         | Enables auto play of pages                    |
+| `autoplayDuration`   | `number`   | `3000`          | Auto play change interval (ms)                |
+| `autoplayDirection`  | `string`   | `'next'`        | Auto play change direction (`next` or `prev`) |
+| `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
+| `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
-
-# Event
+# Events
 
 ## `pageChange`
 Is dispatched on page change

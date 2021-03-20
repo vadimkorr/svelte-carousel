@@ -3,6 +3,11 @@
   import { NEXT } from '../../direction'
 
   /**
+   * CSS animation timing function
+   */
+  export let timingFunction = "ease-in-out";
+
+  /**
    * Enable Next/Previos arrows
    */
   export let arrows = true;
@@ -66,6 +71,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
+    {timingFunction}
     let:showPrevPage
     let:showNextPage
   >
