@@ -18,6 +18,8 @@
     [PREV]: showPrevPage
   }
 
+  export let timingFunction = "ease-in-out";
+
   /**
    * Enable Next/Prev arrows
    */
@@ -221,6 +223,7 @@
         style="
           transform: translateX({offset}px);
           transition-duration: {_duration}ms;
+          transition-timing-function: {timingFunction};
         "
         bind:this={pagesElement}
       >
@@ -276,7 +279,6 @@
   .sc-carousel__pages-container {
     width: 100%;
     display: flex; /* to put child elements in one row */
-    transition-timing-function: ease-in-out;
     transition-property: transform;
   }
   .sc-carousel__arrow-container {
