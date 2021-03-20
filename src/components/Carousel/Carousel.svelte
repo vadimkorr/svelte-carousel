@@ -20,6 +20,7 @@
 
   /**
    * CSS animation timing function
+   * examples: 'linear', 'steps(5, end)', 'cubic-bezier(0.1, -0.6, 0.2, 0)'
    */
   export let timingFunction = 'ease-in-out';
 
