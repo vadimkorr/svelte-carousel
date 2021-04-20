@@ -41,6 +41,11 @@
    * Auto play change direction ('next', 'prev')
    */
   export let autoplayDirection = NEXT
+  
+  /**
+   * Pause autoplay on focus
+   */
+  export let pauseOnFocus = false
 
   /**
    * Current page indicator dots
@@ -69,6 +74,7 @@
 
 <div class="main-container">
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
@@ -76,8 +82,8 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
-    {timingFunction}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }
@@ -93,6 +99,7 @@
   </Carousel>
 
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
@@ -100,6 +107,7 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
   >
     {#each colors2 as { color, text } (color)}

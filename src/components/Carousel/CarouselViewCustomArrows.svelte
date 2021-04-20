@@ -43,6 +43,11 @@
   export let autoplayDirection = NEXT
 
   /**
+   * Pause autoplay on focus
+   */
+  export let pauseOnFocus = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -63,6 +68,7 @@
 
 <div class="main-container">
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
@@ -70,8 +76,8 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
-    {timingFunction}
     let:showPrevPage
     let:showNextPage
   >

@@ -62,6 +62,11 @@
   export let autoplayDirection = NEXT
 
   /**
+   * Pause autoplay on focus
+   */
+   export let pauseOnFocus = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -79,12 +84,14 @@
   let pagesElement
   let hovered = false
 
-  let autoplayIntervals = []
+  let autoplayInterval = null
   $: {
-    if (hovered) {
-      clearAutoplay()
-    } else {
-      applyAutoplay()
+    if (pauseOnFocus) {
+      if (hovered) {
+        clearAutoplay()
+      } else {
+        applyAutoplay()
+      }
     }
   }
 
@@ -107,17 +114,16 @@
   }
 
   function applyAutoplay() {
-    if (autoplay) {
-      let autoplayInterval = setInterval(() => {
+    if (autoplay && !autoplayInterval) {
+      autoplayInterval = setInterval(() => {
         directionFnDescription[autoplayDirection]()
       }, autoplayDuration)
-      autoplayIntervals.push(autoplayInterval)
     }
   }
+
   function clearAutoplay() {
-    while(autoplayIntervals.length) {
-      clearInterval(autoplayIntervals.pop())
-    }     
+    clearInterval(autoplayInterval)
+    autoplayInterval = null
   }
   
   function addClones() {
@@ -213,14 +219,9 @@
     showPage(currentPageIndex, { offsetDelay: 0, animated: true })
   }
   function handleHovered(event) {
-    console.log('hovered', event.detail.value)
     hovered = event.detail.value
   }
 </script>
-
-<div> 
-hovered={hovered}
-</div>
 
 <div class="sc-carousel__carousel-container">
   <div class="sc-carousel__content-container">
