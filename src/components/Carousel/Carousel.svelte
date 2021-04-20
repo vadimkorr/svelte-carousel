@@ -82,12 +82,12 @@
   let offset = 0
   let pageWindowElement
   let pagesElement
-  let hovered = false
+  let focused = false
 
   let autoplayInterval = null
   $: {
     if (pauseOnFocus) {
-      if (hovered) {
+      if (focused) {
         clearAutoplay()
       } else {
         applyAutoplay()
@@ -218,8 +218,8 @@
   function handleSwipeEnd() {
     showPage(currentPageIndex, { offsetDelay: 0, animated: true })
   }
-  function handleHovered(event) {
-    hovered = event.detail.value
+  function handleFocused(event) {
+    focused = event.detail.value
   }
 </script>
 
@@ -240,7 +240,7 @@
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
       use:focusable
-      on:focused={handleHovered}
+      on:focused={handleFocused}
     >
       <div
         class="sc-carousel__pages-container"
