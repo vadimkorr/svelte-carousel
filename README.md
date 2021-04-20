@@ -42,12 +42,13 @@ Import component and styles in App component
 | `autoplay`           | `boolean`  | `false`         | Enables auto play of pages                    |
 | `autoplayDuration`   | `number`   | `3000`          | Auto play change interval (ms)                |
 | `autoplayDirection`  | `string`   | `'next'`        | Auto play change direction (`next` or `prev`) |
+| `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
 | `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
-# Events
+## Events
 
-## `pageChange`
+### `pageChange`
 Is dispatched on page change
 
 | Payload field      | Type        | Description                           | 
