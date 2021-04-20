@@ -4,7 +4,7 @@
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../../direction'
-  import { swipeable } from '../../utils/swipeable'
+  import { swipeable } from '../../actions/swipeable'
   import { hoverable } from '../../utils/hoverable'
   import {
     addResizeEventListener,
