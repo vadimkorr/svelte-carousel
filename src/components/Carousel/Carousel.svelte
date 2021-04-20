@@ -5,7 +5,7 @@
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
-  import { hoverable } from '../../utils/hoverable'
+  import { focusable } from '../../actions/focusable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -239,8 +239,8 @@
     <div
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
-      use:hoverable
-      on:hovered={handleHovered}
+      use:focusable
+      on:focused={handleHovered}
     >
       <div
         class="sc-carousel__pages-container"
