@@ -5,6 +5,7 @@
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../utils/swipeable'
+  import { hoverable } from '../../utils/hoverable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -76,6 +77,16 @@
   let offset = 0
   let pageWindowElement
   let pagesElement
+  let hovered = false
+
+  let autoplayIntervals = []
+  $: {
+    if (hovered) {
+      clearAutoplay()
+    } else {
+      applyAutoplay()
+    }
+  }
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount, infinite)
@@ -96,15 +107,17 @@
   }
 
   function applyAutoplay() {
-    let interval
     if (autoplay) {
-      interval = setInterval(() => {
+      let autoplayInterval = setInterval(() => {
         directionFnDescription[autoplayDirection]()
       }, autoplayDuration)
+      autoplayIntervals.push(autoplayInterval)
     }
-    return () => {
-      interval && clearInterval(interval)
-    }
+  }
+  function clearAutoplay() {
+    while(autoplayIntervals.length) {
+      clearInterval(autoplayIntervals.pop())
+    }     
   }
   
   function addClones() {
@@ -128,12 +141,13 @@
         infinite && addClones()
         applyPageSizes()
       }
-      cleanupFns.push(applyAutoplay())
+      applyAutoplay()
       addResizeEventListener(applyPageSizes)
     })()
   })
 
   onDestroy(() => {
+    clearAutoplay()
     removeResizeEventListener(applyPageSizes)
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
@@ -198,7 +212,15 @@
   function handleSwipeEnd() {
     showPage(currentPageIndex, { offsetDelay: 0, animated: true })
   }
+  function handleHovered(event) {
+    console.log('hovered', event.detail.value)
+    hovered = event.detail.value
+  }
 </script>
+
+<div> 
+hovered={hovered}
+</div>
 
 <div class="sc-carousel__carousel-container">
   <div class="sc-carousel__content-container">
@@ -216,6 +238,8 @@
     <div
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
+      use:hoverable
+      on:hovered={handleHovered}
     >
       <div
         class="sc-carousel__pages-container"
