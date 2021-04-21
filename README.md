@@ -45,9 +45,9 @@ Import component and styles in App component
 | `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
-# Events
+## Events
 
-## `pageChange`
+### `pageChange`
 Is dispatched on page change
 
 | Payload field      | Type        | Description                           | 

@@ -1,4 +1,4 @@
-import { NEXT, PREV } from '../direction'
+import { NEXT, PREV } from '../../direction'
 import {
   addStartEventListener,
   removeStartEventListener,
@@ -6,20 +6,20 @@ import {
   removeMoveEventListener,
   addEndEventListener,
   removeEndEventListener,
-  createDispatcher
 } from './event'
+import { createDispatcher } from '../../utils/event'
 
 function getCoords(event) {
   if (event instanceof TouchEvent) {
     const touch = event.touches[0]
     return {
       x: touch ? touch.clientX : 0,
-      y: touch ? touch.clientY : 0
+      y: touch ? touch.clientY : 0,
     }
   }
   return {
     x: event.clientX,
-    y: event.clientY
+    y: event.clientY,
   }
 }
 
@@ -55,7 +55,7 @@ export function swipeable(node, { thresholdProvider }) {
       dispatch('threshold', { direction: moved > 0 ? PREV : NEXT })
       removeEndEventListener(window, handleMouseup)
       removeMoveEventListener(window, handleMousemove)
-    } 
+    }
   }
 
   function handleMouseup(event) {
@@ -71,6 +71,6 @@ export function swipeable(node, { thresholdProvider }) {
   return {
     destroy() {
       removeStartEventListener(node, handleMousedown)
-    }
+    },
   }
 }

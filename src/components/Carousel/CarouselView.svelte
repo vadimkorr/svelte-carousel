@@ -69,6 +69,7 @@
 
 <div class="main-container">
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
@@ -77,7 +78,6 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
-    {timingFunction}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }
@@ -93,6 +93,7 @@
   </Carousel>
 
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
