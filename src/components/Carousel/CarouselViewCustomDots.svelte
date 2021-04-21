@@ -67,6 +67,7 @@
 
 <div class="main-container">
   <Carousel
+    {timingFunction}
     {arrows}
     {infinite}
     {initialPageIndex}
@@ -75,7 +76,6 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
-    {timingFunction}
     let:currentPageIndex
     let:pagesCount
     let:showPage
