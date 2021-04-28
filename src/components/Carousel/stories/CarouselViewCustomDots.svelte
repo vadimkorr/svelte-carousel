@@ -1,6 +1,6 @@
 <script>
-  import Carousel from './Carousel.svelte'
-  import { NEXT } from '../../direction'
+  import Carousel from '../Carousel.svelte'
+  import { NEXT } from '../../../direction'
 
   /**
    * CSS animation timing function
@@ -11,7 +11,7 @@
    * Enable Next/Previos arrows
    */
   export let arrows = true;
-  
+
   /**
    * Infinite looping
    */
@@ -47,6 +47,10 @@
    */
   export let dots = true
 
+  function onPageChange(event, showPage) {
+    showPage(event.target.value)
+  }
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -72,8 +76,9 @@
     {autoplayDuration}
     {autoplayDirection}
     {dots}
-    let:showPrevPage
-    let:showNextPage
+    let:currentPageIndex
+    let:pagesCount
+    let:showPage
   >
     {#each colors as color (color)}
       <div
@@ -83,14 +88,19 @@
         <p>{color}</p>
       </div>
     {/each}
-    <div slot="prev" class="arrow-container">
-      <div class="arrow" on:click={showPrevPage}>
-        <span>&lt;&lt;&lt;</span>
-      </div>
-    </div>
-    <div slot="next" class="arrow-container">
-      <div class="arrow" on:click={showNextPage}>
-        <span>&gt;&gt;&gt;</span>
+    <div slot="dots">
+      <div class="select-container">
+        <select
+          value={currentPageIndex}
+          on:change="{(event) => onPageChange(event, showPage)}"
+          on:blur="{(event) => onPageChange(event, showPage)}"
+        >
+          {#each  Array(pagesCount) as _, pageIndex (pageIndex)}
+            <option value={pageIndex} class:active={currentPageIndex === pageIndex}>
+              {pageIndex}
+            </option>
+          {/each}
+        </select>
       </div>
     </div>
   </Carousel>
@@ -112,19 +122,19 @@
     font-style: italic;
     font-size: 18px;
   }
-
-  .arrow-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
+  .active {
+    background-color: grey;
+    color: white;
   }
-  .arrow {
-    background-color: darkgray;
+
+  .select-container {
+    padding: 5px 0;
+  }
+  .select-container > select {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    height: 25px;
+    width: 100px;
     border-radius: 5px;
-    padding: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
   }
 </style>

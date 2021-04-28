@@ -1,5 +1,5 @@
 <script>
-  import Dots from './Dots.svelte'
+  import Dots from '../Dots.svelte'
 
   /**
    * Amount of pages (amount of dots)

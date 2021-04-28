@@ -1,5 +1,5 @@
 <script>
-  import Dot from './Dot.svelte'
+  import Dot from '../Dot.svelte'
 
   /**
    * Indicates if dot is active
