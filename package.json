@@ -26,8 +26,8 @@
     "start": "sirv docs",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build:docs": "set DOCS=true && rollup -c",
-    "dev:docs": "set DOCS=true && rollup -c -w",
+    "build:docs": "set DOCS=true && npm run build",
+    "dev:docs": "set DOCS=true && npm run dev",
     "test": "jest"
   },
   "devDependencies": {
