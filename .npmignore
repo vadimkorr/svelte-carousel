@@ -1,2 +1,12 @@
 docs
 src/docs
+
+stories
+.storybook
+storybook-static
+
+dist
+scripts
+
+.test.js
+

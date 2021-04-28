@@ -1,8 +1,8 @@
 {
   "name": "svelte-carousel",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Svelte carousel",
-  "main": "dist/index.js",
+  "main": "src/main.js",
   "author": "vadimkorr",
   "repository": {
     "type": "git",
@@ -26,10 +26,9 @@
     "start": "sirv docs",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build:docs": "set DOCS=true && rollup -c",
-    "dev:docs": "set DOCS=true && rollup -c -w",
-    "test": "jest",
-    "prepublishOnly": "npm run build"
+    "build:docs": "set DOCS=true && npm run build",
+    "dev:docs": "set DOCS=true && npm run dev",
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

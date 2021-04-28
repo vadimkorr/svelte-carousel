@@ -1,6 +1,6 @@
 <script>
-  import Carousel from './Carousel.svelte'
-  import { NEXT } from '../../direction'
+  import Carousel from '../Carousel.svelte'
+  import { NEXT } from '../../../direction'
 
   /**
    * CSS animation timing function
