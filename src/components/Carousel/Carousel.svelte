@@ -64,7 +64,7 @@
   /**
    * Pause autoplay on focus
    */
-   export let pauseOnFocus = false
+  export let pauseOnFocus = false
 
   /**
    * Current page indicator dots
