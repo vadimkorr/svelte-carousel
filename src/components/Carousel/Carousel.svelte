@@ -5,6 +5,7 @@
   import Arrow from '../Arrow/Arrow.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
+  import { focusable } from '../../actions/focusable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -61,6 +62,11 @@
   export let autoplayDirection = NEXT
 
   /**
+   * Pause autoplay on focus
+   */
+  export let pauseOnFocus = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -76,6 +82,18 @@
   let offset = 0
   let pageWindowElement
   let pagesElement
+  let focused = false
+
+  let autoplayInterval = null
+  $: {
+    if (pauseOnFocus) {
+      if (focused) {
+        clearAutoplay()
+      } else {
+        applyAutoplay()
+      }
+    }
+  }
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount, infinite)
@@ -96,15 +114,16 @@
   }
 
   function applyAutoplay() {
-    let interval
-    if (autoplay) {
-      interval = setInterval(() => {
+    if (autoplay && !autoplayInterval) {
+      autoplayInterval = setInterval(() => {
         directionFnDescription[autoplayDirection]()
       }, autoplayDuration)
     }
-    return () => {
-      interval && clearInterval(interval)
-    }
+  }
+
+  function clearAutoplay() {
+    clearInterval(autoplayInterval)
+    autoplayInterval = null
   }
   
   function addClones() {
@@ -128,12 +147,13 @@
         infinite && addClones()
         applyPageSizes()
       }
-      cleanupFns.push(applyAutoplay())
+      applyAutoplay()
       addResizeEventListener(applyPageSizes)
     })()
   })
 
   onDestroy(() => {
+    clearAutoplay()
     removeResizeEventListener(applyPageSizes)
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
@@ -198,6 +218,9 @@
   function handleSwipeEnd() {
     showPage(currentPageIndex, { offsetDelay: 0, animated: true })
   }
+  function handleFocused(event) {
+    focused = event.detail.value
+  }
 </script>
 
 <div class="sc-carousel__carousel-container">
@@ -216,6 +239,8 @@
     <div
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
+      use:focusable
+      on:focused={handleFocused}
     >
       <div
         class="sc-carousel__pages-container"

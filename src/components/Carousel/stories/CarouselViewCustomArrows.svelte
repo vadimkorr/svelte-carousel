@@ -43,6 +43,11 @@
   export let autoplayDirection = NEXT
 
   /**
+   * Pause autoplay on focus
+   */
+  export let pauseOnFocus = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -71,6 +76,7 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
     let:showPrevPage
     let:showNextPage

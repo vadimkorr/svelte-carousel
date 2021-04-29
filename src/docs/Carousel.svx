@@ -214,6 +214,7 @@ Import component and styles in App component
 | `autoplayDuration`   | `number`   | `3000`          | Auto play change interval (ms)                |
 | `autoplayDirection`  | `string`   | `'next'`        | Auto play change direction (`next` or `prev`) |
 | `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
+| `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
 </div>

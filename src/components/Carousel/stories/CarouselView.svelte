@@ -41,6 +41,11 @@
    * Auto play change direction ('next', 'prev')
    */
   export let autoplayDirection = NEXT
+  
+  /**
+   * Pause autoplay on focus
+   */
+  export let pauseOnFocus = false
 
   /**
    * Current page indicator dots
@@ -77,6 +82,7 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
@@ -101,6 +107,7 @@
     {autoplay}
     {autoplayDuration}
     {autoplayDirection}
+    {pauseOnFocus}
     {dots}
   >
     {#each colors2 as { color, text } (color)}
