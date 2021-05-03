@@ -27,7 +27,6 @@ Import component and styles in App component
 ```jsx
 <script>
   import Carousel from 'svelte-carousel'
-  import 'svelte-carousel/dist/index.css'
   // ...
 </script>
 ```
