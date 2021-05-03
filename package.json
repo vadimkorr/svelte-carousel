@@ -28,7 +28,8 @@
     "build-storybook": "build-storybook",
     "build:docs": "set DOCS=true && npm run build",
     "dev:docs": "set DOCS=true && npm run dev",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
