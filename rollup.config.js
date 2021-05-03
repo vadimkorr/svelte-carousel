@@ -1,25 +1,25 @@
-import { join } from 'path';
-import svelte from 'rollup-plugin-svelte';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import json from '@rollup/plugin-json';
-import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
-import babel from 'rollup-plugin-babel';
-import css from 'rollup-plugin-css-only';
-import { mdsvex } from "mdsvex";
+import { join } from 'path'
+import svelte from 'rollup-plugin-svelte'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import json from '@rollup/plugin-json'
+import livereload from 'rollup-plugin-livereload'
+import { terser } from 'rollup-plugin-terser'
+import babel from 'rollup-plugin-babel'
+import css from 'rollup-plugin-css-only'
+import { mdsvex } from 'mdsvex'
 
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH
 
 const docsConfig = {
   input: 'src/docs/main.js',
   outputFormat: 'iife',
-  outputFile: 'docs/index.js'
+  outputFile: 'docs/index.js',
 }
 const packageConfig = {
   input: 'src/main.js',
   outputFormat: 'es',
-  outputFile: 'dist/index.js'
+  outputFile: 'dist/index.js',
 }
 
 const docs = !!process.env.DOCS
@@ -28,24 +28,28 @@ const getConfig = () => {
 }
 
 function serve() {
-  let server;
+  let server
 
   function toExit() {
-    if (server) server.kill(0);
+    if (server) server.kill(0)
   }
 
   return {
     writeBundle() {
-      if (server) return;
-      server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-        stdio: ['ignore', 'inherit', 'inherit'],
-        shell: true
-      });
+      if (server) return
+      server = require('child_process').spawn(
+        'npm',
+        ['run', 'start', '--', '--dev'],
+        {
+          stdio: ['ignore', 'inherit', 'inherit'],
+          shell: true,
+        }
+      )
 
-      process.on('SIGTERM', toExit);
-      process.on('exit', toExit);
-    }
-  };
+      process.on('SIGTERM', toExit)
+      process.on('exit', toExit)
+    },
+  }
 }
 
 export default {
@@ -54,21 +58,21 @@ export default {
     sourcemap: false,
     format: getConfig().outputFormat,
     name: 'app',
-    file: getConfig().outputFile
+    file: getConfig().outputFile,
   },
   plugins: [
     svelte({
       compilerOptions: {
         // enable run-time checks when not in production
-        dev: !production
+        dev: !production,
       },
       // tell svelte to handle mdsvex files
-      extensions: [".svelte", ".svx"],
+      extensions: ['.svelte', '.svx'],
       preprocess: mdsvex({
         layout: {
-          _: join(__dirname, './src/docs/Layouts/Main.svelte')
-        }
-      })
+          _: join(__dirname, './src/docs/Layouts/Main.svelte'),
+        },
+      }),
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
@@ -81,7 +85,7 @@ export default {
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
     resolve({
       browser: true,
-      dedupe: ['svelte']
+      dedupe: ['svelte'],
     }),
     commonjs(),
 
@@ -101,9 +105,9 @@ export default {
 
     babel({
       exclude: 'node_modules/**',
-    })
+    }),
   ],
   watch: {
-    clearScreen: false
-  }
-};
+    clearScreen: false,
+  },
+}
