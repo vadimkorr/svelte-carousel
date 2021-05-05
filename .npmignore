@@ -5,7 +5,7 @@ stories
 .storybook
 storybook-static
 
-dist
+# dist
 scripts
 
 .test.js
