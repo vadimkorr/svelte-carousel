@@ -23,7 +23,7 @@ yarn add svelte-carousel
 npm install svelte-carousel
 ```
 
-Import component and styles in App component
+Import component
 ```jsx
 <script>
   import Carousel from 'svelte-carousel'
