@@ -16,16 +16,8 @@ const docsConfig = {
   outputFormat: 'iife',
   outputFile: 'docs/index.js',
 }
-const packageConfig = {
-  input: 'src/main.js',
-  outputFormat: 'es',
-  outputFile: 'dist/index.js',
-}
 
-const docs = !!process.env.DOCS
-const getConfig = () => {
-  return docs ? docsConfig : packageConfig
-}
+const getConfig = () => docsConfig
 
 function serve() {
   let server

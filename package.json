@@ -21,13 +21,10 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
     "start": "sirv docs",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build:docs": "set DOCS=true && npm run build",
-    "dev:docs": "set DOCS=true && npm run dev",
+    "build:docs": "rollup -c",
+    "dev:docs": "rollup -c -w",
     "test": "jest"
   },
   "devDependencies": {
