@@ -10,7 +10,7 @@ import {
 import { createDispatcher } from '../../utils/event'
 
 function getCoords(event) {
-  if (event instanceof TouchEvent) {
+  if ('TouchEvent' in window && event instanceof TouchEvent) {
     const touch = event.touches[0]
     return {
       x: touch ? touch.clientX : 0,
