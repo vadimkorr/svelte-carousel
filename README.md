@@ -20,6 +20,8 @@ https://vadimkorr.github.io/svelte-carousel
 ## Installation
 ```bash
 yarn add svelte-carousel
+```
+```bash
 npm install svelte-carousel
 ```
 
