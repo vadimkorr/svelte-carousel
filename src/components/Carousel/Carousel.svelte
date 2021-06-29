@@ -159,7 +159,7 @@
   })
 
   function handlePageChange(pageIndex) {
-    showPage(pageIndex + Number(infinite), { offsetDelay: 0, animated: true })
+    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated: true })
   }
 
   function offsetPage(animated) {
@@ -167,9 +167,9 @@
     offset = -currentPageIndex * pageWidth
     if (infinite) {
       if (currentPageIndex === 0) {
-        showPage(pagesCount - 2, { offsetDelay: duration, animated: false })
+        showPage(pagesCount - 2, { offsetDelayMs: duration, animated: false })
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelay: duration, animated: false })
+        showPage(1, { offsetDelayMs: duration, animated: false })
       }
     }
   }
@@ -184,12 +184,12 @@
     }, duration)
   }
 
-  function showPage(pageIndex, { offsetDelay, animated }) {
+  function showPage(pageIndex, { offsetDelayMs, animated }) {
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
       setTimeout(() => {
         offsetPage(animated)
-      }, offsetDelay)
+      }, offsetDelayMs)
     })
   }
   function showPrevPage() {
@@ -216,7 +216,7 @@
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
-    showPage(currentPageIndex, { offsetDelay: 0, animated: true })
+    showPage(currentPageIndex, { offsetDelayMs: 0, animated: true })
   }
   function handleFocused(event) {
     focused = event.detail.value
