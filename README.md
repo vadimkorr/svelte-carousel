@@ -138,3 +138,33 @@ Slot props:
   <!-- -->
 </Carousel>
 ```
+
+## Methods
+
+### `goTo`
+Navigates to a page by index
+
+Arguments:
+
+| Prop               | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `pageIndex`        | `number`    |         | Page number                           |
+| `options.animated` | `boolean`   | `true`  | Should be animated or not             |
+
+```jsx
+<script>
+  // ...
+  
+  let carousel;
+  function goToStartPage() {
+    carousel.goTo(0, { animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToStartPage}>Go</button>
+```
