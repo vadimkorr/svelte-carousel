@@ -1,6 +1,7 @@
 import CarouselView from './CarouselView.svelte'
 import CarouselViewCustomDots from './CarouselViewCustomDots.svelte'
 import CarouselViewCustomArrows from './CarouselViewCustomArrows.svelte'
+import CarouselViewMethods from './CarouselViewMethods.svelte'
 
 export default {
   title: 'Carousel',
@@ -25,4 +26,8 @@ const TemplateCustomArrows = ({ ...args }) => ({
 })
 export const WithCustomArrows = TemplateCustomArrows.bind({})
 
-
+const TemplateMethods = ({ ...args }) => ({
+  Component: CarouselViewMethods,
+  props: args,
+})
+export const WithMethods = TemplateMethods.bind({})
