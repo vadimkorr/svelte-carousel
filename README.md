@@ -146,15 +146,14 @@ Navigates to a page by index
 
 Arguments:
 
-| Prop               | Type        | Default | Description                           | 
+| Argument           | Type        | Default | Description                           | 
 |--------------------|-------------|---------|---------------------------------------|
 | `pageIndex`        | `number`    |         | Page number                           |
-| `options.animated` | `boolean`   | `true`  | Should be animated or not             |
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not             |
 
 ```jsx
 <script>
   // ...
-  
   let carousel;
   function goToStartPage() {
     carousel.goTo(0, { animated: false })
