@@ -72,6 +72,14 @@
    */
   export let dots = true
 
+  export function goTo(pageIndex, options) {
+    const animated = get(options, 'animated', true)
+    if (typeof pageIndex !== 'number') {
+      throw new Error('pageIndex should be a number')
+    }
+    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated })
+  }
+
   let store = createStore()
   let currentPageIndex = 0
   $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
