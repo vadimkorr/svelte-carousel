@@ -11,6 +11,7 @@
     removeResizeEventListener
   } from '../../utils/event'
   import { getAdjacentIndexes } from '../../utils/page'
+  import { get } from '../../utils/object'
 
   const dispatch = createEventDispatcher()
 
