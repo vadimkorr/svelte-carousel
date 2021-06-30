@@ -17,12 +17,23 @@
 
   let carousel;
 
+  // goTo
   let pageIndex
   function handlePageChange(e) {
-    pageIndex = e.target.value
+    pageIndex = Number(e.target.value)
   }
-  function handlePageChangeClick() {
+  function handleGoToClick() {
     carousel.goTo(pageIndex)
+  }
+
+  // goToPrev
+  function handleGoToPrevClick() {
+    carousel.goToPrev()
+  }
+
+  // goToNext
+  function handleGoToNextClick() {
+    carousel.goToNext()
   }
 </script>
 
@@ -39,8 +50,21 @@
       </div>
     {/each}
   </Carousel>
-  <input type="number" on:change={handlePageChange} />
-  <button class="button" on:click={handlePageChangeClick}>Go to</button>
+
+  <div class="sb-container">
+    <span class="sb-title">carousel.goTo</span>
+    <input class="sb-input" type="number" on:change={handlePageChange} />
+    <button class="sb-button" on:click={handleGoToClick}>Go</button>
+    <div class="sb-divider"></div>
+
+    <span class="sb-title">carousel.goToPrev</span>
+    <button class="sb-button" on:click={handleGoToPrevClick}>Go</button>
+    <div class="sb-divider"></div>
+
+    <span class="sb-title">carousel.goToNext</span>
+    <button class="sb-button" on:click={handleGoToNextClick}>Go</button>
+    <div class="sb-divider"></div>
+  </div>
 </div>
 
 <style>
@@ -60,14 +84,5 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-style: italic;
     font-size: 18px;
-  }
-
-  input {
-    width: 200px;
-    height: 30px;
-  }
-  .button {
-    width: 200px;
-    height: 30px;
   }
 </style>

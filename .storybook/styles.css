@@ -1,0 +1,47 @@
+.sb-container {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #d2d2d2;
+}
+
+span.sb-title {
+  color: #3e3e3e;
+  display: block;
+  margin: 5px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.sb-divider {
+  max-width: 100%;
+  border-bottom: solid 3px #ffffff;
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+.sb-button {
+  width: 150px;
+  height: 35px;
+  margin: 5px;
+  padding: 0px 10px;
+  border-radius: 5px;
+  background-color: #009800;
+  border: none;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sb-input[type=text],
+.sb-input[type=number] {
+  width: 150px;
+  height: 35px;
+  margin: 5px;
+  padding: 0px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  border: 1px solid #9f9f9f;
+  outline: none;
+  box-sizing: border-box;
+}
