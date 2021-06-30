@@ -9,3 +9,5 @@ storybook-static
 scripts
 
 .test.js
+
+DEPLOYMENT.md
