@@ -8,6 +8,6 @@ storybook-static
 # dist
 scripts
 
-.test.js
+src/**/*.test.js
 
 DEPLOYMENT.md
