@@ -210,25 +210,29 @@
     }, animated ? duration : 0)
   }
 
-  function showPage(pageIndex, { offsetDelayMs, animated }) {
+  function showPage(pageIndex, options) {
+    const animated = get(options, 'animated', true)
+    const offsetDelayMs = get(options, 'offsetDelayMs', true)
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
       setTimeout(() => {
         offsetPage(animated)
       }, offsetDelayMs)
-    })
+    }, { animated })
   }
-  function showPrevPage() {
+  function showPrevPage(options) {
+    const animated = get(options, 'animated', true)
     safeChangePage(() => {
       store.prev({ infinite, pagesCount })
-      offsetPage(true)
-    })
+      offsetPage(animated)
+    }, { animated })
   }
-  function showNextPage() {
+  function showNextPage(options) {
+    const animated = get(options, 'animated', true)
     safeChangePage(() => {
       store.next({ infinite, pagesCount })
-      offsetPage(true)
-    })
+      offsetPage(animated)
+    }, { animated })
   }
 
   // gestures
