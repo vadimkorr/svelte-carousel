@@ -53,7 +53,7 @@
   export let autoplay = false
 
   /**
-   * Auto play change interval
+   * Auto play change interval (ms)
    */
   export let autoplayDuration = 3000
 
