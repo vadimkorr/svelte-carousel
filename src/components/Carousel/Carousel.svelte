@@ -80,6 +80,20 @@
     showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated })
   }
 
+  export function goToPrev(options) {
+    const animated = get(options, 'animated', true)
+    showPrevPage({
+      animated
+    })
+  }
+
+  export function goToNext(options) {
+    const animated = get(options, 'animated', true)
+    showNextPage({
+      animated
+    })
+  }
+
   let store = createStore()
   let currentPageIndex = 0
   $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
