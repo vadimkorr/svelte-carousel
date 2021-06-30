@@ -118,7 +118,6 @@
       children[pageIndex].style.maxWidth = `${pageWidth}px`
     }
 
-    store.init(initialPageIndex + Number(infinite))
     offsetPage(false)
   }
 
@@ -154,6 +153,8 @@
         loaded = [0, pagesElement.children.length - 1]
         await tick()
         infinite && addClones()
+
+        store.init(initialPageIndex + Number(infinite))
         applyPageSizes()
       }
       applyAutoplay()
