@@ -186,6 +186,8 @@
 ## Use case
 <AlbumsPreview />
 
+<Divider />
+
 # Installation
 ```bash
 yarn add svelte-carousel
@@ -202,7 +204,10 @@ Import component
 </script>
 ```
 
+<Divider />
+
 # Props
+
 <div class="table-wrapper">
 
 | Prop                 | Type       | Default         | Description                                   | 
@@ -220,7 +225,9 @@ Import component
 
 </div>
 
-# Event
+<Divider />
+
+# Events
 
 ## `pageChange`
 Is dispatched on page change
@@ -242,6 +249,8 @@ Is dispatched on page change
   <!-- -->
 </Carousel>
 ```
+
+<Divider />
 
 # Slots
 
@@ -325,6 +334,101 @@ Slot props:
   </div>
   <!-- -->
 </Carousel>
+```
+
+<Divider />
+
+# Methods
+
+## `goTo`
+Navigates to a page by index
+
+Arguments:
+
+<div class="table-wrapper">
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `pageIndex`        | `number`    |         | Page number                           |
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+</div>
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToStartPage() {
+    carousel.goTo(0, { animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToStartPage}>Go</button>
+```
+
+## `goToPrev`
+Navigates to the previous page
+
+Arguments:
+
+<div class="table-wrapper">
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+</div>
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToPrevPage() {
+    carousel.goToPrev({ animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToPrevPage}>Go</button>
+```
+
+## `goToNext`
+Navigates to the next page
+
+Arguments:
+
+<div class="table-wrapper">
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+</div>
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToNextPage() {
+    carousel.goToNext({ animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToNextPage}>Go</button>
 ```
 
 <Divider />

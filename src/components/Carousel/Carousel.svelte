@@ -11,6 +11,7 @@
     removeResizeEventListener
   } from '../../utils/event'
   import { getAdjacentIndexes } from '../../utils/page'
+  import { get } from '../../utils/object'
 
   const dispatch = createEventDispatcher()
 
@@ -52,7 +53,7 @@
   export let autoplay = false
 
   /**
-   * Auto play change interval
+   * Auto play change interval (ms)
    */
   export let autoplayDuration = 3000
 
@@ -70,6 +71,28 @@
    * Current page indicator dots
    */
   export let dots = true
+
+  export function goTo(pageIndex, options) {
+    const animated = get(options, 'animated', true)
+    if (typeof pageIndex !== 'number') {
+      throw new Error('pageIndex should be a number')
+    }
+    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated })
+  }
+
+  export function goToPrev(options) {
+    const animated = get(options, 'animated', true)
+    showPrevPage({
+      animated
+    })
+  }
+
+  export function goToNext(options) {
+    const animated = get(options, 'animated', true)
+    showNextPage({
+      animated
+    })
+  }
 
   let store = createStore()
   let currentPageIndex = 0
@@ -160,7 +183,7 @@
   })
 
   function handlePageChange(pageIndex) {
-    showPage(pageIndex + Number(infinite), { offsetDelay: 0, animated: true })
+    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated: true })
   }
 
   function offsetPage(animated) {
@@ -168,42 +191,48 @@
     offset = -currentPageIndex * pageWidth
     if (infinite) {
       if (currentPageIndex === 0) {
-        showPage(pagesCount - 2, { offsetDelay: duration, animated: false })
+        showPage(pagesCount - 2, { offsetDelayMs: duration, animated: false })
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelay: duration, animated: false })
+        showPage(1, { offsetDelayMs: duration, animated: false })
       }
     }
   }
 
+  // Disable page change while animation is in progress
   let disabled = false
-  function safeChangePage(cb) {
+  function safeChangePage(cb, options) {
+    const animated = get(options, 'animated', true)
     if (disabled) return
     cb()
     disabled = true
     setTimeout(() => {
       disabled = false
-    }, duration)
+    }, animated ? duration : 0)
   }
 
-  function showPage(pageIndex, { offsetDelay, animated }) {
+  function showPage(pageIndex, options) {
+    const animated = get(options, 'animated', true)
+    const offsetDelayMs = get(options, 'offsetDelayMs', true)
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
       setTimeout(() => {
         offsetPage(animated)
-      }, offsetDelay)
-    })
+      }, offsetDelayMs)
+    }, { animated })
   }
-  function showPrevPage() {
+  function showPrevPage(options) {
+    const animated = get(options, 'animated', true)
     safeChangePage(() => {
       store.prev({ infinite, pagesCount })
-      offsetPage(true)
-    })
+      offsetPage(animated)
+    }, { animated })
   }
-  function showNextPage() {
+  function showNextPage(options) {
+    const animated = get(options, 'animated', true)
     safeChangePage(() => {
       store.next({ infinite, pagesCount })
-      offsetPage(true)
-    })
+      offsetPage(animated)
+    }, { animated })
   }
 
   // gestures
@@ -217,7 +246,7 @@
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
-    showPage(currentPageIndex, { offsetDelay: 0, animated: true })
+    showPage(currentPageIndex, { offsetDelayMs: 0, animated: true })
   }
   function handleFocused(event) {
     focused = event.detail.value

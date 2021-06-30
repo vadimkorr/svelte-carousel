@@ -138,3 +138,84 @@ Slot props:
   <!-- -->
 </Carousel>
 ```
+
+## Methods
+
+### `goTo`
+Navigates to a page by index
+
+Arguments:
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `pageIndex`        | `number`    |         | Page number                           |
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToStartPage() {
+    carousel.goTo(0, { animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToStartPage}>Go</button>
+```
+
+### `goToPrev`
+Navigates to the previous page
+
+Arguments:
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToPrevPage() {
+    carousel.goToPrev({ animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToPrevPage}>Go</button>
+```
+
+### `goToNext`
+Navigates to the next page
+
+Arguments:
+
+| Argument           | Type        | Default | Description                           | 
+|--------------------|-------------|---------|---------------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+
+```jsx
+<script>
+  // ...
+  let carousel;
+  function goToNextPage() {
+    carousel.goToNext({ animated: false })
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <!--  -->
+</Carousel>
+<button class="button" on:click={goToNextPage}>Go</button>
+```
