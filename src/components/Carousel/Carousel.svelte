@@ -198,14 +198,16 @@
     }
   }
 
+  // Disable page change while animation is in progress
   let disabled = false
-  function safeChangePage(cb) {
+  function safeChangePage(cb, options) {
+    const animated = get(options, 'animated', true)
     if (disabled) return
     cb()
     disabled = true
     setTimeout(() => {
       disabled = false
-    }, duration)
+    }, animated ? duration : 0)
   }
 
   function showPage(pageIndex, { offsetDelayMs, animated }) {
