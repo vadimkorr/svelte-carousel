@@ -3,6 +3,7 @@
   import { createStore } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
+  import Progress from '../Progress/Progress.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
   import { focusable } from '../../actions/focusable'
@@ -332,6 +333,7 @@
       ></Dots>
     </slot>
   {/if}
+  <Progress value={progressValue} />
 </div>
 
 <style>
