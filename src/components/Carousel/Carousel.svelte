@@ -205,7 +205,7 @@
   }
 
   function offsetPage(animated) {
-    _duration = animated ? duration : 0
+    _duration = animated ? duration : 0 // TODO: why not used
     offset = -currentPageIndex * pageWidth
     if (infinite) {
       if (currentPageIndex === 0) {
@@ -230,7 +230,7 @@
 
   function showPage(pageIndex, options) {
     const animated = get(options, 'animated', true)
-    const offsetDelayMs = get(options, 'offsetDelayMs', true)
+    const offsetDelayMs = get(options, 'offsetDelayMs', true) // TODO: fix default value
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
       setTimeout(() => {
