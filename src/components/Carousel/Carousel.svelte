@@ -12,6 +12,7 @@
   } from '../../utils/event'
   import { getAdjacentIndexes } from '../../utils/page'
   import { get } from '../../utils/object'
+  import { ProgressManager } from '../../utils/ProgressManager.js'
 
   const dispatch = createEventDispatcher()
 
@@ -107,12 +108,22 @@
   let pagesElement
   let focused = false
 
+  let progressValue
+  const progressManager = new ProgressManager({
+    autoplayDuration,
+    onValueChange: (value) => {
+      progressValue = value
+    }
+  })
+
   let autoplayInterval = null
   $: {
     if (pauseOnFocus) {
       if (focused) {
+        progressManager.pause()
         clearAutoplay()
       } else {
+        progressManager.resume()
         applyAutoplay()
       }
     }
@@ -156,11 +167,17 @@
   }
 
   let cleanupFns = []
+
   onMount(() => {
     (async () => {
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
+        
+        progressManager.reset() // clear interval out of condition in case autoplay was changed reactively
+        if (autoplay) {
+          progressManager.start()
+        }
       }))
       if (pagesElement && pageWindowElement) {
         // load first and last child to clone them 
