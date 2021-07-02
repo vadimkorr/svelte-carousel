@@ -268,7 +268,6 @@
     _duration = 0
   }
   function handleThreshold(event) {
-    // TODO: is it correct?
     directionFnDescription[event.detail.direction]()
   }
   function handleSwipeMove(event) {
@@ -316,7 +315,12 @@
         bind:this={pagesElement}
       >
         <slot {loaded}></slot>
-      </div>    
+      </div>
+      {#if autoplayProgressVisible}
+        <div class="sc-carousel-progress__container">
+          <Progress value={progressValue} />
+        </div>
+      {/if}
     </div>
     {#if arrows}
       <slot name="next" {showNextPage}>
@@ -344,8 +348,6 @@
       ></Dots>
     </slot>
   {/if}
-  {progressValue}
-  <Progress value={progressValue} />
 </div>
 
 <style>
@@ -365,6 +367,7 @@
     display: flex;
     overflow: hidden;
     box-sizing: border-box;
+    position: relative;
   }
   .sc-carousel__pages-container {
     width: 100%;
@@ -377,5 +380,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .sc-carousel-progress__container {
+    width: 100%;
+    height: 7px;
+    background-color: lightgray;
+    position: absolute;
+    bottom: 0;
   }
 </style>
