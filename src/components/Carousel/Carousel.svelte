@@ -135,7 +135,7 @@
   const progressManager = new ProgressManager({
     autoplayDuration,
     onValueChange: (value) => {
-      progressValue = value
+      progressValue = 1 - value
     }
   })
 
@@ -355,6 +355,10 @@
 </div>
 
 <style>
+  :root {
+    --sc-arrow-size: 2px;
+    --sc-color-rgb-light-50p: rgba(93, 93, 93, 0.5);
+  }
   .sc-carousel__carousel-container {
     display: flex;
     width: 100%;
@@ -387,8 +391,8 @@
   }
   .sc-carousel-progress__container {
     width: 100%;
-    height: 7px;
-    background-color: lightgray;
+    height: 5px;
+    background-color: var(--sc-color-rgb-light-50p);
     position: absolute;
     bottom: 0;
   }
