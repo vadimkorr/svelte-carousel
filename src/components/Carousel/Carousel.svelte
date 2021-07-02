@@ -174,7 +174,10 @@
   }
 
   function applyAutoplay() {
-    console.log('autoplay', autoplay)
+    if (!infinite && currentPageIndex === pagesCount - 1) {
+      progressManager.reset()
+      return
+    }
     if (autoplay) {
       autoplayDirectionFnDescription[autoplayDirection]()
     }
