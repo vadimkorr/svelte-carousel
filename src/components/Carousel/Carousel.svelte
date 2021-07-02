@@ -188,6 +188,7 @@
         currentPageIndex = value.currentPageIndex
         console.log('currentPageIndex', currentPageIndex)
       }))
+      cleanupFns.push(() => progressManager.reset())
       if (pagesElement && pageWindowElement) {
         // load first and last child to clone them 
         loaded = [0, pagesElement.children.length - 1]

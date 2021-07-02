@@ -51,6 +51,4 @@ export class ProgressManager {
   reset() {
     clearInterval(this.#interval)
   }
-
-  // TODO: add on destroy
 }
