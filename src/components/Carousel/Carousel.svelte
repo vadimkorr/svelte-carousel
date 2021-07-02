@@ -174,6 +174,7 @@
   }
 
   function applyAutoplay() {
+    console.log('autoplay', autoplay)
     if (autoplay) {
       autoplayDirectionFnDescription[autoplayDirection]()
     }
@@ -186,7 +187,6 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
-        console.log('currentPageIndex', currentPageIndex)
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesElement && pageWindowElement) {
@@ -215,13 +215,13 @@
   }
 
   function offsetPage(animated) {
-    _duration = animated ? duration : 0 // TODO: why not used
+    _duration = animated ? duration : 0
     offset = -currentPageIndex * pageWidth
     if (infinite) {
       if (currentPageIndex === 0) {
-        showPage(pagesCount - 2, { offsetDelayMs: duration, animated: false })
+        showPage(pagesCount - 2, { offsetDelayMs: _duration, animated: false })
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelayMs: duration, animated: false })
+        showPage(1, { offsetDelayMs: _duration, animated: false })
       }
     }
   }
@@ -241,7 +241,7 @@
 
   function showPage(pageIndex, options) {
     const animated = get(options, 'animated', true)
-    const offsetDelayMs = get(options, 'offsetDelayMs', true) // TODO: fix default value
+    const offsetDelayMs = get(options, 'offsetDelayMs', 0)
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
       setTimeout(() => {
