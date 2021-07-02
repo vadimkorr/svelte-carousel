@@ -1,8 +1,14 @@
-const PROGRESS_STEPS_COUNT = 100
+const PROGRESS_STEPS_COUNT = 10
+
+const setIntervalImmediately = (fn, ms) => {
+  fn();
+  return setInterval(fn, ms);
+}
 
 export class ProgressManager {
   #autoplayDuration
   #onValueChange
+
 
   #interval
   #paused = false
@@ -15,18 +21,26 @@ export class ProgressManager {
     this.#onValueChange = onValueChange
   }
 
-  start() {
-    let value = 0
-    let progress = 0
-    const stepMs = this.#autoplayDuration / PROGRESS_STEPS_COUNT
+  start(onFinish) {
+    this.reset()
 
-    this.#interval = setInterval(() => {
+    const stepMs = this.#autoplayDuration / PROGRESS_STEPS_COUNT
+    let progress = -stepMs
+
+    this.#interval = setIntervalImmediately(() => {
       if (this.#paused) {
         return 
       }
       progress += stepMs
-      value = progress / this.#autoplayDuration
+
+      const value = progress / this.#autoplayDuration
       this.#onValueChange(value)
+
+      if (value > 1) {
+        this.reset()
+        onFinish()
+        this.start(onFinish)
+      }
     }, stepMs)
   }
 
@@ -40,5 +54,8 @@ export class ProgressManager {
 
   reset() {
     clearInterval(this.#interval)
+    // this.#onValueChange(0)
   }
+
+  // TODO: add on destroy
 }

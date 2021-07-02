@@ -18,8 +18,16 @@
   const dispatch = createEventDispatcher()
 
   const directionFnDescription = {
-    [NEXT]: showNextPage,
-    [PREV]: showPrevPage
+    [NEXT]: () => {
+      progressManager.start(() => {
+        showNextPage()
+      })
+    },
+    [PREV]: () => {
+      progressManager.start(() => {
+        showPrevPage()
+      })
+    }
   }
 
   /**
@@ -67,7 +75,7 @@
   /**
    * Pause autoplay on focus
    */
-  export let pauseOnFocus = false
+  export let pauseOnFocus = true
 
   /**
    * Current page indicator dots
@@ -117,15 +125,12 @@
     }
   })
 
-  let autoplayInterval = null
   $: {
     if (pauseOnFocus) {
       if (focused) {
         progressManager.pause()
-        clearAutoplay()
       } else {
         progressManager.resume()
-        applyAutoplay()
       }
     }
   }
@@ -146,25 +151,18 @@
 
     offsetPage(false)
   }
-
-  function applyAutoplay() {
-    if (autoplay && !autoplayInterval) {
-      autoplayInterval = setInterval(() => {
-        directionFnDescription[autoplayDirection]()
-      }, autoplayDuration)
-    }
-  }
-
-  function clearAutoplay() {
-    clearInterval(autoplayInterval)
-    autoplayInterval = null
-  }
   
   function addClones() {
     const first = pagesElement.children[0]
     const last = pagesElement.children[pagesElement.children.length - 1]
     pagesElement.prepend(last.cloneNode(true))
     pagesElement.append(first.cloneNode(true))
+  }
+
+  function applyAutoplay() {
+    if (autoplay) {
+      directionFnDescription[autoplayDirection]()
+    }
   }
 
   let cleanupFns = []
@@ -174,11 +172,7 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
-        
-        progressManager.reset() // clear interval out of condition in case autoplay was changed reactively
-        if (autoplay) {
-          progressManager.start()
-        }
+        console.log('currentPageIndex', currentPageIndex)
       }))
       if (pagesElement && pageWindowElement) {
         // load first and last child to clone them 
@@ -189,13 +183,14 @@
         store.init(initialPageIndex + Number(infinite))
         applyPageSizes()
       }
+
       applyAutoplay()
+
       addResizeEventListener(applyPageSizes)
     })()
   })
 
   onDestroy(() => {
-    clearAutoplay()
     removeResizeEventListener(applyPageSizes)
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
@@ -219,12 +214,14 @@
   // Disable page change while animation is in progress
   let disabled = false
   function safeChangePage(cb, options) {
+    applyAutoplay()
     const animated = get(options, 'animated', true)
     if (disabled) return
     cb()
     disabled = true
     setTimeout(() => {
       disabled = false
+      
     }, animated ? duration : 0)
   }
 
@@ -258,6 +255,7 @@
     _duration = 0
   }
   function handleThreshold(event) {
+    // TODO: is it correct?
     directionFnDescription[event.detail.direction]()
   }
   function handleSwipeMove(event) {
@@ -333,6 +331,7 @@
       ></Dots>
     </slot>
   {/if}
+  {progressValue}
   <Progress value={progressValue} />
 </div>
 
