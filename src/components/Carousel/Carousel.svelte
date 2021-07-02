@@ -228,14 +228,13 @@
   // Disable page change while animation is in progress
   let disabled = false
   function safeChangePage(cb, options) {
-    applyAutoplay()
     const animated = get(options, 'animated', true)
     if (disabled) return
     cb()
     disabled = true
     setTimeout(() => {
       disabled = false
-      
+      applyAutoplay()
     }, animated ? duration : 0)
   }
 

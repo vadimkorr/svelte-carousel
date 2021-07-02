@@ -36,7 +36,6 @@ export class ProgressManager {
       if (value > 1) {
         this.reset()
         onFinish()
-        this.start(onFinish)
       }
     }, stepMs)
   }
