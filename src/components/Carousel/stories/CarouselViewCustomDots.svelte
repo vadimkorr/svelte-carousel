@@ -58,7 +58,7 @@
   export let dots = true
 
   function onPageChange(event, showPage) {
-    showPage(event.target.value)
+    showPage(Number(event.target.value))
   }
 
   const colors = [
