@@ -17,7 +17,7 @@
 
   const dispatch = createEventDispatcher()
 
-  const directionFnDescription = {
+  const autoplayDirectionFnDescription = {
     [NEXT]: () => {
       progressManager.start(() => {
         showNextPage()
@@ -27,6 +27,15 @@
       progressManager.start(() => {
         showPrevPage()
       })
+    }
+  }
+
+  const directionFnDescription = {
+    [NEXT]: () => {
+      showNextPage()
+    },
+    [PREV]: () => {
+      showPrevPage()
     }
   }
 
@@ -161,7 +170,7 @@
 
   function applyAutoplay() {
     if (autoplay) {
-      directionFnDescription[autoplayDirection]()
+      autoplayDirectionFnDescription[autoplayDirection]()
     }
   }
 
