@@ -48,6 +48,11 @@
   export let pauseOnFocus = false
 
   /**
+   * Show autoplay duration progress indicator
+   */
+  export let autoplayProgressVisible = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -81,6 +86,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {pauseOnFocus}
+    {autoplayProgressVisible}
     {dots}
     let:currentPageIndex
     let:pagesCount

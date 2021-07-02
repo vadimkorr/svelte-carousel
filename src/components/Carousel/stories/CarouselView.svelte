@@ -48,6 +48,11 @@
   export let pauseOnFocus = false
 
   /**
+   * Show autoplay duration progress indicator
+   */
+  export let autoplayProgressVisible = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
@@ -83,6 +88,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {pauseOnFocus}
+    {autoplayProgressVisible}
     {dots}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
@@ -108,6 +114,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {pauseOnFocus}
+    {autoplayProgressVisible}
     {dots}
   >
     {#each colors2 as { color, text } (color)}
