@@ -55,7 +55,7 @@
 
 ## Autoplay
 <Carousel
-  autoplay={true}
+  autoplay
   autoplayDuration={2000}
 >
   {#each colors as { color, text } (color)}
@@ -65,7 +65,7 @@
 
 ```jsx
 <Carousel
-  autoplay={true}
+  autoplay
   autoplayDuration={2000}
 >
   {#each colors as { color, text } (color)}

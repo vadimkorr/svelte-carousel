@@ -72,12 +72,12 @@
   export let autoplay = false
 
   /**
-   * Auto play change interval (ms)
+   * Autoplay change interval (ms)
    */
   export let autoplayDuration = 3000
 
   /**
-   * Auto play change direction ('next', 'prev')
+   * Autoplay change direction ('next', 'prev')
    */
   export let autoplayDirection = NEXT
 

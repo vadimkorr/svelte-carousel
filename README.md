@@ -41,8 +41,8 @@ Import component
 | `initialPageIndex`   | `number`   | `0`             | Page to start on                              |
 | `duration`           | `number`   | `500`           | Transition duration (ms)                      |
 | `autoplay`           | `boolean`  | `false`         | Enables auto play of pages                    |
-| `autoplayDuration`   | `number`   | `3000`          | Auto play change interval (ms)                |
-| `autoplayDirection`  | `string`   | `'next'`        | Auto play change direction (`next` or `prev`) |
+| `autoplayDuration`   | `number`   | `3000`          | Autoplay change interval (ms)                |
+| `autoplayDirection`  | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`) |
 | `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
 | `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
