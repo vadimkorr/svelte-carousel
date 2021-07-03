@@ -76,6 +76,58 @@
 
 <Divider />
 
+## Autoplay with duration progress
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+```
+
+<Divider />
+
+## Autoplay with pause on focus
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+  pauseOnFocus
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+  pauseOnFocus
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+```
+
+<Divider />
+
 ## Lazy loading of images
 <Carousel
   let:loaded
@@ -217,10 +269,10 @@ Import component
 | `initialPageIndex`   | `number`   | `0`             | Page to start on                              |
 | `duration`           | `number`   | `500`           | Transition duration (ms)                      |
 | `autoplay`           | `boolean`  | `false`         | Enables auto play of pages                    |
-| `autoplayDuration`   | `number`   | `3000`          | Auto play change interval (ms)                |
-| `autoplayDirection`  | `string`   | `'next'`        | Auto play change direction (`next` or `prev`) |
-| `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
+| `autoplayDuration`   | `number`   | `3000`          | Autoplay change interval (ms)                 |
+| `autoplayDirection`  | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
 | `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
+| `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
 </div>
