@@ -27,8 +27,6 @@
 <style>
   :root {
     --sc-arrow-size: 2px;
-    --sc-color-rgb-light-50p: rgba(93, 93, 93, 0.5);
-    --sc-color-hex-dark: #1e1e1e;
   }
   .sc-carousel-arrow__circle {
     width: 20px;

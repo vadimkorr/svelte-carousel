@@ -363,7 +363,11 @@
 <style>
   :root {
     --sc-arrow-size: 2px;
+
     --sc-color-rgb-light-50p: rgba(93, 93, 93, 0.5);
+
+    --sc-color-hex-dark-50p: rgba(30, 30, 30, 0.5);
+    --sc-color-hex-dark: #1e1e1e;
   }
   .sc-carousel__carousel-container {
     display: flex;

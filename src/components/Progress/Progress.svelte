@@ -20,9 +20,6 @@
 ></div>
 
 <style>
-  :root {
-    --sc-color-hex-dark-50p: rgba(30, 30, 30, 0.5)
-  }
   .sc-carousel-progress__indicator {
     height: 100%;
     background-color: var(--sc-color-hex-dark-50p);
