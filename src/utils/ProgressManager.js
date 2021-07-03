@@ -4,17 +4,17 @@ const PROGRESS_STEPS_COUNT = 100
 
 export class ProgressManager {
   #autoplayDuration
-  #onValueChange
+  #onProgressValueChange
 
   #interval
   #paused = false
 
   constructor({
     autoplayDuration,
-    onValueChange,
+    onProgressValueChange,
   }) {
     this.#autoplayDuration = autoplayDuration
-    this.#onValueChange = onValueChange
+    this.#onProgressValueChange = onProgressValueChange
   }
 
   start(onFinish) {
@@ -30,7 +30,7 @@ export class ProgressManager {
       progress += stepMs
 
       const value = progress / this.#autoplayDuration
-      this.#onValueChange(value)
+      this.#onProgressValueChange(value)
 
       if (value > 1) {
         this.reset()

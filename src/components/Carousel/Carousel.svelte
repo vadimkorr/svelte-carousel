@@ -134,7 +134,7 @@
   let progressValue
   const progressManager = new ProgressManager({
     autoplayDuration,
-    onValueChange: (value) => {
+    onProgressValueChange: (value) => {
       progressValue = 1 - value
     }
   })
