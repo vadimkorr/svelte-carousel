@@ -174,7 +174,13 @@
   }
 
   function applyAutoplay() {
-    if (!infinite && currentPageIndex === pagesCount - 1) {
+    // prevent progress change if not infinite for first and last page
+    if (
+      !infinite && (
+        (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
+        (autoplayDirection === PREV && currentPageIndex === 0)
+      )
+    ) {
       progressManager.reset()
       return
     }
