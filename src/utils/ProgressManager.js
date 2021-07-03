@@ -2,7 +2,6 @@ import { setIntervalImmediate } from './interval'
 
 const PROGRESS_STEPS_COUNT = 100
 
-
 export class ProgressManager {
   #autoplayDuration
   #onValueChange
