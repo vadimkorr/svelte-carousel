@@ -1,7 +1,6 @@
 import { setIntervalImmediate } from './interval'
 
-const PROGRESS_STEPS_COUNT = 100
-
+const STEP_MS = 35
 export class ProgressManager {
   #autoplayDuration
   #onProgressValueChange
@@ -20,7 +19,7 @@ export class ProgressManager {
   start(onFinish) {
     this.reset()
 
-    const stepMs = this.#autoplayDuration / PROGRESS_STEPS_COUNT
+    const stepMs = Math.min(STEP_MS, this.#autoplayDuration)
     let progress = -stepMs
 
     this.#interval = setIntervalImmediate(() => {
