@@ -208,8 +208,6 @@ Import component
 
 # Props
 
-<div class="table-wrapper">
-
 | Prop                 | Type       | Default         | Description                                   | 
 |----------------------|------------|-----------------|-----------------------------------------------|
 | `arrows`             | `boolean`  | `true`          | Enable Next/Prev arrows                       |
@@ -223,8 +221,6 @@ Import component
 | `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
 | `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
-</div>
-
 <Divider />
 
 # Events
@@ -232,13 +228,9 @@ Import component
 ## `pageChange`
 Is dispatched on page change
 
-<div class="table-wrapper">
-
 | Payload field      | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
 | `event.detail`     | `number`    | Current page index                    |
-
-</div>
 
 ```jsx
 <Carousel
@@ -259,14 +251,10 @@ They are used for customizing prev and next buttons.
 
 Slot props:
 
-<div class="table-wrapper">
-
 | Prop               | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
 | `showPrevPage`     | `function`  | Call it to switch to the previos page |
 | `showNextPage`     | `function`  | Call it to switch to the next page    |
-
-</div>
 
 ```jsx
 <Carousel
@@ -288,15 +276,12 @@ Slot props:
 This slot is used for customizing dots appearance.
 
 Slot props:
-<div class="table-wrapper">
 
 | Prop                | Type         | Description                                  | 
 |---------------------|----------  --|----------------------------------------------|
 | `currentPageIndex`  | `number`     | Represents current page index (start from 0) |
 | `pagesCount`        | `number`     | Total pages amount                           |
 | `showPage`          | `function`   | Takes index as page to be shown              |
-
-</div>
 
 ```jsx
 <Carousel
@@ -317,13 +302,9 @@ This slot takes content for the carousel.
 
 Slot props:
 
-<div class="table-wrapper">
-
 | Prop              | Type       | Description                                                          | 
 |-------------------|------------|----------------------------------------------------------------------|
 | `loaded`          | `number[]` | Contains indexes of pages to be loaded. Can be used for lazy loading |
-
-</div>
 
 ```jsx
 <Carousel
@@ -345,14 +326,10 @@ Navigates to a page by index
 
 Arguments:
 
-<div class="table-wrapper">
-
 | Argument           | Type        | Default | Description                           | 
 |--------------------|-------------|---------|---------------------------------------|
 | `pageIndex`        | `number`    |         | Page number                           |
 | `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
-
-</div>
 
 ```jsx
 <script>
@@ -376,13 +353,9 @@ Navigates to the previous page
 
 Arguments:
 
-<div class="table-wrapper">
-
 | Argument           | Type        | Default | Description                           | 
 |--------------------|-------------|---------|---------------------------------------|
 | `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
-
-</div>
 
 ```jsx
 <script>
@@ -406,13 +379,9 @@ Navigates to the next page
 
 Arguments:
 
-<div class="table-wrapper">
-
 | Argument           | Type        | Default | Description                           | 
 |--------------------|-------------|---------|---------------------------------------|
 | `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
-
-</div>
 
 ```jsx
 <script>
@@ -444,24 +413,6 @@ Arguments:
     height: 100%;
     object-fit: cover;
     -webkit-user-drag: none;
-  }
-
-  /* table */
-  .table-wrapper {
-    max-width: 100%;
-    overflow-x: auto;
-  }
-  table {
-    border-collapse: collapse;
-  }
-  tr {
-    border-bottom: 2px solid #009800;
-  }
-  td {
-    padding: 2px 10px;
-  }
-  th {
-    padding: 5px 10px;
   }
 
   /* custom arrows */

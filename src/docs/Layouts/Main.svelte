@@ -1,3 +1,16 @@
+<script context="module">
+  import Table from './custom/Table.svelte';
+  import Th from './custom/Th.svelte';
+  import Tr from './custom/Tr.svelte';
+  import Td from './custom/Td.svelte';
+  export {
+    Table as table,
+    Th as th,
+    Tr as tr,
+    Td as td
+  };
+</script>
+
 <script>
   const links = [{
     title: 'github',
