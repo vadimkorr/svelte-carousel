@@ -84,7 +84,7 @@
   /**
    * Pause autoplay on focus
    */
-  export let pauseOnFocus = true
+  export let pauseOnFocus = false
 
   /**
    * Show autoplay duration progress indicator
