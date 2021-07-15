@@ -181,11 +181,11 @@
       return
     }
     if (autoplay) {
-      const delaysMs = get(options, 'delaysMs', 0)
-      if (delaysMs) {
+      const delayMs = get(options, 'delayMs', 0)
+      if (delayMs) {
         setTimeout(() => {
           autoplayDirectionFnDescription[autoplayDirection]()
-        }, delaysMs)
+        }, delayMs)
       } else {
         autoplayDirectionFnDescription[autoplayDirection]()
       }
@@ -269,7 +269,7 @@
       setTimeout(() => {
         offsetPage(animated)
         const jumped = jumpIfNeeded()
-        !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
+        !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
       }, offsetDelayMs)
     }, { animated })
   }
@@ -279,7 +279,7 @@
       store.prev({ infinite, pagesCount })
       offsetPage(animated)
       const jumped = jumpIfNeeded()
-      !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
+      !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
     }, { animated })
   }
   function showNextPage(options) {
@@ -288,7 +288,7 @@
       store.next({ infinite, pagesCount })
       offsetPage(animated)
       const jumped = jumpIfNeeded()
-      !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
+      !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
     }, { animated })
   }
 
