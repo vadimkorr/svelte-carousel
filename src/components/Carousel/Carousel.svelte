@@ -169,7 +169,7 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  function applyAutoplay(options) {
+  function applyAutoplayIfNeeded(options) {
     // prevent progress change if not infinite for first and last page
     if (
       !infinite && (
@@ -211,7 +211,7 @@
         applyPageSizes()
       }
 
-      applyAutoplay()
+      applyAutoplayIfNeeded()
 
       addResizeEventListener(applyPageSizes)
     })()
@@ -269,7 +269,7 @@
       setTimeout(() => {
         offsetPage(animated)
         const jumped = jumpIfNeeded()
-        !jumped && applyAutoplay({ delaysMs: _duration })
+        !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
       }, offsetDelayMs)
     }, { animated })
   }
@@ -279,7 +279,7 @@
       store.prev({ infinite, pagesCount })
       offsetPage(animated)
       const jumped = jumpIfNeeded()
-      !jumped && applyAutoplay({ delaysMs: _duration })
+      !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
     }, { animated })
   }
   function showNextPage(options) {
@@ -288,7 +288,7 @@
       store.next({ infinite, pagesCount })
       offsetPage(animated)
       const jumped = jumpIfNeeded()
-      !jumped && applyAutoplay({ delaysMs: _duration })
+      !jumped && applyAutoplayIfNeeded({ delaysMs: _duration })
     }, { animated })
   }
 
