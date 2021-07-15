@@ -318,6 +318,12 @@
 </div>
 
 <style>
+  :root {
+    --sc-color-rgb-light-50p: rgba(93, 93, 93, 0.5);
+    --sc-color-rgb-light: #5d5d5d;
+    --sc-color-hex-dark-50p: rgba(30, 30, 30, 0.5);
+    --sc-color-hex-dark: #1e1e1e;
+  }
   .sc-carousel__carousel-container {
     display: flex;
     width: 100%;
