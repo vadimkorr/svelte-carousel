@@ -26,13 +26,13 @@
 
 <style>
   :root {
-    --size: 2px
+    --sc-arrow-size: 2px;
   }
   .sc-carousel-arrow__circle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: rgba(93, 93, 93, 0.5); /* #5d5d5d */
+    background-color: var(--sc-color-rgb-light-50p);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,18 +44,18 @@
     opacity: 0.9;
   }
   .sc-carousel-arrow__arrow {
-    border: solid #1e1e1e;
-    border-width: 0 var(--size) var(--size) 0;
-    padding: var(--size);
+    border: solid var(--sc-color-hex-dark);
+    border-width: 0 var(--sc-arrow-size) var(--sc-arrow-size) 0;
+    padding: var(--sc-arrow-size);
     position: relative;
   }
   .sc-carousel-arrow__arrow-next {
     transform: rotate(-45deg);
-    left: calc(var(--size) / -2);
+    left: calc(var(--sc-arrow-size) / -2);
   }
   .sc-carousel-arrow__arrow-prev {
     transform: rotate(135deg);
-    right: calc(var(--size) / -2);
+    right: calc(var(--sc-arrow-size) / -2);
   }
   .sc-carousel-arrow__circle_disabled,
   .sc-carousel-arrow__circle_disabled:hover {
