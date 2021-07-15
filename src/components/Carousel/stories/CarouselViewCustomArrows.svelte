@@ -1,6 +1,5 @@
 <script>
   import Carousel from '../Carousel.svelte'
-  import { NEXT } from '../../../direction'
 
   /**
    * CSS animation timing function
@@ -40,7 +39,7 @@
   /**
    * Autoplay change direction ('next', 'prev')
    */
-  export let autoplayDirection = NEXT
+  export let autoplayDirection = 'next'
 
   /**
    * Pause autoplay on focus
