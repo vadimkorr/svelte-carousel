@@ -77,21 +77,17 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated })
+    showPage(pageIndex + Number(infinite), { animated })
   }
 
   export function goToPrev(options) {
     const animated = get(options, 'animated', true)
-    showPrevPage({
-      animated
-    })
+    showPrevPage({ animated })
   }
 
   export function goToNext(options) {
     const animated = get(options, 'animated', true)
-    showNextPage({
-      animated
-    })
+    showNextPage({ animated })
   }
 
   let store = createStore()
@@ -183,7 +179,7 @@
   })
 
   function handlePageChange(pageIndex) {
-    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated: true })
+    showPage(pageIndex + Number(infinite))
   }
 
   function offsetPage(animated) {
@@ -246,7 +242,7 @@
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
-    showPage(currentPageIndex, { offsetDelayMs: 0, animated: true })
+    showPage(currentPageIndex)
   }
   function handleFocused(event) {
     focused = event.detail.value
