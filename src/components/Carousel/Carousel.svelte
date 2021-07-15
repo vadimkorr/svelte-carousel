@@ -67,7 +67,7 @@
   let _duration = duration
 
   /**
-   * Enables auto play of pages
+   * Enables autoplay of pages
    */
   export let autoplay = false
 
@@ -101,21 +101,17 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated })
+    showPage(pageIndex + Number(infinite), { animated })
   }
 
   export function goToPrev(options) {
     const animated = get(options, 'animated', true)
-    showPrevPage({
-      animated
-    })
+    showPrevPage({ animated })
   }
 
   export function goToNext(options) {
     const animated = get(options, 'animated', true)
-    showNextPage({
-      animated
-    })
+    showNextPage({ animated })
   }
 
   let store = createStore()
@@ -173,7 +169,7 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  function applyAutoplay() {
+  function applyAutoplay(options) {
     // prevent progress change if not infinite for first and last page
     if (
       !infinite && (
@@ -185,7 +181,14 @@
       return
     }
     if (autoplay) {
-      autoplayDirectionFnDescription[autoplayDirection]()
+      const delaysMs = get(options, 'delaysMs', 0)
+      if (delaysMs) {
+        setTimeout(() => {
+          autoplayDirectionFnDescription[autoplayDirection]()
+        }, delaysMs)
+      } else {
+        autoplayDirectionFnDescription[autoplayDirection]()
+      }
     }
   }
 
@@ -220,19 +223,29 @@
   })
 
   function handlePageChange(pageIndex) {
-    showPage(pageIndex + Number(infinite), { offsetDelayMs: 0, animated: true })
+    showPage(pageIndex + Number(infinite))
   }
 
   function offsetPage(animated) {
+    // _duration is an offset animation time
     _duration = animated ? duration : 0
     offset = -currentPageIndex * pageWidth
+  }
+
+  // makes delayed jump to 1st or last element
+  function jumpIfNeeded() {
+    let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
+        // offsetDelayMs should depend on _duration, as it wait when offset finishes
         showPage(pagesCount - 2, { offsetDelayMs: _duration, animated: false })
+        jumped = true
       } else if (currentPageIndex === pagesCount - 1) {
         showPage(1, { offsetDelayMs: _duration, animated: false })
+        jumped = true
       }
     }
+    return jumped
   }
 
   // Disable page change while animation is in progress
@@ -244,7 +257,6 @@
     disabled = true
     setTimeout(() => {
       disabled = false
-      applyAutoplay()
     }, animated ? duration : 0)
   }
 
@@ -253,8 +265,11 @@
     const offsetDelayMs = get(options, 'offsetDelayMs', 0)
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
+      // delayed page transition, used for infinite autoplay to jump to real page
       setTimeout(() => {
         offsetPage(animated)
+        const jumped = jumpIfNeeded()
+        !jumped && applyAutoplay({ delaysMs: _duration })
       }, offsetDelayMs)
     }, { animated })
   }
@@ -263,6 +278,8 @@
     safeChangePage(() => {
       store.prev({ infinite, pagesCount })
       offsetPage(animated)
+      const jumped = jumpIfNeeded()
+      !jumped && applyAutoplay({ delaysMs: _duration })
     }, { animated })
   }
   function showNextPage(options) {
@@ -270,6 +287,8 @@
     safeChangePage(() => {
       store.next({ infinite, pagesCount })
       offsetPage(animated)
+      const jumped = jumpIfNeeded()
+      !jumped && applyAutoplay({ delaysMs: _duration })
     }, { animated })
   }
 
@@ -284,7 +303,7 @@
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
-    showPage(currentPageIndex, { offsetDelayMs: 0, animated: true })
+    showPage(currentPageIndex)
   }
   function handleFocused(event) {
     focused = event.detail.value
@@ -362,10 +381,8 @@
 
 <style>
   :root {
-    --sc-arrow-size: 2px;
-
     --sc-color-rgb-light-50p: rgba(93, 93, 93, 0.5);
-
+    --sc-color-rgb-light: #5d5d5d;
     --sc-color-hex-dark-50p: rgba(30, 30, 30, 0.5);
     --sc-color-hex-dark: #1e1e1e;
   }

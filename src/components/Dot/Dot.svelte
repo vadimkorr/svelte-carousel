@@ -41,7 +41,7 @@
     width: 16px;
   }
   .sc-carousel-dot__dot {
-    background-color: #5d5d5d;
+    background-color: var(--sc-color-rgb-light);
     border-radius: 50%;
     display: inline-block;
     opacity: 0.5;

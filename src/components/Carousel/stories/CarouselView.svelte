@@ -27,7 +27,7 @@
   export let duration = 500
 
   /**
-   * Enables auto play of pages
+   * Enables autoplay of pages
    */
   export let autoplay = false
 
