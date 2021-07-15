@@ -183,15 +183,25 @@
   }
 
   function offsetPage(animated) {
+    // _duration is an offset animation time
     _duration = animated ? duration : 0
     offset = -currentPageIndex * pageWidth
+  }
+
+  // makes delayed jump to 1st or last element
+  function jumpIfNeeded() {
+    let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
-        showPage(pagesCount - 2, { offsetDelayMs: duration, animated: false })
+        // offsetDelayMs should depend on _duration, as it wait when offset finishes
+        showPage(pagesCount - 2, { offsetDelayMs: _duration, animated: false })
+        jumped = true
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelayMs: duration, animated: false })
+        showPage(1, { offsetDelayMs: _duration, animated: false })
+        jumped = true
       }
     }
+    return jumped
   }
 
   // Disable page change while animation is in progress
@@ -211,8 +221,11 @@
     const offsetDelayMs = get(options, 'offsetDelayMs', true)
     safeChangePage(() => {
       store.moveToPage({ pageIndex, pagesCount })
+      // delayed page transition, used for infinite autoplay to jump to real page
       setTimeout(() => {
         offsetPage(animated)
+        const jumped = jumpIfNeeded()
+        !jumped && applyAutoplay()
       }, offsetDelayMs)
     }, { animated })
   }
@@ -221,6 +234,8 @@
     safeChangePage(() => {
       store.prev({ infinite, pagesCount })
       offsetPage(animated)
+      const jumped = jumpIfNeeded()
+      !jumped && applyAutoplay()
     }, { animated })
   }
   function showNextPage(options) {
@@ -228,6 +243,8 @@
     safeChangePage(() => {
       store.next({ infinite, pagesCount })
       offsetPage(animated)
+      const jumped = jumpIfNeeded()
+      !jumped && applyAutoplay()
     }, { animated })
   }
 

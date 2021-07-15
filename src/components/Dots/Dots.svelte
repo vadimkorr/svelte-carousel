@@ -43,7 +43,7 @@
   }
   .sc-carousel-dots__dot-container {
     height: calc(var(--sc-dot-size) + 10px);
-    width: calc(var(--sc-dot-size) + 10px);
+    width: calc(var(--sc-dot-size) + 6px);
     display: flex;
     align-items: center;
     justify-content: center;
