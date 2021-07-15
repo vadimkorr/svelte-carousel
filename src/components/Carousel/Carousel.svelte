@@ -269,7 +269,7 @@
       setTimeout(() => {
         offsetPage(animated)
         const jumped = jumpIfNeeded()
-        !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
+        !jumped && applyAutoplayIfNeeded({ delayMs: _duration }) // while offset animation is in progress (delayMs = _duration ms) wait for it
       }, offsetDelayMs)
     }, { animated })
   }
