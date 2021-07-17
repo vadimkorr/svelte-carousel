@@ -13,30 +13,19 @@
   } from '../../utils/event'
   import { getAdjacentIndexes } from '../../utils/page'
   import { get } from '../../utils/object'
-  import { ProgressManager } from '../../utils/ProgressManager.js'
+  import { ProgressManager } from '../../utils/ProgressManager'
+  import { wait } from '../../utils/interval'
 
   const dispatch = createEventDispatcher()
 
   const autoplayDirectionFnDescription = {
-    [NEXT]: () => {
-      progressManager.start(() => {
-        showNextPage()
-      })
-    },
-    [PREV]: () => {
-      progressManager.start(() => {
-        showPrevPage()
-      })
-    }
+    [NEXT]: async () => await progressManager.start(showNextPage),
+    [PREV]: async () => await progressManager.start(showPrevPage)
   }
 
   const directionFnDescription = {
-    [NEXT]: () => {
-      showNextPage()
-    },
-    [PREV]: () => {
-      showPrevPage()
-    }
+    [NEXT]: showNextPage,
+    [PREV]: showPrevPage
   }
 
   /**
@@ -70,6 +59,13 @@
    * Enables autoplay of pages
    */
   export let autoplay = false
+  $: {
+    if (autoplay) {
+      applyAutoplay()
+    } else {
+      progressManager.reset()
+    }
+  }
 
   /**
    * Autoplay change interval (ms)
@@ -96,31 +92,41 @@
    */
   export let dots = true
 
-  export function goTo(pageIndex, options) {
+  export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    showPage(pageIndex + Number(infinite), { animated })
+    await showPage(pageIndex + Number(infinite), { animated })
   }
 
-  export function goToPrev(options) {
+  export async function goToPrev(options) {
     const animated = get(options, 'animated', true)
-    showPrevPage({ animated })
+    await showPrevPage({ animated })
   }
 
-  export function goToNext(options) {
+  export async function goToNext(options) {
     const animated = get(options, 'animated', true)
-    showNextPage({ animated })
+    await showNextPage({ animated })
   }
 
   let store = createStore()
   let currentPageIndex = 0
-  $: originalCurrentPageIndex = currentPageIndex - Number(infinite);
+  $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite)
   $: dispatch('pageChange', originalCurrentPageIndex)
 
   let pagesCount = 0
   $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 1) // without clones
+
+  function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
+    if (infinite) {
+      if (currentPageIndex === pagesCount - 1) return 0
+      if (currentPageIndex === 0) return pagesCount - 3
+      return currentPageIndex - 1
+    }
+    return currentPageIndex
+  }
+
   let pageWidth = 0
   let offset = 0
   let pageWindowElement
@@ -169,27 +175,8 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  function applyAutoplayIfNeeded(options) {
-    // prevent progress change if not infinite for first and last page
-    if (
-      !infinite && (
-        (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
-        (autoplayDirection === PREV && currentPageIndex === 0)
-      )
-    ) {
-      progressManager.reset()
-      return
-    }
-    if (autoplay) {
-      const delayMs = get(options, 'delayMs', 0)
-      if (delayMs) {
-        setTimeout(() => {
-          autoplayDirectionFnDescription[autoplayDirection]()
-        }, delayMs)
-      } else {
-        autoplayDirectionFnDescription[autoplayDirection]()
-      }
-    }
+  async function applyAutoplay() {
+    await autoplayDirectionFnDescription[autoplayDirection]()
   }
 
   let cleanupFns = []
@@ -199,6 +186,16 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
+
+        // prevent progress change if not infinite for first and last page
+        if (
+          !infinite && (
+            (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
+            (autoplayDirection === PREV && currentPageIndex === 0)
+          )
+        ) {
+          progressManager.reset()
+        }
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesElement && pageWindowElement) {
@@ -211,8 +208,6 @@
         applyPageSizes()
       }
 
-      applyAutoplayIfNeeded()
-
       addResizeEventListener(applyPageSizes)
     })()
   })
@@ -222,26 +217,30 @@
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
 
-  function handlePageChange(pageIndex) {
-    showPage(pageIndex + Number(infinite))
+  async function handlePageChange(pageIndex) {
+    await showPage(pageIndex + Number(infinite))
   }
 
   function offsetPage(animated) {
-    // _duration is an offset animation time
-    _duration = animated ? duration : 0
-    offset = -currentPageIndex * pageWidth
+    return new Promise((resolve) => {
+      // _duration is an offset animation time
+      _duration = animated ? duration : 0
+      offset = -currentPageIndex * pageWidth
+      setTimeout(() => {
+        resolve()
+      }, _duration)
+    })
   }
 
   // makes delayed jump to 1st or last element
-  function jumpIfNeeded() {
+  async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
-        // offsetDelayMs should depend on _duration, as it wait when offset finishes
-        showPage(pagesCount - 2, { offsetDelayMs: _duration, animated: false })
+        await showPage(pagesCount - 2, { animated: false })
         jumped = true
       } else if (currentPageIndex === pagesCount - 1) {
-        showPage(1, { offsetDelayMs: _duration, animated: false })
+        await showPage(1, { animated: false })
         jumped = true
       }
     }
@@ -250,54 +249,43 @@
 
   // Disable page change while animation is in progress
   let disabled = false
-  function safeChangePage(cb, options) {
-    const animated = get(options, 'animated', true)
+  async function changePage(updateStoreFn, options) {
     if (disabled) return
-    cb()
     disabled = true
-    setTimeout(() => {
-      disabled = false
-    }, animated ? duration : 0)
+
+    updateStoreFn()
+    await offsetPage(get(options, 'animated', true))
+    disabled = false
+
+    const jumped = await jumpIfNeeded()
+    !jumped && autoplay && applyAutoplay() // no need to wait it finishes
   }
 
-  function showPage(pageIndex, options) {
-    const animated = get(options, 'animated', true)
-    const offsetDelayMs = get(options, 'offsetDelayMs', 0)
-    safeChangePage(() => {
-      store.moveToPage({ pageIndex, pagesCount })
-      // delayed page transition, used for infinite autoplay to jump to real page
-      setTimeout(() => {
-        offsetPage(animated)
-        const jumped = jumpIfNeeded()
-        !jumped && applyAutoplayIfNeeded({ delayMs: _duration }) // while offset animation is in progress (delayMs = _duration ms) wait for it
-      }, offsetDelayMs)
-    }, { animated })
+  async function showPage(pageIndex, options) {
+    await changePage(
+      () => store.moveToPage({ pageIndex, pagesCount }),
+      options
+    )
   }
-  function showPrevPage(options) {
-    const animated = get(options, 'animated', true)
-    safeChangePage(() => {
-      store.prev({ infinite, pagesCount })
-      offsetPage(animated)
-      const jumped = jumpIfNeeded()
-      !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
-    }, { animated })
+  async function showPrevPage(options) {
+    await changePage(
+      () => store.prev({ infinite, pagesCount }),
+      options
+    )
   }
-  function showNextPage(options) {
-    const animated = get(options, 'animated', true)
-    safeChangePage(() => {
-      store.next({ infinite, pagesCount })
-      offsetPage(animated)
-      const jumped = jumpIfNeeded()
-      !jumped && applyAutoplayIfNeeded({ delayMs: _duration })
-    }, { animated })
+  async function showNextPage(options) {
+    await changePage(
+      () => store.next({ infinite, pagesCount }),
+      options
+    )
   }
 
   // gestures
   function handleSwipeStart() {
     _duration = 0
   }
-  function handleThreshold(event) {
-    directionFnDescription[event.detail.direction]()
+  async function handleThreshold(event) {
+    await directionFnDescription[event.detail.direction]()
   }
   function handleSwipeMove(event) {
     offset += event.detail.dx

@@ -17,25 +17,28 @@ export class ProgressManager {
   }
 
   start(onFinish) {
-    this.reset()
+    return new Promise((resolve) => {
+      this.reset()
 
-    const stepMs = Math.min(STEP_MS, this.#autoplayDuration)
-    let progress = -stepMs
-
-    this.#interval = setIntervalImmediate(() => {
-      if (this.#paused) {
-        return 
-      }
-      progress += stepMs
-
-      const value = progress / this.#autoplayDuration
-      this.#onProgressValueChange(value)
-
-      if (value > 1) {
-        this.reset()
-        onFinish()
-      }
-    }, stepMs)
+      const stepMs = Math.min(STEP_MS, this.#autoplayDuration)
+      let progress = -stepMs
+  
+      this.#interval = setIntervalImmediate(async () => {
+        if (this.#paused) {
+          return
+        }
+        progress += stepMs
+  
+        const value = progress / this.#autoplayDuration
+        this.#onProgressValueChange(value)
+  
+        if (value > 1) {
+          this.reset()
+          await onFinish()
+          resolve()
+        }
+      }, stepMs)
+    })
   }
 
   pause() {
