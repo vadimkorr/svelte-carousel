@@ -4,7 +4,7 @@
   /**
    * CSS animation timing function
    */
-  export let timingFunction = "ease-in-out";
+  export let timingFunction = 'ease-in-out';
 
   /**
    * Enable Next/Previos arrows
@@ -47,12 +47,17 @@
   export let pauseOnFocus = false
 
   /**
+   * Show autoplay duration progress indicator
+   */
+  export let autoplayProgressVisible = false
+
+  /**
    * Current page indicator dots
    */
   export let dots = true
 
   function onPageChange(event, showPage) {
-    showPage(event.target.value)
+    showPage(Number(event.target.value))
   }
 
   const colors = [
@@ -80,6 +85,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {pauseOnFocus}
+    {autoplayProgressVisible}
     {dots}
     let:currentPageIndex
     let:pagesCount

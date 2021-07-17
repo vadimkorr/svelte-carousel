@@ -55,7 +55,7 @@
 
 ## Autoplay
 <Carousel
-  autoplay={true}
+  autoplay
   autoplayDuration={2000}
 >
   {#each colors as { color, text } (color)}
@@ -65,8 +65,60 @@
 
 ```jsx
 <Carousel
-  autoplay={true}
+  autoplay
   autoplayDuration={2000}
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+```
+
+<Divider />
+
+## Autoplay with duration progress
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+```
+
+<Divider />
+
+## Autoplay with pause on focus
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+  pauseOnFocus
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  autoplay
+  autoplayDuration={5000}
+  autoplayProgressVisible
+  pauseOnFocus
 >
   {#each colors as { color, text } (color)}
     <Color {color} {text} />
@@ -208,18 +260,19 @@ Import component
 
 # Props
 
-| Prop                 | Type       | Default         | Description                                   | 
-|----------------------|------------|-----------------|-----------------------------------------------|
-| `arrows`             | `boolean`  | `true`          | Enable Next/Prev arrows                       |
-| `infinite`           | `boolean`  | `true`          | Infinite looping                              |
-| `initialPageIndex`   | `number`   | `0`             | Page to start on                              |
-| `duration`           | `number`   | `500`           | Transition duration (ms)                      |
-| `autoplay`           | `boolean`  | `false`         | Enables autoplay of pages                     |
-| `autoplayDuration`   | `number`   | `3000`          | Autoplay change interval (ms)                 |
-| `autoplayDirection`  | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
-| `dots`               | `boolean`  | `true`          | Current page indicator dots                   |
-| `pauseOnFocus`       | `boolean`  | `false`         | Pause autoplay on focus                       |
-| `timingFunction`     | `string`   | `'ease-in-out'` | CSS animation timing function                 |
+| Prop                      | Type       | Default         | Description                                   | 
+|---------------------------|------------|-----------------|-----------------------------------------------|
+| `arrows`                  | `boolean`  | `true`          | Enable Next/Prev arrows                       |
+| `infinite`                | `boolean`  | `true`          | Infinite looping                              |
+| `initialPageIndex`        | `number`   | `0`             | Page to start on                              |
+| `duration`                | `number`   | `500`           | Transition duration (ms)                      |
+| `autoplay`                | `boolean`  | `false`         | Enables auto play of pages                    |
+| `autoplayDuration`        | `number`   | `3000`          | Autoplay change interval (ms)                 |
+| `autoplayDirection`       | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
+| `pauseOnFocus`            | `boolean`  | `false`         | Pause autoplay on focus                       |
+| `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
+| `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
+| `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 
 <Divider />
 
