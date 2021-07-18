@@ -194,16 +194,6 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
-
-        // prevent progress change if not infinite for first and last page
-        if (
-          !infinite && (
-            (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
-            (autoplayDirection === PREV && currentPageIndex === 0)
-          )
-        ) {
-          progressManager.reset()
-        }
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesElement && pageWindowElement) {
