@@ -1,7 +1,4 @@
 <script>
-  import { tweened } from 'svelte/motion';
-  import { cubicInOut } from 'svelte/easing';
-
   const MAX_PERCENT = 100;
 
   /**

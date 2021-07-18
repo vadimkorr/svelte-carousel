@@ -16,6 +16,8 @@
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
+  const CLONES_COUNT = 2
+
   const dispatch = createEventDispatcher()
 
   const autoplayDirectionFnDescription = {
@@ -112,11 +114,10 @@
   $: dispatch('pageChange', originalCurrentPageIndex)
 
   let pagesCount = 0
-  $: originalPagesCount = Math.max(pagesCount - (infinite ? 2 : 0), 1) // without clones
+  $: originalPagesCount = Math.max(pagesCount - (infinite ? CLONES_COUNT : 0), 1) // without clones
 
   function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
     if (infinite) {
-      const CLONES_COUNT = 2
       if (currentPageIndex === pagesCount - 1) return 0
       if (currentPageIndex === 0) return (pagesCount - CLONES_COUNT) - 1
       return currentPageIndex - 1
@@ -235,7 +236,7 @@
     let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
-        await showPage(pagesCount - 2, { animated: false })
+        await showPage(pagesCount - CLONES_COUNT, { animated: false })
         jumped = true
       } else if (currentPageIndex === pagesCount - 1) {
         await showPage(1, { animated: false })
