@@ -51,5 +51,6 @@ export class ProgressManager {
 
   reset() {
     clearInterval(this.#interval)
+    this.#onProgressValueChange(1)
   }
 }

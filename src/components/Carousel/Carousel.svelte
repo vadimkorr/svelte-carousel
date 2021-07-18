@@ -60,11 +60,7 @@
    */
   export let autoplay = false
   $: {
-    if (autoplay) {
-      applyAutoplay()
-    } else {
-      progressManager.reset()
-    }
+    applyAutoplayIfNeeded(autoplay)
   }
 
   /**
@@ -176,8 +172,19 @@
     pagesElement.append(first.cloneNode(true))
   }
 
-  async function applyAutoplay() {
-    await autoplayDirectionFnDescription[autoplayDirection]()
+  async function applyAutoplayIfNeeded(autoplay) {
+    // prevent progress change if not infinite for first and last page
+    if (
+      !infinite && (
+        (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
+        (autoplayDirection === PREV && currentPageIndex === 0)
+      )
+    ) {
+      progressManager.reset()
+      return
+    }
+
+    autoplay && await autoplayDirectionFnDescription[autoplayDirection]()
   }
 
   let cleanupFns = []
@@ -259,7 +266,7 @@
     disabled = false
 
     const jumped = await jumpIfNeeded()
-    !jumped && autoplay && applyAutoplay() // no need to wait it finishes
+    !jumped && applyAutoplayIfNeeded(autoplay) // no need to wait it finishes
   }
 
   async function showPage(pageIndex, options) {
