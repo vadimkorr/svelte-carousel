@@ -143,7 +143,7 @@ Slot props:
 ## Methods
 
 ### `goTo`
-Navigates to a page by index
+Navigates to a page by index. `(options) => Promise<void>`.
 
 Arguments:
 
@@ -170,13 +170,13 @@ Arguments:
 ```
 
 ### `goToPrev`
-Navigates to the previous page
+Navigates to the previous page. `(options) => Promise<void>`.
 
 Arguments:
 
-| Argument           | Type        | Default | Description                           | 
-|--------------------|-------------|---------|---------------------------------------|
-| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+| Argument           | Type        | Default | Description                   | 
+|--------------------|-------------|---------|-------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not  |
 
 ```jsx
 <script>
@@ -196,13 +196,13 @@ Arguments:
 ```
 
 ### `goToNext`
-Navigates to the next page
+Navigates to the next page. `(options) => Promise<void>`.
 
 Arguments:
 
-| Argument           | Type        | Default | Description                           | 
-|--------------------|-------------|---------|---------------------------------------|
-| `options.animated` | `boolean`   | `true`  | Should it be animated or not          |
+| Argument           | Type        | Default | Description                  | 
+|--------------------|-------------|---------|------------------------------|
+| `options.animated` | `boolean`   | `true`  | Should it be animated or not |
 
 ```jsx
 <script>
