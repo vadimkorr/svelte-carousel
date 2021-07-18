@@ -1,6 +1,8 @@
 import { setIntervalImmediate } from './interval'
 
 const STEP_MS = 35
+const MAX_VALUE = 1
+
 export class ProgressManager {
   #autoplayDuration
   #onProgressValueChange
@@ -32,7 +34,7 @@ export class ProgressManager {
         const value = progress / this.#autoplayDuration
         this.#onProgressValueChange(value)
   
-        if (value > 1) {
+        if (value > MAX_VALUE) {
           this.reset()
           await onFinish()
           resolve()
@@ -51,6 +53,6 @@ export class ProgressManager {
 
   reset() {
     clearInterval(this.#interval)
-    this.#onProgressValueChange(1)
+    this.#onProgressValueChange(MAX_VALUE)
   }
 }
