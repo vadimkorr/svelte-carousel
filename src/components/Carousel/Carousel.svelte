@@ -112,7 +112,7 @@
 
   let store = createStore()
   let currentPageIndex = 0
-  $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite)
+  $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) // index without cloenes
   $: dispatch('pageChange', originalCurrentPageIndex)
 
   let pagesCount = 0
@@ -120,8 +120,9 @@
 
   function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
     if (infinite) {
+      const CLONES_COUNT = 2
       if (currentPageIndex === pagesCount - 1) return 0
-      if (currentPageIndex === 0) return pagesCount - 3
+      if (currentPageIndex === 0) return (pagesCount - CLONES_COUNT) - 1
       return currentPageIndex - 1
     }
     return currentPageIndex
