@@ -1,5 +1,6 @@
 import {
   setIntervalImmediate,
+  wait
 } from './interval.js'
 
 describe('setIntervalImmediate', () => {
@@ -26,5 +27,20 @@ describe('setIntervalImmediate', () => {
     expect(calledTimes).toBe(callNumbersToStopTimer)
     expect(setInterval).toHaveBeenCalledWith(expect.any(Function), durationMs)
     expect(clearInterval).toHaveBeenCalledWith(interval)
+  })
+})
+
+describe('wait', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  })
+
+  it('wait n ms', () => {
+    const ms = 1000
+
+    wait(ms)
+    jest.runAllTimers()
+
+    expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), ms)
   })
 })
