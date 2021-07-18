@@ -32,8 +32,8 @@
   }
 
   // goToNext
-  function handleGoToNextClick() {
-    carousel.goToNext()
+  async function handleGoToNextClick() {
+    await carousel.goToNext()
   }
 </script>
 
