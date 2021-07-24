@@ -7,10 +7,9 @@ import {
 } from './event'
 import { TAP_DURATION_MS } from '../../units'
 
-let tapStartedAt = 0
-
 export function tappable(node) {
   const dispatch = createDispatcher(node)
+  let tapStartedAt = 0
 
   function handleTapstart() {
     tapStartedAt = Date.now()
