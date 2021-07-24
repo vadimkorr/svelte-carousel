@@ -5,19 +5,19 @@ import {
   addFocusoutEventListener,
   removeFocusoutEventListener,
 } from './event'
+import { TAP_DURATION_MS } from '../../units'
 
-let timeStart
+let tapStartedAt = 0
 
 export function tappable(node) {
   const dispatch = createDispatcher(node)
 
   function handleTapstart() {
-    timeStart = Date.now()
+    tapStartedAt = Date.now()
   }
 
   function handleTapend() {
-    const diffMs = Date.now() - timeStart
-    if (diffMs <= 200) {
+    if (Date.now() - tapStartedAt <= TAP_DURATION_MS) {
       dispatch('tapped')
     }
   }

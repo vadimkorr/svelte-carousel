@@ -250,6 +250,7 @@
   // Disable page change while animation is in progress
   let disabled = false
   async function changePage(updateStoreFn, options) {
+    progressManager.reset()
     if (disabled) return
     disabled = true
 

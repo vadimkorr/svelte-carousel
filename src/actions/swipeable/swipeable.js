@@ -8,6 +8,7 @@ import {
   removeEndEventListener,
 } from './event'
 import { createDispatcher } from '../../utils/event'
+import { SWIPE_MIN_DURATION_MS, SWIPE_MIN_DISTANCE_PX } from '../../units'
 
 function getCoords(event) {
   if ('TouchEvent' in window && event instanceof TouchEvent) {
@@ -28,9 +29,18 @@ export function swipeable(node, { thresholdProvider }) {
   let x
   let y
   let moved = 0
+  let swipeStartedAt
+  let isTouching = false
+
+  function isValidSwipe() {
+    const swipeDurationMs = Date.now() - swipeStartedAt
+    return swipeDurationMs >= SWIPE_MIN_DURATION_MS && Math.abs(moved) >= SWIPE_MIN_DISTANCE_PX
+  }
 
   function handleMousedown(event) {
+    swipeStartedAt = Date.now()
     moved = 0
+    isTouching = true
     const coords = getCoords(event)
     x = coords.x
     y = coords.y
@@ -40,6 +50,7 @@ export function swipeable(node, { thresholdProvider }) {
   }
 
   function handleMousemove(event) {
+    if (!isTouching) return
     const coords = getCoords(event)
     const dx = coords.x - x
     const dy = coords.y - y
@@ -59,10 +70,11 @@ export function swipeable(node, { thresholdProvider }) {
   }
 
   function handleMouseup(event) {
+    isTouching = false
+    if (!isValidSwipe()) return
+
     const coords = getCoords(event)
-    x = coords.x
-    y = coords.y
-    dispatch('end', { x, y })
+    dispatch('end', { x: coords.x, y: coords.y })
     removeEndEventListener(window, handleMouseup)
     removeMoveEventListener(window, handleMousemove)
   }
