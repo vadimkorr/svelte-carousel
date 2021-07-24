@@ -7,6 +7,7 @@
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
   import { focusable } from '../../actions/focusable'
+  import { tappable } from '../../actions/tappable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -292,8 +293,12 @@
   function handleSwipeEnd() {
     showPage(currentPageIndex)
   }
+
   function handleFocused(event) {
     focused = event.detail.value
+  }
+  function handleTapped() {
+    focused = !focused
   }
 </script>
 
@@ -315,6 +320,9 @@
       bind:this={pageWindowElement}
       use:focusable
       on:focused={handleFocused}
+
+      use:tappable
+      on:tapped={handleTapped}
     >
       <div
         class="sc-carousel__pages-container"
