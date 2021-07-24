@@ -56,6 +56,11 @@
    */
   export let dots = true
 
+  /**
+   * Enable swiping
+   */
+  export let swiping = true
+
   const colors = [
     { color: '#e5f9f0', text: '0' },
     { color: '#ccf3e2', text: '1' },
@@ -89,6 +94,7 @@
     {pauseOnFocus}
     {autoplayProgressVisible}
     {dots}
+    {swiping}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }
@@ -115,6 +121,7 @@
     {pauseOnFocus}
     {autoplayProgressVisible}
     {dots}
+    {swiping}
   >
     {#each colors2 as { color, text } (color)}
       <div

@@ -90,6 +90,11 @@
    */
   export let dots = true
 
+  /**
+   * Enable swiping
+   */
+  export let swiping = true
+
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
     if (typeof pageIndex !== 'number') {
