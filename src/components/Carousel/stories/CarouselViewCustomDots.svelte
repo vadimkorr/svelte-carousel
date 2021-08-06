@@ -56,6 +56,11 @@
    */
   export let dots = true
 
+  /**
+   * Enable swiping
+   */
+  export let swiping = true
+
   function onPageChange(event, showPage) {
     showPage(Number(event.target.value))
   }
@@ -87,6 +92,7 @@
     {pauseOnFocus}
     {autoplayProgressVisible}
     {dots}
+    {swiping}
     let:currentPageIndex
     let:pagesCount
     let:showPage
