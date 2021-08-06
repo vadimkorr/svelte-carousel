@@ -70,13 +70,17 @@ export function swipeable(node, { thresholdProvider }) {
   }
 
   function handleMouseup(event) {
-    isTouching = false
-    if (!isValidSwipe()) return
-
-    const coords = getCoords(event)
-    dispatch('end', { x: coords.x, y: coords.y })
     removeEndEventListener(window, handleMouseup)
     removeMoveEventListener(window, handleMousemove)
+
+    isTouching = false
+
+    if (!isValidSwipe()) {
+      dispatch('swipeFailed')
+      return
+    }
+    const coords = getCoords(event)
+    dispatch('end', { x: coords.x, y: coords.y })
   }
 
   addStartEventListener(node, handleMousedown)

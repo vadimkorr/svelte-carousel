@@ -168,7 +168,7 @@
       children[pageIndex].style.maxWidth = `${pageWidth}px`
     }
 
-    offsetPage(false)
+    offsetPage({ animated: false })
   }
   
   function addClones() {
@@ -228,7 +228,8 @@
     await showPage(pageIndex + Number(infinite))
   }
 
-  function offsetPage(animated) {
+  function offsetPage(options) {
+    const animated = get(options, 'animated', true)
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
@@ -262,7 +263,7 @@
     disabled = true
 
     updateStoreFn()
-    await offsetPage(get(options, 'animated', true))
+    await offsetPage({ animated: get(options, 'animated', true) })
     disabled = false
 
     const jumped = await jumpIfNeeded()
@@ -305,6 +306,10 @@
     if (!swiping) return
     showPage(currentPageIndex)
   }
+  async function handleSwipeFailed() {
+    if (!swiping) return
+    await offsetPage({ animated: true })
+  }
 
   function handlePausedToggle(event) {
     if (event.detail.isTouchable) {
@@ -341,6 +346,7 @@
         on:start={handleSwipeStart}
         on:move={handleSwipeMove}
         on:end={handleSwipeEnd}
+        on:swipeFailed={handleSwipeFailed}
         on:threshold={handleThreshold}
         style="
           transform: translateX({offset}px);
