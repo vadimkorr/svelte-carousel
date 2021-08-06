@@ -6,8 +6,7 @@
   import Progress from '../Progress/Progress.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
-  import { focusable } from '../../actions/focusable'
-  import { tappable } from '../../actions/tappable'
+  import { pausable } from '../../actions/pausable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -304,11 +303,12 @@
     showPage(currentPageIndex)
   }
 
-  function handleFocused(event) {
+  function handlePausedToggle(event) {
+    if (event.detail.isTouchable) {
+      focused = !focused
+      return
+    }
     focused = event.detail.value
-  }
-  function handleTapped() {
-    focused = !focused
   }
 </script>
 
@@ -328,11 +328,9 @@
     <div
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
-      use:focusable
-      on:focused={handleFocused}
 
-      use:tappable
-      on:tapped={handleTapped}
+      use:pausable
+      on:pausedToggle={handlePausedToggle}
     >
       <div
         class="sc-carousel__pages-container"

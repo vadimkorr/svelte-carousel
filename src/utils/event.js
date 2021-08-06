@@ -16,3 +16,11 @@ export function createDispatcher(source) {
   }
   return dispatch
 }
+
+export function getIsTouchable() {
+  return (
+    ('ontouchstart' in window) ||
+    (navigator.maxTouchPoints > 0) ||
+    (navigator.msMaxTouchPoints > 0)
+  )
+}
