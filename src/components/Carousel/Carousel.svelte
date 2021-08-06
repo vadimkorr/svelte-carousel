@@ -190,7 +190,10 @@
       return
     }
 
-    autoplay && await autoplayDirectionFnDescription[autoplayDirection]()
+    if (autoplay) {
+      focused = false // reset focused on page change
+      await autoplayDirectionFnDescription[autoplayDirection]()
+    }
   }
 
   let cleanupFns = []
