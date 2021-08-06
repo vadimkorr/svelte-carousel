@@ -294,7 +294,7 @@
     if (!swiping) return
     _duration = 0
   }
-  async function handleThreshold(event) {
+  async function handleSwipeThresholdReached(event) {
     if (!swiping) return
     await directionFnDescription[event.detail.direction]()
   }
@@ -343,11 +343,11 @@
       <div
         class="sc-carousel__pages-container"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
-        on:start={handleSwipeStart}
-        on:move={handleSwipeMove}
-        on:end={handleSwipeEnd}
+        on:swipeStart={handleSwipeStart}
+        on:swipeMove={handleSwipeMove}
+        on:swipeEnd={handleSwipeEnd}
         on:swipeFailed={handleSwipeFailed}
-        on:threshold={handleThreshold}
+        on:swipeThresholdReached={handleSwipeThresholdReached}
         style="
           transform: translateX({offset}px);
           transition-duration: {_duration}ms;

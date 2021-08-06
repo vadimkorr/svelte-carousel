@@ -44,7 +44,7 @@ export function swipeable(node, { thresholdProvider }) {
     const coords = getCoords(event)
     x = coords.x
     y = coords.y
-    dispatch('start', { x, y })
+    dispatch('swipeStart', { x, y })
     addMoveEventListener(window, handleMousemove)
     addEndEventListener(window, handleMouseup)
   }
@@ -56,14 +56,14 @@ export function swipeable(node, { thresholdProvider }) {
     const dy = coords.y - y
     x = coords.x
     y = coords.y
-    dispatch('move', { x, y, dx, dy })
+    dispatch('swipeMove', { x, y, dx, dy })
 
     if (dx !== 0 && Math.sign(dx) !== Math.sign(moved)) {
       moved = 0
     }
     moved += dx
     if (Math.abs(moved) > thresholdProvider()) {
-      dispatch('threshold', { direction: moved > 0 ? PREV : NEXT })
+      dispatch('swipeThresholdReached', { direction: moved > 0 ? PREV : NEXT })
       removeEndEventListener(window, handleMouseup)
       removeMoveEventListener(window, handleMousemove)
     }
@@ -80,7 +80,7 @@ export function swipeable(node, { thresholdProvider }) {
       return
     }
     const coords = getCoords(event)
-    dispatch('end', { x: coords.x, y: coords.y })
+    dispatch('swipeEnd', { x: coords.x, y: coords.y })
   }
 
   addStartEventListener(node, handleMousedown)
