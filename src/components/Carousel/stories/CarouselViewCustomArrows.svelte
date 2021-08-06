@@ -56,6 +56,11 @@
    */
   export let dots = true
 
+  /**
+   * Enable swiping
+   */
+  export let swiping = true
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -83,6 +88,7 @@
     {pauseOnFocus}
     {autoplayProgressVisible}
     {dots}
+    {swiping}
     let:showPrevPage
     let:showNextPage
   >

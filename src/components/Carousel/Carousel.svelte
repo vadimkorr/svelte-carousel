@@ -90,6 +90,11 @@
    */
   export let dots = true
 
+  /**
+   * Enable swiping
+   */
+  export let swiping = true
+
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
     if (typeof pageIndex !== 'number') {
@@ -281,15 +286,19 @@
 
   // gestures
   function handleSwipeStart() {
+    if (!swiping) return
     _duration = 0
   }
   async function handleThreshold(event) {
+    if (!swiping) return
     await directionFnDescription[event.detail.direction]()
   }
   function handleSwipeMove(event) {
+    if (!swiping) return
     offset += event.detail.dx
   }
   function handleSwipeEnd() {
+    if (!swiping) return
     showPage(currentPageIndex)
   }
   function handleFocused(event) {

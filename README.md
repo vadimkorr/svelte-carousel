@@ -47,6 +47,7 @@ Import component
 | `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
+| `swiping`                 | `boolean`  | `true`          | Enable swiping                                |
 
 ## Events
 
