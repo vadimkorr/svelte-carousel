@@ -7,14 +7,13 @@ export function removeResizeEventListener(cb) {
 }
 
 export function createDispatcher(source) {
-  function dispatch(event, data) {
+  return function (event, data) {
     source.dispatchEvent(
       new CustomEvent(event, {
         detail: data,
       })
     )
   }
-  return dispatch
 }
 
 export function getIsTouchable() {
