@@ -2,7 +2,7 @@
   import { tweened } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
 
-  const DOT_SIZE_PX = 5
+  const DOT_SIZE_PX = 6
   const ACTIVE_DOT_SIZE_PX = 8
 
   const size = tweened(DOT_SIZE_PX, {
