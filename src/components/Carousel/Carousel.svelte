@@ -191,7 +191,6 @@
     }
 
     if (autoplay) {
-      focused = false // reset focused on page change
       await autoplayDirectionFnDescription[autoplayDirection]()
     }
   }
