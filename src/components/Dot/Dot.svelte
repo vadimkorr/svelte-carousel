@@ -5,21 +5,13 @@
   export let active = false
 </script>
 
-<div class="sc-carousel-dot__container">
-  <div
-    class="sc-carousel-dot__dot"
-    class:sc-carousel-dot__dot_active={active}
-    on:click
-  ></div>
-</div>
+<div
+  class="sc-carousel-dot__dot"
+  class:sc-carousel-dot__dot_active={active}
+  on:click
+></div>
 
 <style>
-  .sc-carousel-dot__container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 16px;
-    width: 16px;
   :root {
     --sc-dot-size: 6px;
     --sc-active-dot-size: 8px;
