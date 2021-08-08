@@ -31,9 +31,6 @@
 </div>
 
 <style>
-  :root {
-    --sc-dot-size: 10px; 
-  }
   .sc-carousel-dots__container {
     display: flex;
     align-items: center;
@@ -42,8 +39,8 @@
     padding: 0 30px;
   }
   .sc-carousel-dots__dot-container {
-    height: calc(var(--sc-dot-size) + 10px);
-    width: calc(var(--sc-dot-size) + 6px);
+    height: calc(var(--sc-dot-size) + 14px);
+    width: calc(var(--sc-dot-size) + 10px);
     display: flex;
     align-items: center;
     justify-content: center;
