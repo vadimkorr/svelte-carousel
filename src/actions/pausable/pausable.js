@@ -1,4 +1,7 @@
-import { createDispatcher, getIsTouchable } from '../../utils/event'
+import {
+  createDispatcher,
+  getIsTouchable,
+} from '../../utils/event'
 
 import { focusable } from '../focusable'
 import { tappable } from '../tappable'
