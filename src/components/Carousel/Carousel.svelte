@@ -6,7 +6,7 @@
   import Progress from '../Progress/Progress.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
-  import { focusable } from '../../actions/focusable'
+  import { pausable } from '../../actions/pausable'
   import {
     addResizeEventListener,
     removeResizeEventListener
@@ -168,7 +168,7 @@
       children[pageIndex].style.maxWidth = `${pageWidth}px`
     }
 
-    offsetPage(false)
+    offsetPage({ animated: false })
   }
   
   function addClones() {
@@ -190,7 +190,9 @@
       return
     }
 
-    autoplay && await autoplayDirectionFnDescription[autoplayDirection]()
+    if (autoplay) {
+      await autoplayDirectionFnDescription[autoplayDirection]()
+    }
   }
 
   let cleanupFns = []
@@ -225,7 +227,8 @@
     await showPage(pageIndex + Number(infinite))
   }
 
-  function offsetPage(animated) {
+  function offsetPage(options) {
+    const animated = get(options, 'animated', true)
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
@@ -254,11 +257,12 @@
   // Disable page change while animation is in progress
   let disabled = false
   async function changePage(updateStoreFn, options) {
+    progressManager.reset()
     if (disabled) return
     disabled = true
 
     updateStoreFn()
-    await offsetPage(get(options, 'animated', true))
+    await offsetPage({ animated: get(options, 'animated', true) })
     disabled = false
 
     const jumped = await jumpIfNeeded()
@@ -289,7 +293,7 @@
     if (!swiping) return
     _duration = 0
   }
-  async function handleThreshold(event) {
+  async function handleSwipeThresholdReached(event) {
     if (!swiping) return
     await directionFnDescription[event.detail.direction]()
   }
@@ -301,7 +305,16 @@
     if (!swiping) return
     showPage(currentPageIndex)
   }
-  function handleFocused(event) {
+  async function handleSwipeFailed() {
+    if (!swiping) return
+    await offsetPage({ animated: true })
+  }
+
+  function handlePausedToggle(event) {
+    if (event.detail.isTouchable) {
+      focused = !focused
+      return
+    }
     focused = event.detail.value
   }
 </script>
@@ -322,16 +335,18 @@
     <div
       class="sc-carousel__pages-window"
       bind:this={pageWindowElement}
-      use:focusable
-      on:focused={handleFocused}
+
+      use:pausable
+      on:pausedToggle={handlePausedToggle}
     >
       <div
         class="sc-carousel__pages-container"
         use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
-        on:start={handleSwipeStart}
-        on:move={handleSwipeMove}
-        on:end={handleSwipeEnd}
-        on:threshold={handleThreshold}
+        on:swipeStart={handleSwipeStart}
+        on:swipeMove={handleSwipeMove}
+        on:swipeEnd={handleSwipeEnd}
+        on:swipeFailed={handleSwipeFailed}
+        on:swipeThresholdReached={handleSwipeThresholdReached}
         style="
           transform: translateX({offset}px);
           transition-duration: {_duration}ms;
