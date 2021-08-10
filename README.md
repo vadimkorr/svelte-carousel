@@ -144,7 +144,7 @@ Slot props:
 ## Methods
 
 ### `goTo`
-Navigates to a page by index. `(options) => Promise<void>`.
+Navigates to a page by index. `(pageIndex, options) => Promise<void>`.
 
 Arguments:
 
