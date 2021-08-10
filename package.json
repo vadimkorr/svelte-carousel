@@ -1,6 +1,6 @@
 {
   "name": "svelte-carousel",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Svelte carousel",
   "main": "src/main.js",
   "author": "vadimkorr",
