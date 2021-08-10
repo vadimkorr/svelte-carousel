@@ -43,7 +43,7 @@ Import component
 | `autoplay`                | `boolean`  | `false`         | Enables auto play of pages                    |
 | `autoplayDuration`        | `number`   | `3000`          | Autoplay change interval (ms)                 |
 | `autoplayDirection`       | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
-| `pauseOnFocus`            | `boolean`  | `false`         | Pauses autoplay on focus (for desktop - hover on the carousel to toggle the autoplay, for touchable devices - tap the carousel to toggle the autoplay) |
+| `pauseOnFocus`            | `boolean`  | `false`         | Pauses autoplay on focus (for desktop - hover over the carousel to toggle the autoplay, for touchable devices - tap the carousel to toggle the autoplay) |
 | `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
