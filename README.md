@@ -15,7 +15,8 @@ The awesome carousel component for Svelte 3
 
 ## Demo
 
-https://vadimkorr.github.io/svelte-carousel
+https://vadimkorr.github.io/svelte-carousel \
+[REPL](https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5)
 
 ## Installation
 ```bash

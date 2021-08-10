@@ -13,11 +13,14 @@
 
 <script>
   const links = [{
-    title: 'github',
+    title: 'GitHub',
     url: 'https://github.com/vadimkorr/svelte-carousel'
   }, {
-    title: 'npm',
+    title: 'NPM',
     url: 'https://www.npmjs.com/package/svelte-carousel'
+  }, {
+    title: 'REPL',
+    url: 'https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5'
   }]
 </script>
 
