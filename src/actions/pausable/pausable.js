@@ -7,7 +7,7 @@ import { tappable } from '../tappable'
 
 function getHandler(isTouchable, node) {
   const dispatch = createDispatcher(node)
-  
+
   if (isTouchable) {
     return tappable(node, {
       dispatch: (_, payload) => {
