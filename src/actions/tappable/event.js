@@ -1,6 +1,6 @@
 // tap start event
 export function addFocusinEventListener(source, cb) {
-  source.addEventListener('touchstart', cb)
+  source.addEventListener('touchstart', cb, { passive: true })
 }
 export function removeFocusinEventListener(source, cb) {
   source.removeEventListener('touchstart', cb)

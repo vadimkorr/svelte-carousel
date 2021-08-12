@@ -1,7 +1,7 @@
 // start event
 export function addStartEventListener(source, cb) {
   source.addEventListener('mousedown', cb)
-  source.addEventListener('touchstart', cb)
+  source.addEventListener('touchstart', cb, { passive: true })
 }
 export function removeStartEventListener(source, cb) {
   source.removeEventListener('mousedown', cb)
