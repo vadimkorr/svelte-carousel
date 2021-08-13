@@ -36,9 +36,9 @@ Import component
 
 ## SvelteKit support
 
-There are several things to keep in mind when Carousel is used with SvelteKit. This is because `svelte-carousel` is a client-side library and depends on `document` and `window`. [See more in SvelteKit FAQ](https://kit.svelte.dev/faq). 
+There are several things to keep in mind when `svelte-carousel` is used with SvelteKit. This is because `svelte-carousel` is a client-side library and depends on `document` and `window`. [See more in SvelteKit FAQ](https://kit.svelte.dev/faq).
 
-1. Install `svelte-carousel` as a dev dependency. [Why as a dev dependency?](https://github.com/sveltejs/sapper-template#using-external-components).
+1. Install `svelte-carousel` as a dev dependency. [Why as a dev dependency?](https://github.com/sveltejs/sapper-template#using-external-components)
 
 ```bash
 yarn add svelte-carousel -D
