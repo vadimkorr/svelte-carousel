@@ -34,6 +34,51 @@ Import component
 </script>
 ```
 
+## SvelteKit support
+
+There are several things to keep in mind when Carousel is used with SvelteKit. This is because `svelte-carousel` is a client-side library and depends on `document` and `window`. [See more in SvelteKit FAQ](https://kit.svelte.dev/faq). 
+
+1. Install `svelte-carousel` as a dev dependency. [Why as a dev dependency?](https://github.com/sveltejs/sapper-template#using-external-components).
+
+```bash
+yarn add svelte-carousel -D
+```
+```bash
+npm install svelte-carousel -D
+```
+
+
+2. Import and use it:
+
+```jsx
+
+<script>
+  import { onMount } from 'svelte';
+
+  let Carousel; // for saving Carousel component class
+  let carousel; // for calling methods of carousel instance
+  onMount(async () => {
+    const module = await import('svelte-carousel');
+    Carousel = module.default;
+  });
+
+  const handleNextClick = () => {
+    carousel.goToNext()
+  }
+</script>
+
+<svelte:component
+  this={Carousel}
+  bind:this={carousel}
+>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</svelte:component>
+
+<button on:click={handleNextClick}>Next</button>
+```
+
 ## Props
 | Prop                      | Type       | Default         | Description                                   | 
 |---------------------------|------------|-----------------|-----------------------------------------------|
