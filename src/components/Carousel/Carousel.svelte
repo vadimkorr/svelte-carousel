@@ -4,6 +4,7 @@
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import Progress from '../Progress/Progress.svelte'
+  import PausedIndicator from '../PausedIndicator/PausedIndicator.svelte'
   import { NEXT, PREV } from '../../direction'
   import { swipeable } from '../../actions/swipeable'
   import { pausable } from '../../actions/pausable'
@@ -81,6 +82,11 @@
   export let pauseOnFocus = false
 
   /**
+   * Show paused indicator on focus during autoplay
+   */
+  export let pausedIndicatorEnabled = false
+
+  /**
    * Show autoplay duration progress indicator
    */
   export let autoplayProgressVisible = false
@@ -145,6 +151,7 @@
   })
 
   $: {
+    // TODO: need to add isAutoplay?
     if (pauseOnFocus) {
       if (focused) {
         progressManager.pause()
@@ -356,6 +363,9 @@
       >
         <slot {loaded}></slot>
       </div>
+      <div class="sc-carousel-paused-indicator__container">
+        <PausedIndicator visible={autoplay && pauseOnFocus && focused} />
+      </div>
       {#if autoplayProgressVisible}
         <div class="sc-carousel-progress__container">
           <Progress value={progressValue} />
@@ -426,6 +436,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .sc-carousel-paused-indicator__container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    pointer-events: none;
   }
   .sc-carousel-progress__container {
     width: 100%;
