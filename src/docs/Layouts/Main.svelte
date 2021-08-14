@@ -3,11 +3,14 @@
   import Th from './custom/Th.svelte';
   import Tr from './custom/Tr.svelte';
   import Td from './custom/Td.svelte';
+  import { H1, H2 } from './custom/H';
   export {
     Table as table,
     Th as th,
     Tr as tr,
-    Td as td
+    Td as td,
+    H1 as h1,
+    H2 as h2,
   };
 </script>
 

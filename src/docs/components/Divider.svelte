@@ -4,8 +4,8 @@
 
 <style>
   .divider {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     height: 1px;
   }
 </style>

@@ -9,9 +9,9 @@
   import colors from './data/colors.json'
 </script>
 
-# Features
+# Features!anchorId:features;
 
-## Single item
+## Single item!anchorId:features-single-item;
 <Carousel>
   {#each colors as { color, text } (color)}
     <Color {color} {text} />
@@ -28,7 +28,7 @@
 
 <Divider />
 
-## Multiple items
+## Multiple items!anchorId:features-multiple-items;
 <Carousel>
   {#each _.chunk(colors, 3) as colorsChunk, chunkIndex (chunkIndex)}
     <div style="display: flex;">
@@ -53,7 +53,7 @@
 
 <Divider />
 
-## Autoplay
+## Autoplay!anchorId:features-autoplay;
 <Carousel
   autoplay
   autoplayDuration={2000}
@@ -76,7 +76,7 @@
 
 <Divider />
 
-## Autoplay with duration progress
+## Autoplay with duration progress!anchorId:features-autoplay-duration-progress;
 <Carousel
   autoplay
   autoplayDuration={5000}
@@ -101,8 +101,7 @@
 
 <Divider />
 
-## Autoplay with pause on focus
-
+## Autoplay with pause on focus!anchorId:features-autoplay-pause-on-focus;
 **For desktop** - hover over the carousel to toggle the autoplay.
 **For touchable devices** - tap the carousel to toggle the autoplay.
 
@@ -132,7 +131,7 @@
 
 <Divider />
 
-## Lazy loading of images
+## Lazy loading of images!anchorId:features-lazy-loading;
 <Carousel
   let:loaded
 >
@@ -161,7 +160,7 @@
 
 <Divider />
 
-## Arrows customization
+## Arrows customization!anchorId:features-arrows-customization;
 <Carousel
   let:showPrevPage
   let:showNextPage
@@ -196,7 +195,7 @@
 
 <Divider />
 
-## Dots customization
+## Dots customization!anchorId:features-dots-customization;
 <Carousel
   let:currentPageIndex
   let:pagesCount
@@ -239,12 +238,12 @@
 
 <Divider />
 
-## Use case
+## Use cases!anchorId:features-use-cases;
 <AlbumsPreview />
 
 <Divider />
 
-# Installation
+# Installation!anchorId:installation;
 ```bash
 yarn add svelte-carousel
 ```
@@ -252,7 +251,7 @@ yarn add svelte-carousel
 npm install svelte-carousel
 ```
 
-Import component
+Import component:
 ```jsx
 <script>
   import Carousel from 'svelte-carousel'
@@ -262,11 +261,10 @@ Import component
 
 <Divider />
 
-# Props
-
+# Props!anchorId:props;
 | Prop                      | Type       | Default         | Description                                   | 
 |---------------------------|------------|-----------------|-----------------------------------------------|
-| `arrows`                  | `boolean`  | `true`          | Enable Next/Prev arrows                       |
+| `arrows`                  | `boolean`  | `true`          | Enables next/prev arrows                      |
 | `infinite`                | `boolean`  | `true`          | Infinite looping                              |
 | `initialPageIndex`        | `number`   | `0`             | Page to start on                              |
 | `duration`                | `number`   | `500`           | Transition duration (ms)                      |
@@ -274,17 +272,17 @@ Import component
 | `autoplayDuration`        | `number`   | `3000`          | Autoplay change interval (ms)                 |
 | `autoplayDirection`       | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
 | `pauseOnFocus`            | `boolean`  | `false`         | Pauses autoplay on focus (for desktop - hover over the carousel to toggle the autoplay, for touchable devices - tap the carousel to toggle the autoplay) |
-| `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
+| `autoplayProgressVisible` | `boolean`  | `false`         | Shows autoplay duration progress indicator    |
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
-| `swiping`                 | `boolean`  | `true`          | Enable swiping                                |
+| `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
 
 <Divider />
 
-# Events
+# Events!anchorId:events;
 
-## `pageChange`
-Is dispatched on page change
+## pageChange!anchorId:events-page-change;
+It is dispatched on page change.
 
 | Payload field      | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
@@ -302,9 +300,9 @@ Is dispatched on page change
 
 <Divider />
 
-# Slots
+# Slots!anchorId:slots;
 
-## `prev` and `next`
+## prev and next!anchorId:slots-prev-next;
 They are used for customizing prev and next buttons.
 
 Slot props:
@@ -329,9 +327,8 @@ Slot props:
 </Carousel>
 ```
 
-## `dots`
-
-This slot is used for customizing dots appearance.
+## dots!anchorId:slots-dots;
+This slot is used for customizing how dots look like.
 
 Slot props:
 
@@ -354,8 +351,7 @@ Slot props:
 </Carousel>
 ```
 
-## Default slot
-
+## Default slot!anchorId:slots-default;
 This slot takes content for the carousel.
 
 Slot props:
@@ -377,9 +373,9 @@ Slot props:
 
 <Divider />
 
-# Methods
+# Methods!anchorId:methods;
 
-## `goTo`
+## goTo!anchorId:methods-go-to;
 Navigates to a page by index. `(pageIndex, options) => Promise<void>`.
 
 Arguments:
@@ -406,7 +402,7 @@ Arguments:
 <button class="button" on:click={goToStartPage}>Go</button>
 ```
 
-## `goToPrev`
+## goToPrev!anchorId:methods-go-to-prev;
 Navigates to the previous page. `(options) => Promise<void>`.
 
 Arguments:
@@ -432,7 +428,7 @@ Arguments:
 <button class="button" on:click={goToPrevPage}>Go</button>
 ```
 
-## `goToNext`
+## goToNext!anchorId:methods-go-to-next;
 Navigates to the next page. `(options) => Promise<void>`.
 
 Arguments:

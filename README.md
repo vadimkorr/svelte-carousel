@@ -14,9 +14,8 @@
 The awesome carousel component for Svelte 3
 
 ## Demo
-
-https://vadimkorr.github.io/svelte-carousel \
-[REPL](https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5)
+* [vadimkorr.github.io/svelte-carousel](https://vadimkorr.github.io/svelte-carousel)
+* [REPL](https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5)
 
 ## Installation
 ```bash
@@ -35,7 +34,6 @@ Import component
 ```
 
 ## SvelteKit support
-
 There are several things to keep in mind when `svelte-carousel` is used with SvelteKit. This is because `svelte-carousel` is a client-side library and depends on `document` and `window`. [See more in SvelteKit FAQ](https://kit.svelte.dev/faq).
 
 1. Install `svelte-carousel` as a dev dependency. [Why as a dev dependency?](https://github.com/sveltejs/sapper-template#using-external-components)
@@ -46,7 +44,6 @@ yarn add svelte-carousel -D
 ```bash
 npm install svelte-carousel -D
 ```
-
 
 2. Import and use it:
 
@@ -82,23 +79,23 @@ npm install svelte-carousel -D
 ## Props
 | Prop                      | Type       | Default         | Description                                   | 
 |---------------------------|------------|-----------------|-----------------------------------------------|
-| `arrows`                  | `boolean`  | `true`          | Enable Next/Prev arrows                       |
+| `arrows`                  | `boolean`  | `true`          | Enables next/prev arrows                      |
 | `infinite`                | `boolean`  | `true`          | Infinite looping                              |
 | `initialPageIndex`        | `number`   | `0`             | Page to start on                              |
 | `duration`                | `number`   | `500`           | Transition duration (ms)                      |
-| `autoplay`                | `boolean`  | `false`         | Enables auto play of pages                    |
+| `autoplay`                | `boolean`  | `false`         | Enables autoplay of pages                     |
 | `autoplayDuration`        | `number`   | `3000`          | Autoplay change interval (ms)                 |
 | `autoplayDirection`       | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
 | `pauseOnFocus`            | `boolean`  | `false`         | Pauses autoplay on focus (for desktop - hover over the carousel to toggle the autoplay, for touchable devices - tap the carousel to toggle the autoplay) |
-| `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
+| `autoplayProgressVisible` | `boolean`  | `false`         | Shows autoplay duration progress indicator    |
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
-| `swiping`                 | `boolean`  | `true`          | Enable swiping                                |
+| `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
 
 ## Events
 
 ### `pageChange`
-Is dispatched on page change
+It is dispatched on page change
 
 | Payload field      | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
@@ -142,8 +139,7 @@ Slot props:
 ```
 
 ### `dots`
-
-This slot is used for customizing dots appearance.
+This slot is used for customizing how dots look like.
 
 Slot props:
 
@@ -167,7 +163,6 @@ Slot props:
 ```
 
 ### Default slot
-
 This slot takes content for the carousel.
 
 Slot props:
