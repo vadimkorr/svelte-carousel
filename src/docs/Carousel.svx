@@ -102,7 +102,6 @@
 <Divider />
 
 ## Autoplay with pause on focus!anchorId:features-autoplay-pause-on-focus;
-
 **For desktop** - hover over the carousel to toggle the autoplay.
 **For touchable devices** - tap the carousel to toggle the autoplay.
 
@@ -245,7 +244,6 @@
 <Divider />
 
 # Installation!anchorId:installation;
-
 ```bash
 yarn add svelte-carousel
 ```
@@ -253,7 +251,7 @@ yarn add svelte-carousel
 npm install svelte-carousel
 ```
 
-Import component
+Import component:
 ```jsx
 <script>
   import Carousel from 'svelte-carousel'
@@ -264,10 +262,9 @@ Import component
 <Divider />
 
 # Props!anchorId:props;
-
 | Prop                      | Type       | Default         | Description                                   | 
 |---------------------------|------------|-----------------|-----------------------------------------------|
-| `arrows`                  | `boolean`  | `true`          | Enable Next/Prev arrows                       |
+| `arrows`                  | `boolean`  | `true`          | Enables next/prev arrows                      |
 | `infinite`                | `boolean`  | `true`          | Infinite looping                              |
 | `initialPageIndex`        | `number`   | `0`             | Page to start on                              |
 | `duration`                | `number`   | `500`           | Transition duration (ms)                      |
@@ -275,17 +272,17 @@ Import component
 | `autoplayDuration`        | `number`   | `3000`          | Autoplay change interval (ms)                 |
 | `autoplayDirection`       | `string`   | `'next'`        | Autoplay change direction (`next` or `prev`)  |
 | `pauseOnFocus`            | `boolean`  | `false`         | Pauses autoplay on focus (for desktop - hover over the carousel to toggle the autoplay, for touchable devices - tap the carousel to toggle the autoplay) |
-| `autoplayProgressVisible` | `boolean`  | `false`         | Show autoplay duration progress indicator     |
+| `autoplayProgressVisible` | `boolean`  | `false`         | Shows autoplay duration progress indicator    |
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
-| `swiping`                 | `boolean`  | `true`          | Enable swiping                                |
+| `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
 
 <Divider />
 
 # Events!anchorId:events;
 
 ## pageChange!anchorId:events-page-change;
-Is dispatched on page change
+It is dispatched on page change.
 
 | Payload field      | Type        | Description                           | 
 |--------------------|-------------|---------------------------------------|
@@ -331,8 +328,7 @@ Slot props:
 ```
 
 ## dots!anchorId:slots-dots;
-
-This slot is used for customizing dots appearance.
+This slot is used for customizing how dots look like.
 
 Slot props:
 
@@ -356,7 +352,6 @@ Slot props:
 ```
 
 ## Default slot!anchorId:slots-default;
-
 This slot takes content for the carousel.
 
 Slot props:
