@@ -8,6 +8,9 @@
 </H>
 
 <style>
+  :global(h1.title) {
+    margin: 16px 0;
+  }
   :global(h1.title .anchor::before) {
     top: 15px;
   }

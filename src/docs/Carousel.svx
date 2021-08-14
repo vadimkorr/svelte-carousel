@@ -284,7 +284,7 @@ Import component
 
 # Events!anchorId:events;
 
-## `pageChange`!anchorId:events-page-change;
+## pageChange!anchorId:events-page-change;
 Is dispatched on page change
 
 | Payload field      | Type        | Description                           | 
@@ -305,7 +305,7 @@ Is dispatched on page change
 
 # Slots!anchorId:slots;
 
-## `prev` and `next`!anchorId:slots-prev-next;
+## prev and next!anchorId:slots-prev-next;
 They are used for customizing prev and next buttons.
 
 Slot props:
@@ -330,7 +330,7 @@ Slot props:
 </Carousel>
 ```
 
-## `dots`!anchorId:slots-dots;
+## dots!anchorId:slots-dots;
 
 This slot is used for customizing dots appearance.
 
@@ -380,7 +380,7 @@ Slot props:
 
 # Methods!anchorId:methods;
 
-## `goTo`!anchorId:methods-go-to;
+## goTo!anchorId:methods-go-to;
 Navigates to a page by index. `(pageIndex, options) => Promise<void>`.
 
 Arguments:
@@ -407,7 +407,7 @@ Arguments:
 <button class="button" on:click={goToStartPage}>Go</button>
 ```
 
-## `goToPrev`!anchorId:methods-go-to-prev;
+## goToPrev!anchorId:methods-go-to-prev;
 Navigates to the previous page. `(options) => Promise<void>`.
 
 Arguments:
@@ -433,7 +433,7 @@ Arguments:
 <button class="button" on:click={goToPrevPage}>Go</button>
 ```
 
-## `goToNext`!anchorId:methods-go-to-next;
+## goToNext!anchorId:methods-go-to-next;
 Navigates to the next page. `(options) => Promise<void>`.
 
 Arguments:
