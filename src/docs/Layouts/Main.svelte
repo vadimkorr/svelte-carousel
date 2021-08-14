@@ -15,24 +15,31 @@
 </script>
 
 <script>
-  const links = [{
-    title: 'GitHub',
-    url: 'https://github.com/vadimkorr/svelte-carousel'
-  }, {
-    title: 'NPM',
-    url: 'https://www.npmjs.com/package/svelte-carousel'
-  }, {
-    title: 'REPL',
-    url: 'https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5'
-  }]
+  import links from '../data/links.json'
+  import githubLogo from '../icons/github-logo.svg'
+  import npmLogo from '../icons/npm-logo.svg'
+  import youtubeLogo from '../icons/youtube-logo.svg'
+
+  const icons = {
+    'github-logo': githubLogo,
+    'npm-logo': npmLogo,
+    'youtube-logo': youtubeLogo,
+  }
+
 </script>
 
 <div class="docs__main-layout__main-container">
   <div class="docs__main-layout__header-container">
     <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md.png" alt="svelte-carousel-logo" />
     <div class="docs__main-layout__links-container">
-      {#each links as { url, title } (title)}
-        <a href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+      {#each links as { url, title, iconName } (title)}
+        <a href={url} target="_blank" rel="noopener noreferrer" class="docs__main-layout__link">
+          {#if iconName}
+            <img class="docs__main-layout__link-icon" src={icons[iconName]}>
+          {:else}
+            <span class="docs__main-layout__link-text">{title}</span>
+          {/if}
+        </a>
       {/each}
     </div>
   </div>
@@ -69,10 +76,29 @@
   .docs__main-layout__links-container > a {
     text-decoration: none;
     color: #009800;
-    font-size: 18px;
+    display: flex;
+    align-items: center;
+    background-color: #c0b870;
+    padding: 5px;
+    border-radius: 3px;
   }
   .docs__main-layout__links-container > a:not(:last-child) {
     margin-right: 10px;
+  }
+  .docs__main-layout__links-container > a:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .docs__main-layout__links-container > a:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  .docs__main-layout__link-icon {
+    width: 30px;
+  }
+  .docs__main-layout__link-text {
+    font-size: 18px;
   }
 
   .docs__main-layout__content-container {

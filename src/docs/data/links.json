@@ -1,0 +1,16 @@
+[{
+  "title": "GitHub",
+  "iconName": "github-logo",
+  "url": "https://github.com/vadimkorr/svelte-carousel"
+}, {
+  "title": "NPM",
+  "iconName": "npm-logo",
+  "url": "https://www.npmjs.com/package/svelte-carousel"
+}, {
+  "title": "YouTube",
+  "iconName": "youtube-logo",
+  "url": "https://www.youtube.com/channel/UCQnQ5wh8Eh1q-E2s-fN1Xcg"
+}, {
+  "title": "REPL",
+  "url": "https://svelte.dev/repl/f503a458832f4a358d9ec00f88945ff5"
+}]
