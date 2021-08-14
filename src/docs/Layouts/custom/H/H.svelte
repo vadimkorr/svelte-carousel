@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte'
-  import { parseTitleStr } from '../../utils/string'
+  import { parseTitleStr } from '../../../utils/string'
 
   export let titleComponent
   let titleEl
@@ -14,17 +14,22 @@
   })
 </script>
 
-<svelte:component this={titleComponent} id={anchorId} class="title">
-  <a class="anchor" href={`#${anchorId}`}>
-    {title}
-    {#if !title}
-      <span bind:this={titleEl}><slot /></span>
-    {/if}
-  </a>
-</svelte:component>
+<div>
+  <svelte:component this={titleComponent} id={anchorId} class="title">
+    <a class="anchor" href={`#${anchorId}`}>
+      {title}
+      {#if !title}
+        <span bind:this={titleEl}><slot /></span>
+      {/if}
+    </a>
+  </svelte:component>
+</div>
 
 <style>
-  :global(.title):hover .anchor::before {
+  :global(.title) {
+    display: inline-block;
+  }
+  :global(.title:hover .anchor::before) {
     visibility: visible;
   }
   .anchor {

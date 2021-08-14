@@ -3,8 +3,7 @@
   import Th from './custom/Th.svelte';
   import Tr from './custom/Tr.svelte';
   import Td from './custom/Td.svelte';
-  import H1 from './custom/H1.svelte';
-  import H2 from './custom/H2.svelte';
+  import { H1, H2 } from './custom/H';
   export {
     Table as table,
     Th as th,
