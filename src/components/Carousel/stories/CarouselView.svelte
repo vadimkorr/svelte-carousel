@@ -47,6 +47,11 @@
   export let pauseOnFocus = false
 
   /**
+   * Show paused indicator on focus during autoplay
+   */
+  export let pausedIndicatorEnabled = false
+
+  /**
    * Show autoplay duration progress indicator
    */
   export let autoplayProgressVisible = false
@@ -92,6 +97,7 @@
     {autoplayDuration}
     {autoplayDirection}
     {pauseOnFocus}
+    {pausedIndicatorEnabled}
     {autoplayProgressVisible}
     {dots}
     {swiping}
