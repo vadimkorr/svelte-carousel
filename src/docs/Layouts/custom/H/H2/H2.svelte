@@ -8,10 +8,10 @@
 </H>
 
 <style>
-  :global(h2.title) {
+  :global(h2.docs__title) {
     margin: 14px 0;
   }
-  :global(h2.title .anchor::before) {
+  :global(h2.docs__title .docs__anchor::before) {
     top: 8px;
   }
 </style>

@@ -15,8 +15,8 @@
 </script>
 
 <div>
-  <svelte:component this={titleComponent} id={anchorId} class="title">
-    <a class="anchor" href={`#${anchorId}`}>
+  <svelte:component this={titleComponent} id={anchorId} class="docs__title">
+    <a class="docs__anchor" href={`#${anchorId}`}>
       {title}
       {#if !title}
         <span bind:this={titleEl}><slot /></span>
@@ -26,19 +26,19 @@
 </div>
 
 <style>
-  :global(.title) {
+  :global(.docs__title) {
     display: inline-block;
   }
-  :global(.title:hover .anchor::before) {
+  :global(.docs__title:hover .docs__anchor::before) {
     visibility: visible;
   }
-  .anchor {
+  .docs__anchor {
     position: relative;
     margin-left: 10px;
     text-decoration: none;
     color: #000000;
   }
-  .anchor::before {
+  .docs__anchor::before {
     visibility: hidden;
     font-size: 14px;
     content: "\1F517";

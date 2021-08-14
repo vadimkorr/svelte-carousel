@@ -239,7 +239,7 @@
 
 <Divider />
 
-## Use case!anchorId:features-use-cases;
+## Use cases!anchorId:features-use-cases;
 <AlbumsPreview />
 
 <Divider />
