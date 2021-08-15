@@ -16,12 +16,11 @@
 
 <div>
   <svelte:component this={titleComponent} id={anchorId} class="docs__title">
-    <a class="docs__anchor" href={`#${anchorId}`}>
-      {title}
-      {#if !title}
-        <span bind:this={titleEl}><slot /></span>
-      {/if}
-    </a>
+    <a class="docs__anchor" href={`#${anchorId}`}></a>
+    {title}
+    {#if !title}
+      <span bind:this={titleEl}><slot /></span>
+    {/if}
   </svelte:component>
 </div>
 
@@ -34,7 +33,7 @@
   }
   .docs__anchor {
     position: relative;
-    margin-left: 10px;
+    margin-left: 16px;
     text-decoration: none;
     color: #000000;
   }
@@ -43,6 +42,6 @@
     font-size: 14px;
     content: "\1F517";
     position: absolute;
-    left: -20px;
+    left: -23px;
   }
 </style>
