@@ -1,3 +1,5 @@
+import { setIntervalImmediate } from './interval'
+
 // resize event
 export function addResizeEventListener(cb) {
   window.addEventListener('resize', cb)
@@ -25,8 +27,7 @@ export function getIsTouchable() {
 }
 
 export function addTouchableChangeEventListener(cb) {
-  let isTouchable = getIsTouchable();
-  cb(isTouchable)
+  let isTouchable = null
 
   function handleResize() {
     const isTouchableNext = getIsTouchable();
@@ -36,8 +37,9 @@ export function addTouchableChangeEventListener(cb) {
     }
   }
 
-  addResizeEventListener(handleResize)
+  const interval = setIntervalImmediate(handleResize, 500);
+
   return () => {
-    removeResizeEventListener(handleResize)
+    clearInterval(interval)
   }
 }
