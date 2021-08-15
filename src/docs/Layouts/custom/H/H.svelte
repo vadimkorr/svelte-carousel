@@ -16,7 +16,9 @@
 
 <div>
   <svelte:component this={titleComponent} id={anchorId} class="docs__title">
-    <a class="docs__anchor" href={`#${anchorId}`}></a>
+    <a class="docs__anchor" href={`#${anchorId}`}>
+      <span>{title}</span>
+    </a>
     {title}
     {#if !title}
       <span bind:this={titleEl}><slot /></span>
@@ -43,5 +45,8 @@
     content: "\1F517";
     position: absolute;
     left: -23px;
+  }
+  .docs__anchor > span {
+    display: none;
   }
 </style>

@@ -34,7 +34,7 @@
       {#each links as { url, title, iconName } (title)}
         <a href={url} target="_blank" rel="noopener noreferrer" class="docs__main-layout__link">
           {#if iconName}
-            <img class="docs__main-layout__link-icon" src={icons[iconName]}>
+            <img class="docs__main-layout__link-icon" src={icons[iconName]} alt={iconName}>
           {:else}
             <span class="docs__main-layout__link-text">{title}</span>
           {/if}
@@ -98,6 +98,7 @@
   .docs__main-layout__link-text {
     color: #009800;
     font-size: 18px;
+    font-weight: 500;
   }
 
   .docs__main-layout__content-container {
