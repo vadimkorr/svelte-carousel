@@ -1,5 +1,6 @@
 import {
-  addTouchableChangeEventListener,
+  // addTouchableChangeEventListener,
+  getIsTouchable,
   createDispatcher,
 } from '../../utils/event'
 import { focusable } from '../focusable'
@@ -35,12 +36,12 @@ export function pausable(node) {
     destroy && destroy() // destroy when touchable changed
     destroy = getHandler(isTouchable, node).destroy
   }
-
+  handleTouchableChange(getIsTouchable())
   // in order to change handlers when browser was switched to mobile view and vice versa
-  const removeTouchableChangeListener = addTouchableChangeEventListener(handleTouchableChange)
+  // const removeTouchableChangeListener = addTouchableChangeEventListener(handleTouchableChange)
   return {
     destroy() {
-      removeTouchableChangeListener()
+      // removeTouchableChangeListener()
       destroy() // destroy here in case if touchable was not changed
     }
   }

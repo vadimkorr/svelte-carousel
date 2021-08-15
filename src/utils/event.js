@@ -20,16 +20,17 @@ export function createDispatcher(source) {
 
 export function getIsTouchable() {
   return (
-    // ('ontouchstart' in window) || // not changing value during browser view switching (mobile <-> desktop)
-    (navigator.maxTouchPoints > 0) ||
-    (navigator.msMaxTouchPoints > 0)
+    ('ontouchstart' in window) 
+    // || // not changing value during browser view switching (mobile <-> desktop)
+    // (navigator.maxTouchPoints > 0) ||
+    // (navigator.msMaxTouchPoints > 0)
   )
 }
 
 export function addTouchableChangeEventListener(cb) {
   let isTouchable = null
 
-  function handleResize() {
+  function handleTouchableChange() {
     const isTouchableNext = getIsTouchable();
     if (isTouchable !== isTouchableNext) {
       cb(isTouchableNext)
@@ -37,8 +38,7 @@ export function addTouchableChangeEventListener(cb) {
     }
   }
 
-  const interval = setIntervalImmediate(handleResize, 500);
-
+  const interval = setIntervalImmediate(handleTouchableChange, 500);
   return () => {
     clearInterval(interval)
   }
