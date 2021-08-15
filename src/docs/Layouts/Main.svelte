@@ -25,7 +25,6 @@
     'npm-logo': npmLogo,
     'youtube-logo': youtubeLogo,
   }
-
 </script>
 
 <div class="docs__main-layout__main-container">
@@ -75,10 +74,9 @@
   }
   .docs__main-layout__links-container > a {
     text-decoration: none;
-    color: #009800;
     display: flex;
     align-items: center;
-    background-color: #c0b870;
+    background-color: #ffffff;
     padding: 5px;
     border-radius: 3px;
   }
@@ -95,9 +93,10 @@
   }
 
   .docs__main-layout__link-icon {
-    width: 30px;
+    width: 25px;
   }
   .docs__main-layout__link-text {
+    color: #009800;
     font-size: 18px;
   }
 
