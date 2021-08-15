@@ -17,7 +17,7 @@
 <div>
   <svelte:component this={titleComponent} id={anchorId} class="docs__title">
     <a class="docs__anchor" href={`#${anchorId}`}>
-      <span>{title}</span>
+      <span class="hidden-title">{title}</span>
     </a>
     {title}
     {#if !title}
@@ -46,7 +46,7 @@
     position: absolute;
     left: -23px;
   }
-  .docs__anchor > span {
+  .hidden-title {
     display: none;
   }
 </style>
