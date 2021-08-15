@@ -6,10 +6,10 @@
 
 <style>
   .table-wrapper {
-    max-width: 100%;
     overflow-x: auto;
   }
   table {
     border-collapse: collapse;
+    width: 100%;
   }
 </style>
