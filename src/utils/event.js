@@ -1,5 +1,3 @@
-import { setIntervalImmediate } from './interval'
-
 // resize event
 export function addResizeEventListener(cb) {
   window.addEventListener('resize', cb)
@@ -15,31 +13,5 @@ export function createDispatcher(source) {
         detail: data,
       })
     )
-  }
-}
-
-export function getIsTouchable() {
-  return (
-    ('ontouchstart' in window) 
-    // || // not changing value during browser view switching (mobile <-> desktop)
-    // (navigator.maxTouchPoints > 0) ||
-    // (navigator.msMaxTouchPoints > 0)
-  )
-}
-
-export function addTouchableChangeEventListener(cb) {
-  let isTouchable = null
-
-  function handleTouchableChange() {
-    const isTouchableNext = getIsTouchable();
-    if (isTouchable !== isTouchableNext) {
-      cb(isTouchableNext)
-      isTouchable = isTouchableNext
-    }
-  }
-
-  const interval = setIntervalImmediate(handleTouchableChange, 500);
-  return () => {
-    clearInterval(interval)
   }
 }

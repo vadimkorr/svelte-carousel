@@ -1,5 +1,4 @@
 import { createDispatcher } from '../../utils/event'
-import { get } from '../../utils/object'
 import {
   addFocusinEventListener,
   removeFocusinEventListener,
@@ -10,9 +9,8 @@ import {
 /**
  * focusable events are for mouse events only
  */
-export function focusable(node, options) {
-  // pass custom dispatch fn in order to re-translate dispatched event
-  const dispatch = get(options, 'dispatch', createDispatcher(node))
+export function focusable(node) {
+  const dispatch = createDispatcher(node)
 
   function handleFocusin() {
     addFocusoutEventListener(node, handleFocusout)

@@ -1,5 +1,4 @@
 import { createDispatcher } from '../../utils/event'
-import { get } from '../../utils/object'
 import { getDistance } from '../../utils/math'
 import {
   addFocusinEventListener,
@@ -15,9 +14,8 @@ import {
 /**
  * tappable events are for touchable devices only
  */
-export function tappable(node, options) {
-  // pass custom dispatch fn in order to re-translate dispatched event
-  const dispatch = get(options, 'dispatch', createDispatcher(node))
+export function tappable(node) {
+  const dispatch = createDispatcher(node)
 
   let tapStartedAt = 0
   let tapStartPos = { x: 0, y: 0 }
@@ -44,6 +42,7 @@ export function tappable(node, options) {
   }
 
   function handleTapend(event) {
+    event.preventDefault();
     removeFocusoutEventListener(node, handleTapend)
 
     const touch = event.changedTouches[0]
