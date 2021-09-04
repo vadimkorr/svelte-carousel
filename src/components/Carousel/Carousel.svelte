@@ -17,7 +17,7 @@
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
-  const CLONES_COUNT = 2
+
 
   const dispatch = createEventDispatcher()
 
@@ -96,6 +96,16 @@
    */
   export let swiping = true
 
+  /**
+   * Number of pages to show 
+   */
+  export let pagesToShow = 2
+
+  /**
+   * Number of pages to scroll 
+   */
+  export let pagesToScroll = 2
+
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
     if (typeof pageIndex !== 'number') {
@@ -119,19 +129,23 @@
   $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) // index without cloenes
   $: dispatch('pageChange', originalCurrentPageIndex)
 
+  const PAGE_CLONES_COUNT = 2
+  $: pagesItemsClonesCount = pagesToShow * 2
   let pagesCount = 0
-  $: originalPagesCount = Math.max(pagesCount - (infinite ? CLONES_COUNT : 0), 1) // without clones
+  let pagesItemsCount = 0
+  $: originalPagesCount = Math.max(pagesCount - (infinite ? PAGE_CLONES_COUNT : 0), 1) // without clones
 
   function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
     if (infinite) {
       if (currentPageIndex === pagesCount - 1) return 0
-      if (currentPageIndex === 0) return (pagesCount - CLONES_COUNT) - 1
+      if (currentPageIndex === 0) return (pagesCount - PAGE_CLONES_COUNT) - 1
       return currentPageIndex - 1
     }
     return currentPageIndex
   }
 
-  let pageWidth = 0
+  let pagesWindowWidth = 0
+  let pagesItemWidth = 0
   let offset = 0
   let pageWindowElement
   let pagesElement
@@ -160,23 +174,40 @@
 
   function applyPageSizes() {
     const children = pagesElement.children
-    pageWidth = pageWindowElement.clientWidth
+    pagesWindowWidth = pageWindowElement.clientWidth
 
-    pagesCount = children.length
+    pagesItemWidth = pagesWindowWidth / pagesToShow
 
-    for (let pageIndex=0; pageIndex<pagesCount; pageIndex++) {
-      children[pageIndex].style.minWidth = `${pageWidth}px`
-      children[pageIndex].style.maxWidth = `${pageWidth}px`
+    pagesItemsCount = children.length
+    pagesCount = (pagesItemsCount / pagesToScroll) // Math ceil
+
+    for (let pageIndex=0; pageIndex<pagesItemsCount; pageIndex++) {
+      children[pageIndex].style.minWidth = `${pagesItemWidth}px`
+      children[pageIndex].style.maxWidth = `${pagesItemWidth}px`
     }
 
     offsetPage({ animated: false })
   }
   
   function addClones() {
-    const first = pagesElement.children[0]
-    const last = pagesElement.children[pagesElement.children.length - 1]
-    pagesElement.prepend(last.cloneNode(true))
-    pagesElement.append(first.cloneNode(true))
+    // TODO: move to utils
+    // TODO: add fns to remove clones
+    const toAppend = []
+    for (let i=0; i<pagesToShow; i++) {
+      toAppend.push(pagesElement.children[i].cloneNode(true))
+    }
+    const toPrepend = []
+    const len = pagesElement.children.length
+    for (let i=len - 1; i>len - 1 - pagesToShow; i--) {
+      toPrepend.push(pagesElement.children[i].cloneNode(true))
+    }
+
+    for (let i=0; i<toAppend.length; i++) {
+      pagesElement.append(toAppend[i])
+    }
+    for (let i=0; i<toPrepend.length; i++) {
+      pagesElement.prepend(toPrepend[i])
+    }
   }
 
   async function applyAutoplayIfNeeded(autoplay) {
@@ -233,7 +264,7 @@
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
-      offset = -currentPageIndex * pageWidth
+      offset = -currentPageIndex * (pagesItemWidth * pagesToScroll)
       setTimeout(() => {
         resolve()
       }, _duration)
@@ -245,7 +276,7 @@
     let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
-        await showPage(pagesCount - CLONES_COUNT, { animated: false })
+        await showPage(pagesCount - PAGE_CLONES_COUNT, { animated: false })
         jumped = true
       } else if (currentPageIndex === pagesCount - 1) {
         await showPage(1, { animated: false })
@@ -344,7 +375,7 @@
     >
       <div
         class="sc-carousel__pages-container"
-        use:swipeable="{{ thresholdProvider: () => pageWidth/3 }}"
+        use:swipeable="{{ thresholdProvider: () => pagesWindowWidth/3 }}"
         on:swipeStart={handleSwipeStart}
         on:swipeMove={handleSwipeMove}
         on:swipeEnd={handleSwipeEnd}
