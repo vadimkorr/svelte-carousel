@@ -99,19 +99,20 @@
   /**
    * Number of pages to show 
    */
-  export let pagesToShow = 2
+  export let pagesToShow = 3
 
   /**
    * Number of pages to scroll 
    */
-  export let pagesToScroll = 2
+  export let pagesToScroll = 1
+
 
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(pageIndex + Number(infinite), { animated })
+    await showPage(pageIndex + clonesCount, { animated })
   }
 
   export async function goToPrev(options) {
@@ -129,17 +130,25 @@
   $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) // index without cloenes
   $: dispatch('pageChange', originalCurrentPageIndex)
 
-  const PAGE_CLONES_COUNT = 2
-  $: pagesItemsClonesCount = pagesToShow * 2
+  let clonesCount = Math.max(pagesToScroll, pagesToShow) // TODO: check 
+  $: pagesItemsClonesCount = clonesCount * 2
   let pagesCount = 0
-  let pagesItemsCount = 0
-  $: originalPagesCount = Math.max(pagesCount - (infinite ? PAGE_CLONES_COUNT : 0), 1) // without clones
+
+  $: originalPagesCount = Math.max(
+    Math.ceil(
+      (
+        pagesCount - (infinite ? pagesItemsClonesCount : 0)
+      ) / pagesToScroll
+    ),
+  1) // without clones
 
   function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
+    console.log('getOriginalCurrentPageIndex', currentPageIndex, pagesCount, infinite)
+    console.log('pagesItemsClonesCount', pagesItemsClonesCount)
     if (infinite) {
-      if (currentPageIndex === pagesCount - 1) return 0
-      if (currentPageIndex === 0) return (pagesCount - PAGE_CLONES_COUNT) - 1
-      return currentPageIndex - 1
+      if (currentPageIndex === pagesCount - clonesCount) return 0
+      if (currentPageIndex === 0) return (pagesCount - clonesCount)
+      return currentPageIndex - clonesCount
     }
     return currentPageIndex
   }
@@ -178,10 +187,9 @@
 
     pagesItemWidth = pagesWindowWidth / pagesToShow
 
-    pagesItemsCount = children.length
-    pagesCount = (pagesItemsCount / pagesToScroll) // Math ceil
-
-    for (let pageIndex=0; pageIndex<pagesItemsCount; pageIndex++) {
+    pagesCount =  children.length 
+ 
+    for (let pageIndex=0; pageIndex<children.length; pageIndex++) {
       children[pageIndex].style.minWidth = `${pagesItemWidth}px`
       children[pageIndex].style.maxWidth = `${pagesItemWidth}px`
     }
@@ -193,12 +201,12 @@
     // TODO: move to utils
     // TODO: add fns to remove clones
     const toAppend = []
-    for (let i=0; i<pagesToShow; i++) {
+    for (let i=0; i<clonesCount; i++) {
       toAppend.push(pagesElement.children[i].cloneNode(true))
     }
     const toPrepend = []
     const len = pagesElement.children.length
-    for (let i=len - 1; i>len - 1 - pagesToShow; i--) {
+    for (let i=len - 1; i>len - 1 - clonesCount; i--) {
       toPrepend.push(pagesElement.children[i].cloneNode(true))
     }
 
@@ -234,15 +242,17 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
+        console.log('currentPageIndex', currentPageIndex)
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesElement && pageWindowElement) {
-        // load first and last child to clone them 
+        // load first and last child to clone them
+        // TODO: update
         loaded = [0, pagesElement.children.length - 1]
         await tick()
         infinite && addClones()
 
-        store.init(initialPageIndex + Number(infinite))
+        store.init(initialPageIndex + clonesCount)
         applyPageSizes()
       }
 
@@ -256,7 +266,7 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(pageIndex + Number(infinite))
+    await showPage(pageIndex + clonesCount)
   }
 
   function offsetPage(options) {
@@ -264,7 +274,10 @@
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
+      console.log(currentPageIndex, pagesItemWidth, pagesToScroll)
       offset = -currentPageIndex * (pagesItemWidth * pagesToScroll)
+      console.log('offset', offset)
+
       setTimeout(() => {
         resolve()
       }, _duration)
@@ -276,10 +289,10 @@
     let jumped = false
     if (infinite) {
       if (currentPageIndex === 0) {
-        await showPage(pagesCount - PAGE_CLONES_COUNT, { animated: false })
+        await showPage(pagesCount - clonesCount, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - 1) {
-        await showPage(1, { animated: false })
+      } else if (currentPageIndex === pagesCount - clonesCount) {
+        await showPage(clonesCount, { animated: false })
         jumped = true
       }
     }
@@ -415,6 +428,7 @@
       pagesCount={originalPagesCount}
       showPage={handlePageChange}
     >
+    {originalCurrentPageIndex}/{originalPagesCount}
       <Dots
         pagesCount={originalPagesCount}
         currentPageIndex={originalCurrentPageIndex}
