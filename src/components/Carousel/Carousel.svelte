@@ -12,12 +12,16 @@
     addResizeEventListener,
     removeResizeEventListener
   } from '../../utils/event'
-  import { getAdjacentIndexes } from '../../utils/page'
+  import {
+    getAdjacentIndexes,
+    getClones,
+    applyClones,
+    getPageSizes,
+    applyPageSizes,
+  } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
-
-
 
   const dispatch = createEventDispatcher()
 
@@ -99,12 +103,12 @@
   /**
    * Number of pages to show 
    */
-  export let pagesToShow = 3
+  export let pagesToShow = 2 // 2 // 1 // 3
 
   /**
    * Number of pages to scroll 
    */
-  export let pagesToScroll = 1
+  export let pagesToScroll = 2 // 1 // 1  // 2
 
 
   export async function goTo(pageIndex, options) {
@@ -112,7 +116,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(pageIndex + clonesCount, { animated })
+    await showPage(pageIndex + oneSideClonesCount, { animated })
   }
 
   export async function goToPrev(options) {
@@ -130,8 +134,8 @@
   $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) // index without cloenes
   $: dispatch('pageChange', originalCurrentPageIndex)
 
-  let clonesCount = Math.max(pagesToScroll, pagesToShow) // TODO: check 
-  $: pagesItemsClonesCount = clonesCount * 2
+  let oneSideClonesCount = Math.max(pagesToScroll, pagesToShow) // TODO: check 
+  $: pagesItemsClonesCount = oneSideClonesCount * 2
   let pagesCount = 0
 
   $: originalPagesCount = Math.max(
@@ -143,21 +147,20 @@
   1) // without clones
 
   function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
-    console.log('getOriginalCurrentPageIndex', currentPageIndex, pagesCount, infinite)
-    console.log('pagesItemsClonesCount', pagesItemsClonesCount)
     if (infinite) {
-      if (currentPageIndex === pagesCount - clonesCount) return 0
-      if (currentPageIndex === 0) return (pagesCount - clonesCount)
-      return currentPageIndex - clonesCount
+      console.log('currentPageIndex', currentPageIndex)
+      if (currentPageIndex === pagesCount - oneSideClonesCount) return 0
+      if (currentPageIndex === 0) return (pagesCount - oneSideClonesCount)
+      return Math.floor((currentPageIndex-oneSideClonesCount)/pagesToScroll)
     }
     return currentPageIndex
   }
 
   let pagesWindowWidth = 0
-  let pagesItemWidth = 0
+  let pageWidth = 0
   let offset = 0
   let pageWindowElement
-  let pagesElement
+  let pagesContainer
   let focused = false
 
   let progressValue
@@ -181,41 +184,37 @@
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount, infinite)
 
-  function applyPageSizes() {
-    const children = pagesElement.children
-    pagesWindowWidth = pageWindowElement.clientWidth
+  function initPageSizes() {
+    const sizes = getPageSizes({
+      pageWindowElement,
+      pagesContainerChildren: pagesContainer.children,
+      pagesToShow,
+    })
+    applyPageSizes({
+      pagesContainerChildren: pagesContainer.children,
+      pageWidth: sizes.pageWidth,
+    })
 
-    pagesItemWidth = pagesWindowWidth / pagesToShow
-
-    pagesCount =  children.length 
+    pagesWindowWidth = sizes.pagesWindowWidth
+    pageWidth = sizes.pageWidth
+    pagesCount = sizes.pagesCount
  
-    for (let pageIndex=0; pageIndex<children.length; pageIndex++) {
-      children[pageIndex].style.minWidth = `${pagesItemWidth}px`
-      children[pageIndex].style.maxWidth = `${pagesItemWidth}px`
-    }
-
     offsetPage({ animated: false })
   }
   
   function addClones() {
-    // TODO: move to utils
-    // TODO: add fns to remove clones
-    const toAppend = []
-    for (let i=0; i<clonesCount; i++) {
-      toAppend.push(pagesElement.children[i].cloneNode(true))
-    }
-    const toPrepend = []
-    const len = pagesElement.children.length
-    for (let i=len - 1; i>len - 1 - clonesCount; i--) {
-      toPrepend.push(pagesElement.children[i].cloneNode(true))
-    }
-
-    for (let i=0; i<toAppend.length; i++) {
-      pagesElement.append(toAppend[i])
-    }
-    for (let i=0; i<toPrepend.length; i++) {
-      pagesElement.prepend(toPrepend[i])
-    }
+    const {
+      clonesToAppend,
+      clonesToPrepend,
+    } = getClones({
+      oneSideClonesCount,
+      pagesContainerChildren: pagesContainer.children
+    })
+    applyClones({
+      pagesContainer,
+      clonesToAppend,
+      clonesToPrepend,
+    })
   }
 
   async function applyAutoplayIfNeeded(autoplay) {
@@ -242,41 +241,39 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
-        console.log('currentPageIndex', currentPageIndex)
       }))
       cleanupFns.push(() => progressManager.reset())
-      if (pagesElement && pageWindowElement) {
+      if (pagesContainer && pageWindowElement) {
         // load first and last child to clone them
         // TODO: update
-        loaded = [0, pagesElement.children.length - 1]
+        loaded = [0, pagesContainer.children.length - 1]
         await tick()
         infinite && addClones()
 
-        store.init(initialPageIndex + clonesCount)
-        applyPageSizes()
+        store.init(initialPageIndex + oneSideClonesCount)
+        initPageSizes()
       }
 
-      addResizeEventListener(applyPageSizes)
+      addResizeEventListener(initPageSizes)
     })()
   })
 
   onDestroy(() => {
-    removeResizeEventListener(applyPageSizes)
+    removeResizeEventListener(initPageSizes)
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(pageIndex + clonesCount)
+    await showPage(pageIndex + oneSideClonesCount)
   }
 
   function offsetPage(options) {
     const animated = get(options, 'animated', true)
+    // TODO: remove const pagesToScroll = get(options, 'pagesToScroll', 0)
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
-      console.log(currentPageIndex, pagesItemWidth, pagesToScroll)
-      offset = -currentPageIndex * (pagesItemWidth * pagesToScroll)
-      console.log('offset', offset)
+      offset = -currentPageIndex * pageWidth
 
       setTimeout(() => {
         resolve()
@@ -288,11 +285,11 @@
   async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
-      if (currentPageIndex === 0) {
-        await showPage(pagesCount - clonesCount, { animated: false })
+      if (currentPageIndex === oneSideClonesCount - 1) {
+        await showPage(pagesCount - oneSideClonesCount - 1, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - clonesCount) {
-        await showPage(clonesCount, { animated: false })
+      } else if (currentPageIndex === pagesCount - oneSideClonesCount) {
+        await showPage(oneSideClonesCount, { animated: false })
         jumped = true
       }
     }
@@ -322,13 +319,13 @@
   }
   async function showPrevPage(options) {
     await changePage(
-      () => store.prev({ infinite, pagesCount }),
+      () => store.prev({ infinite, pagesCount, pagesToScroll }),
       options
     )
   }
   async function showNextPage(options) {
     await changePage(
-      () => store.next({ infinite, pagesCount }),
+      () => store.next({ infinite, pagesCount, pagesToScroll }),
       options
     )
   }
@@ -399,7 +396,7 @@
           transition-duration: {_duration}ms;
           transition-timing-function: {timingFunction};
         "
-        bind:this={pagesElement}
+        bind:this={pagesContainer}
       >
         <slot {loaded}></slot>
       </div>
@@ -428,6 +425,7 @@
       pagesCount={originalPagesCount}
       showPage={handlePageChange}
     >
+    {currentPageIndex}/{pagesCount}; 
     {originalCurrentPageIndex}/{originalPagesCount}
       <Dots
         pagesCount={originalPagesCount}

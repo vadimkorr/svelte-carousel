@@ -1,11 +1,11 @@
-export function getNextPageIndexLimited(currentPageIndex, pagesCount) {
+export function getNextPageIndexLimited(currentPageIndex, pagesCount, pagesToScroll) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.min(Math.max(currentPageIndex + 1, 0), pagesCount - 1)
+  return Math.min(Math.max(currentPageIndex + pagesToScroll, 0), pagesCount - 1)
 }
 
-export function getNextPageIndexInfinte(currentPageIndex, pagesCount) {
+export function getNextPageIndexInfinte(currentPageIndex, pagesCount, pagesToScroll) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + 1
+  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + pagesToScroll
   return newCurrentPageIndex > pagesCount - 1 ? 0 : Math.max(newCurrentPageIndex, 0)
 }
 
@@ -13,14 +13,14 @@ export function getNextPageIndexFn(infinite) {
   return infinite ? getNextPageIndexInfinte : getNextPageIndexLimited
 }
 
-export function getPrevPageIndexLimited(currentPageIndex, pagesCount) {
+export function getPrevPageIndexLimited(currentPageIndex, pagesCount, pagesToScroll) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.max(Math.min(currentPageIndex - 1, pagesCount - 1), 0)
+  return Math.max(Math.min(currentPageIndex - pagesToScroll, pagesCount - 1), 0)
 }
 
-export function getPrevPageIndexInfinte(currentPageIndex, pagesCount) {
+export function getPrevPageIndexInfinte(currentPageIndex, pagesCount, pagesToScroll) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - 1
+  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - pagesToScroll
   return newCurrentPageIndex >= 0 ? Math.min(newCurrentPageIndex, pagesCount - 1) : pagesCount - 1
 }
 
@@ -49,4 +49,65 @@ export function getAdjacentIndexes(pageIndex, pagesCount, infinite) {
         : pagesCount - 1
     : rangeEnd
   return [...new Set([rangeStart, rangeEnd, _pageIndex])].sort((a, b) => a - b)
+}
+
+export function getClones({
+  oneSideClonesCount,
+  pagesContainerChildren
+}) {
+  // TODO: add fns to remove clones
+  const clonesToAppend = []
+  for (let i=0; i<oneSideClonesCount; i++) {
+    clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
+  }
+
+  const clonesToPrepend = []
+  const len = pagesContainerChildren.length
+  for (let i=len-1; i>len-1-oneSideClonesCount; i--) {
+    clonesToPrepend.push(pagesContainerChildren[i].cloneNode(true))
+  }
+
+  return {
+    clonesToAppend,
+    clonesToPrepend,
+  }
+}
+
+export function applyClones({
+  pagesContainer,
+  clonesToAppend,
+  clonesToPrepend,
+}) {
+  for (let i=0; i<clonesToAppend.length; i++) {
+    pagesContainer.append(clonesToAppend[i])
+  }
+  for (let i=0; i<clonesToPrepend.length; i++) {
+    pagesContainer.prepend(clonesToPrepend[i])
+  }
+}
+
+export function getPageSizes({
+  pageWindowElement,
+  pagesContainerChildren,
+  pagesToShow,
+}) {
+  const pagesWindowWidth = pageWindowElement.clientWidth
+  const pageWidth = pagesWindowWidth / pagesToShow
+  const pagesCount = pagesContainerChildren.length
+
+  return {
+    pagesWindowWidth,
+    pageWidth,
+    pagesCount,
+  }
+}
+
+export function applyPageSizes({
+  pagesContainerChildren,
+  pageWidth,
+}) {
+  for (let pageIndex=0; pageIndex<pagesContainerChildren.length; pageIndex++) {
+    pagesContainerChildren[pageIndex].style.minWidth = `${pageWidth}px`
+    pagesContainerChildren[pageIndex].style.maxWidth = `${pageWidth}px`
+  }
 }
