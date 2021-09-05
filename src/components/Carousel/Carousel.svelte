@@ -168,8 +168,8 @@
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes({
-    originalCurrentPageIndex,
-    originalPagesCount,
+    pageIndex: originalCurrentPageIndex,
+    pagesCount: originalPagesCount,
     infinite,
   })
 
