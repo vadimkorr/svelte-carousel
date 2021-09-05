@@ -445,8 +445,8 @@
       pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
-    {currentPageIndex}/{pagesCount}; 
-    {originalCurrentPageIndex}/{originalPagesCount}
+    {currentPageIndex}/{pagesCount};
+    {currentPageIndexWithoutClones}/{pagesCountWithoutClones}
       <Dots
         pagesCount={pagesCountWithoutClones}
         currentPageIndex={currentPageIndexWithoutClones}
