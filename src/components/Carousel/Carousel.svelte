@@ -273,7 +273,7 @@
   async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
-      if (currentPageIndex === 0) { // oneSideClonesCount - 1) {
+      if (currentPageIndex === 0) {
         await showPage(pagesCount - 2 * oneSideClonesCount, { animated: false })
         jumped = true
       } else if (currentPageIndex === pagesCount - oneSideClonesCount ) {
