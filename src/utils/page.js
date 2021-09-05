@@ -1,9 +1,17 @@
-export function getNextPageIndexLimited(currentPageIndex, pagesCount, pagesToScroll) {
+export function getNextPageIndexLimited({
+  currentPageIndex,
+  pagesCount,
+  pagesToScroll,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   return Math.min(Math.max(currentPageIndex + pagesToScroll, 0), pagesCount - 1)
 }
 
-export function getNextPageIndexInfinte(currentPageIndex, pagesCount, pagesToScroll) {
+export function getNextPageIndexInfinte({
+  currentPageIndex,
+  pagesCount,
+  pagesToScroll,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   const newCurrentPageIndex = Math.max(currentPageIndex, 0) + pagesToScroll
   return newCurrentPageIndex > pagesCount - 1 ? 0 : Math.max(newCurrentPageIndex, 0)
@@ -13,12 +21,20 @@ export function getNextPageIndexFn(infinite) {
   return infinite ? getNextPageIndexInfinte : getNextPageIndexLimited
 }
 
-export function getPrevPageIndexLimited(currentPageIndex, pagesCount, pagesToScroll) {
+export function getPrevPageIndexLimited({
+  currentPageIndex,
+  pagesCount,
+  pagesToScroll,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   return Math.max(Math.min(currentPageIndex - pagesToScroll, pagesCount - 1), 0)
 }
 
-export function getPrevPageIndexInfinte(currentPageIndex, pagesCount, pagesToScroll) {
+export function getPrevPageIndexInfinte({
+  currentPageIndex,
+  pagesCount,
+  pagesToScroll,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - pagesToScroll
   return newCurrentPageIndex >= 0 ? Math.min(newCurrentPageIndex, pagesCount - 1) : pagesCount - 1
@@ -28,12 +44,19 @@ export function getPrevPageIndexFn(infinite) {
   return infinite ? getPrevPageIndexInfinte : getPrevPageIndexLimited
 }
 
-export function getPageIndex(pageIndex, pagesCount) {
+export function getPageIndex({
+  pageIndex,
+  pagesCount,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
 }
 
-export function getAdjacentIndexes(pageIndex, pagesCount, infinite) {
+export function getAdjacentIndexes({
+  pageIndex,
+  pagesCount,
+  infinite,
+}) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   const _pageIndex = Math.max(0, Math.min(pageIndex, pagesCount - 1))
   let rangeStart = _pageIndex - 1;
@@ -53,9 +76,9 @@ export function getAdjacentIndexes(pageIndex, pagesCount, infinite) {
 
 export function getClones({
   oneSideClonesCount,
-  pagesContainerChildren
+  pagesContainerChildren,
 }) {
-  // TODO: add fns to remove clones
+  // TODO: add fns to remove clones if needed
   const clonesToAppend = []
   for (let i=0; i<oneSideClonesCount; i++) {
     clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
@@ -141,10 +164,12 @@ export function getPagesCountWithoutClones({
   1)
 }
 
-// TODO: check 
 export function getOneSideClonesCount({
+  infinite,
   pagesToScroll,
   pagesToShow,
 }) {
-  return Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
+  return infinite
+    ? Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
+    : 0
 }

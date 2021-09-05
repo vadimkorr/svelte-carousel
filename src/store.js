@@ -1,8 +1,10 @@
-import { writable } from 'svelte/store';
+import {
+  writable,
+} from 'svelte/store';
 import {
   getNextPageIndexFn,
   getPrevPageIndexFn,
-  getPageIndex
+  getPageIndex,
 } from './utils/page'
 
 const initState = {
@@ -15,22 +17,36 @@ function createStore() {
   function init(initialPageIndex) {
     set({
       ...initState,
-      currentPageIndex: initialPageIndex
+      currentPageIndex: initialPageIndex,
     })
   }
 
-  function moveToPage({ pageIndex, pagesCount }) {
+  function moveToPage({
+    pageIndex,
+    pagesCount,
+  }) {
     update(store => {
       return {
         ...store,
-        currentPageIndex: getPageIndex(pageIndex, pagesCount),
+        currentPageIndex: getPageIndex({
+          pageIndex,
+          pagesCount,
+        }),
       }
     })
   }
 
-  function next({ infinite, pagesCount, pagesToScroll }) {
+  function next({
+    infinite,
+    pagesCount,
+    pagesToScroll,
+  }) {
     update(store => {
-      const newCurrentPageIndex = getNextPageIndexFn(infinite)(store.currentPageIndex, pagesCount, pagesToScroll)
+      const newCurrentPageIndex = getNextPageIndexFn(infinite)({
+        currentPageIndex: store.currentPageIndex,
+        pagesCount,
+        pagesToScroll,
+      })
       return {
         ...store,
         currentPageIndex: newCurrentPageIndex,
@@ -38,9 +54,17 @@ function createStore() {
     })
   }
 
-  function prev({ infinite, pagesCount, pagesToScroll }) {
+  function prev({
+    infinite,
+    pagesCount,
+    pagesToScroll,
+  }) {
     update(store => {
-      const newCurrentPageIndex = getPrevPageIndexFn(infinite)(store.currentPageIndex, pagesCount, pagesToScroll)
+      const newCurrentPageIndex = getPrevPageIndexFn(infinite)({
+        currentPageIndex: store.currentPageIndex,
+        pagesCount,
+        pagesToScroll,
+      })
       return {
         ...store,
         currentPageIndex: newCurrentPageIndex,

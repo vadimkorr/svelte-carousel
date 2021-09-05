@@ -134,20 +134,24 @@
   }
 
   let store = createStore()
-  let oneSideClonesCount = getOneSideClonesCount({ pagesToScroll, pagesToShow })
+  let oneSideClonesCount = getOneSideClonesCount({
+    infinite,
+    pagesToScroll,
+    pagesToShow,
+  })
 
   let currentPageIndex = 0
-  $: originalCurrentPageIndex = getCurrentPageIndexWithoutClones({
+  $: currentPageIndexWithoutClones = getCurrentPageIndexWithoutClones({
     currentPageIndex,
     pagesCount,
     oneSideClonesCount,
     infinite,
-    pagesToScroll
+    pagesToScroll,
   })
-  $: dispatch('pageChange', originalCurrentPageIndex)
+  $: dispatch('pageChange', currentPageIndexWithoutClones)
 
   let pagesCount = 0
-  $: originalPagesCount = getPagesCountWithoutClones({
+  $: pagesCountWithoutClones = getPagesCountWithoutClones({
     pagesCount,
     infinite,
     oneSideClonesCount,
@@ -180,7 +184,11 @@
   }
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
-  $: loaded = getAdjacentIndexes(originalCurrentPageIndex, originalPagesCount, infinite)
+  $: loaded = getAdjacentIndexes({
+    pageIndex: currentPageIndexWithoutClones,
+    pagesCount: pagesCountWithoutClones,
+    infinite,
+  })
 
   function initPageSizes() {
     const sizes = getPageSizes({
@@ -197,7 +205,9 @@
     pageWidth = sizes.pageWidth
     pagesCount = sizes.pagesCount
  
-    offsetPage({ animated: false })
+    offsetPage({
+      animated: false,
+    })
   }
   
   function addClones() {
@@ -206,7 +216,7 @@
       clonesToPrepend,
     } = getClones({
       oneSideClonesCount,
-      pagesContainerChildren: pagesContainer.children
+      pagesContainerChildren: pagesContainer.children,
     })
     applyClones({
       pagesContainer,
@@ -321,14 +331,22 @@
   }
   async function showPrevPage(options) {
     await changePage(
-      () => store.prev({ infinite, pagesCount, pagesToScroll }),
-      options
+      () => store.prev({
+        infinite,
+        pagesCount,
+        pagesToScroll,
+      }),
+      options,
     )
   }
   async function showNextPage(options) {
     await changePage(
-      () => store.next({ infinite, pagesCount, pagesToScroll }),
-      options
+      () => store.next({
+        infinite,
+        pagesCount,
+        pagesToScroll,
+      }),
+      options,
     )
   }
 
@@ -369,7 +387,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
-            disabled={!infinite && originalCurrentPageIndex === 0}
+            disabled={!infinite && currentPageIndexWithoutClones === 0}
             on:click={showPrevPage}
           />
         </div>
@@ -413,7 +431,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!infinite && originalCurrentPageIndex === originalPagesCount - 1}
+            disabled={!infinite && currentPageIndexWithoutClones === pagesCountWithoutClones - 1}
             on:click={showNextPage}
           />
         </div>
@@ -423,15 +441,15 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={originalCurrentPageIndex}
-      pagesCount={originalPagesCount}
+      currentPageIndex={currentPageIndexWithoutClones}
+      pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
     {currentPageIndex}/{pagesCount}; 
     {originalCurrentPageIndex}/{originalPagesCount}
       <Dots
-        pagesCount={originalPagesCount}
-        currentPageIndex={originalCurrentPageIndex}
+        pagesCount={pagesCountWithoutClones}
+        currentPageIndex={currentPageIndexWithoutClones}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
     </slot>
