@@ -111,3 +111,40 @@ export function applyPageSizes({
     pagesContainerChildren[pageIndex].style.maxWidth = `${pageWidth}px`
   }
 }
+
+export function getCurrentPageIndexWithoutClones({
+  currentPageIndex,
+  pagesCount,
+  oneSideClonesCount,
+  infinite,
+  pagesToScroll,
+}) {
+  if (infinite) {
+    if (currentPageIndex === pagesCount - oneSideClonesCount) return 0
+    if (currentPageIndex === 0) return pagesCount - oneSideClonesCount
+    return Math.floor((currentPageIndex - oneSideClonesCount) / pagesToScroll)
+  }
+  return currentPageIndex
+}
+
+export function getPagesCountWithoutClones({
+  pagesCount,
+  infinite,
+  oneSideClonesCount,
+  pagesToScroll,
+}) {
+  const bothSidesClonesCount = oneSideClonesCount * 2
+  return Math.max(
+    Math.ceil(
+      (pagesCount - (infinite ? bothSidesClonesCount : 0)) / pagesToScroll
+    ),
+  1)
+}
+
+// TODO: check 
+export function getOneSideClonesCount({
+  pagesToScroll,
+  pagesToShow,
+}) {
+  return Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
+}

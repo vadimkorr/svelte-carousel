@@ -18,10 +18,14 @@
     applyClones,
     getPageSizes,
     applyPageSizes,
+    getCurrentPageIndexWithoutClones,
+    getPagesCountWithoutClones,
+    getOneSideClonesCount,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
+  import { getIsOdd } from '../../utils/math'
 
   const dispatch = createEventDispatcher()
 
@@ -103,12 +107,12 @@
   /**
    * Number of pages to show 
    */
-  export let pagesToShow = 2 // 2 // 1 // 3
+  export let pagesToShow = 4 // 2 // 2 // 1 // 3
 
   /**
    * Number of pages to scroll 
    */
-  export let pagesToScroll = 2 // 1 // 1  // 2
+  export let pagesToScroll = 3 // 2 // 1 // 1  // 2
 
 
   export async function goTo(pageIndex, options) {
@@ -116,7 +120,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(pageIndex + oneSideClonesCount, { animated })
+    await showPage(pageIndex * pagesToScroll + oneSideClonesCount, { animated })
   }
 
   export async function goToPrev(options) {
@@ -130,31 +134,25 @@
   }
 
   let store = createStore()
+  let oneSideClonesCount = getOneSideClonesCount({ pagesToScroll, pagesToShow })
+
   let currentPageIndex = 0
-  $: originalCurrentPageIndex = getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) // index without cloenes
+  $: originalCurrentPageIndex = getCurrentPageIndexWithoutClones({
+    currentPageIndex,
+    pagesCount,
+    oneSideClonesCount,
+    infinite,
+    pagesToScroll
+  })
   $: dispatch('pageChange', originalCurrentPageIndex)
 
-  let oneSideClonesCount = Math.max(pagesToScroll, pagesToShow) // TODO: check 
-  $: pagesItemsClonesCount = oneSideClonesCount * 2
   let pagesCount = 0
-
-  $: originalPagesCount = Math.max(
-    Math.ceil(
-      (
-        pagesCount - (infinite ? pagesItemsClonesCount : 0)
-      ) / pagesToScroll
-    ),
-  1) // without clones
-
-  function getOriginalCurrentPageIndex(currentPageIndex, pagesCount, infinite) {
-    if (infinite) {
-      console.log('currentPageIndex', currentPageIndex)
-      if (currentPageIndex === pagesCount - oneSideClonesCount) return 0
-      if (currentPageIndex === 0) return (pagesCount - oneSideClonesCount)
-      return Math.floor((currentPageIndex-oneSideClonesCount)/pagesToScroll)
-    }
-    return currentPageIndex
-  }
+  $: originalPagesCount = getPagesCountWithoutClones({
+    pagesCount,
+    infinite,
+    oneSideClonesCount,
+    pagesToScroll,
+  })
 
   let pagesWindowWidth = 0
   let pageWidth = 0
@@ -241,6 +239,7 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
+        console.log('currentPageIndex', currentPageIndex)
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesContainer && pageWindowElement) {
@@ -264,7 +263,7 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(pageIndex + oneSideClonesCount)
+    await showPage(pageIndex * pagesToScroll + oneSideClonesCount)
   }
 
   function offsetPage(options) {
@@ -285,10 +284,10 @@
   async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
-      if (currentPageIndex === oneSideClonesCount - 1) {
-        await showPage(pagesCount - oneSideClonesCount - 1, { animated: false })
+      if (currentPageIndex === 0) { // oneSideClonesCount - 1) {
+        await showPage(pagesCount - 2 * oneSideClonesCount, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - oneSideClonesCount) {
+      } else if (currentPageIndex === pagesCount - oneSideClonesCount ) {
         await showPage(oneSideClonesCount, { animated: false })
         jumped = true
       }
@@ -313,7 +312,10 @@
 
   async function showPage(pageIndex, options) {
     await changePage(
-      () => store.moveToPage({ pageIndex, pagesCount }),
+      () => store.moveToPage({
+        pageIndex,
+        pagesCount,
+      }),
       options
     )
   }
