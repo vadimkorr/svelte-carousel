@@ -127,16 +127,16 @@
   })
 
   let currentPageIndex = 0
-  $: originalCurrentPageIndex = getCurrentPageIndexWithoutClones({
+  $: currentPageIndexWithoutClones = getCurrentPageIndexWithoutClones({
     currentPageIndex,
     pagesCount,
     oneSideClonesCount,
     infinite,
   })
-  $: dispatch('pageChange', originalCurrentPageIndex)
+  $: dispatch('pageChange', currentPageIndexWithoutClones)
 
   let pagesCount = 0
-  $: originalPagesCount = getPagesCountWithoutClones({
+  $: pagesCountWithoutClones = getPagesCountWithoutClones({
     pagesCount,
     oneSideClonesCount,
   })
@@ -168,8 +168,8 @@
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes({
-    pageIndex: originalCurrentPageIndex,
-    pagesCount: originalPagesCount,
+    pageIndex: currentPageIndexWithoutClones,
+    pagesCount: pagesCountWithoutClones,
     infinite,
   })
 
@@ -364,7 +364,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
-            disabled={!infinite && originalCurrentPageIndex === 0}
+            disabled={!infinite && currentPageIndexWithoutClones === 0}
             on:click={showPrevPage}
           />
         </div>
@@ -408,7 +408,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!infinite && originalCurrentPageIndex === originalPagesCount - 1}
+            disabled={!infinite && currentPageIndexWithoutClones === pagesCountWithoutClones - 1}
             on:click={showNextPage}
           />
         </div>
@@ -418,13 +418,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={originalCurrentPageIndex}
-      pagesCount={originalPagesCount}
+      currentPageIndex={currentPageIndexWithoutClones}
+      pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
       <Dots
-        pagesCount={originalPagesCount}
-        currentPageIndex={originalCurrentPageIndex}
+        pagesCount={pagesCountWithoutClones}
+        currentPageIndex={currentPageIndexWithoutClones}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
     </slot>
