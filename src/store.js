@@ -1,8 +1,10 @@
-import { writable } from 'svelte/store';
+import {
+  writable,
+} from 'svelte/store';
 import {
   getNextPageIndexFn,
   getPrevPageIndexFn,
-  getPageIndex
+  getPageIndex,
 } from './utils/page'
 
 const initState = {
@@ -15,29 +17,34 @@ function createStore() {
   function init(initialPageIndex) {
     set({
       ...initState,
-      currentPageIndex: initialPageIndex
+      currentPageIndex: initialPageIndex,
     })
   }
 
-  function setCurrentPageIndex(index) {
-    update(store => ({
-      ...store,
-      currentPageIndex: index,
-    }))
-  }
-
-  function moveToPage({ pageIndex, pagesCount }) {
+  function moveToPage({
+    pageIndex,
+    pagesCount,
+  }) {
     update(store => {
       return {
         ...store,
-        currentPageIndex: getPageIndex(pageIndex, pagesCount),
+        currentPageIndex: getPageIndex({
+          pageIndex,
+          pagesCount,
+        }),
       }
     })
   }
 
-  function next({ infinite, pagesCount }) {
+  function next({
+    infinite,
+    pagesCount,
+  }) {
     update(store => {
-      const newCurrentPageIndex = getNextPageIndexFn(infinite)(store.currentPageIndex, pagesCount)
+      const newCurrentPageIndex = getNextPageIndexFn(infinite)({
+        currentPageIndex: store.currentPageIndex,
+        pagesCount,
+      })
       return {
         ...store,
         currentPageIndex: newCurrentPageIndex,
@@ -45,9 +52,15 @@ function createStore() {
     })
   }
 
-  function prev({ infinite, pagesCount }) {
+  function prev({
+    infinite,
+    pagesCount,
+  }) {
     update(store => {
-      const newCurrentPageIndex = getPrevPageIndexFn(infinite)(store.currentPageIndex, pagesCount)
+      const newCurrentPageIndex = getPrevPageIndexFn(infinite)({
+        currentPageIndex: store.currentPageIndex,
+        pagesCount,
+      })
       return {
         ...store,
         currentPageIndex: newCurrentPageIndex,
@@ -59,7 +72,6 @@ function createStore() {
     subscribe,
     next,
     prev,
-    setCurrentPageIndex,
     init,
     moveToPage,
   };

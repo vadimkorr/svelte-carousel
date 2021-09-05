@@ -16,15 +16,25 @@ describe('getNextPageIndexLimited', () => {
       { currentPageIndex: 2, pagesCount: 3, expected: 2 },
       { currentPageIndex: 7, pagesCount: 3, expected: 2 },
     ]
-    testCases.forEach(({ currentPageIndex, pagesCount, expected }) => {
-      expect(getNextPageIndexLimited(currentPageIndex, pagesCount)).toBe(expected)
+    testCases.forEach(({
+      currentPageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getNextPageIndexLimited({
+        currentPageIndex,
+        pagesCount,
+      })).toBe(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
     const currentPageIndex = 5
     const pagesCount = 0
     expect(
-      () => getNextPageIndexLimited(currentPageIndex, pagesCount)
+      () => getNextPageIndexLimited({
+        currentPageIndex,
+        pagesCount,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
@@ -38,15 +48,25 @@ describe('getNextPageIndexInfinte', () => {
       { currentPageIndex: 2, pagesCount: 3, expected: 0 },
       { currentPageIndex: 7, pagesCount: 3, expected: 0 },
     ]
-    testCases.forEach(({ currentPageIndex, pagesCount, expected }) => {
-      expect(getNextPageIndexInfinte(currentPageIndex, pagesCount)).toBe(expected)
+    testCases.forEach(({
+      currentPageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getNextPageIndexInfinte({
+        currentPageIndex,
+        pagesCount,
+      })).toBe(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
     const currentPageIndex = 5
     const pagesCount = 0
     expect(
-      () => getNextPageIndexInfinte(currentPageIndex, pagesCount)
+      () => getNextPageIndexInfinte({
+        currentPageIndex,
+        pagesCount,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
@@ -60,15 +80,25 @@ describe('getPrevPageIndexLimited', () => {
       { currentPageIndex: 2, pagesCount: 3, expected: 1 },
       { currentPageIndex: 7, pagesCount: 3, expected: 2 },
     ]
-    testCases.forEach(({ currentPageIndex, pagesCount, expected }) => {
-      expect(getPrevPageIndexLimited(currentPageIndex, pagesCount)).toBe(expected)
+    testCases.forEach(({
+      currentPageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getPrevPageIndexLimited({
+        currentPageIndex,
+        pagesCount,
+      })).toBe(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
     const currentPageIndex = 5
     const pagesCount = 0
     expect(
-      () => getPrevPageIndexLimited(currentPageIndex, pagesCount)
+      () => getPrevPageIndexLimited({
+        currentPageIndex,
+        pagesCount,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
@@ -82,15 +112,25 @@ describe('getPrevPageIndexInfinte', () => {
       { currentPageIndex: 2, pagesCount: 3, expected: 1 },
       { currentPageIndex: 7, pagesCount: 3, expected: 1 },
     ]
-    testCases.forEach(({ currentPageIndex, pagesCount, expected }) => {
-      expect(getPrevPageIndexInfinte(currentPageIndex, pagesCount)).toBe(expected)
+    testCases.forEach(({
+      currentPageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getPrevPageIndexInfinte({
+        currentPageIndex,
+        pagesCount,
+      })).toBe(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
     const currentPageIndex = 5
     const pagesCount = 0
     expect(
-      () => getPrevPageIndexInfinte(currentPageIndex, pagesCount)
+      () => getPrevPageIndexInfinte({
+        currentPageIndex,
+        pagesCount,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
@@ -104,15 +144,25 @@ describe('getPageIndex', () => {
       { pageIndex: 2, pagesCount: 3, expected: 2 },
       { pageIndex: 7, pagesCount: 3, expected: 2 },
     ]
-    testCases.forEach(({ pageIndex, pagesCount, expected }) => {
-      expect(getPageIndex(pageIndex, pagesCount)).toBe(expected)
+    testCases.forEach(({
+      pageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getPageIndex({
+        pageIndex,
+        pagesCount,
+      })).toBe(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
     const pageIndex = 5
     const pagesCount = 0
     expect(
-      () => getPageIndex(pageIndex, pagesCount)
+      () => getPageIndex({
+        pageIndex,
+        pagesCount,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
@@ -127,8 +177,16 @@ describe('getAdjacentIndexes', () => {
       { pageIndex: 9, pagesCount: 10, expected: [0, 8, 9] },
       { pageIndex: 15, pagesCount: 10, expected: [0, 8, 9] },
     ]
-    testCases.forEach(({ pageIndex, pagesCount, expected }) => {
-      expect(getAdjacentIndexes(pageIndex, pagesCount, true)).toEqual(expected)
+    testCases.forEach(({
+      pageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getAdjacentIndexes({
+        pageIndex,
+        pagesCount,
+        infinite: true,
+      })).toEqual(expected)
     })
   })
   it('returns indexes as expected if not infinite', () => {
@@ -140,8 +198,16 @@ describe('getAdjacentIndexes', () => {
       { pageIndex: 9, pagesCount: 10, expected: [8, 9] },
       { pageIndex: 15, pagesCount: 10, expected: [8, 9] },
     ]
-    testCases.forEach(({ pageIndex, pagesCount, expected }) => {
-      expect(getAdjacentIndexes(pageIndex, pagesCount, false)).toEqual(expected)
+    testCases.forEach(({
+      pageIndex,
+      pagesCount,
+      expected,
+    }) => {
+      expect(getAdjacentIndexes({
+        pageIndex,
+        pagesCount,
+        infinite: false,
+      })).toEqual(expected)
     })
   })
   it('throws error if pagesCount is less than 1', () => {
@@ -149,7 +215,11 @@ describe('getAdjacentIndexes', () => {
     const pagesCount = 0
     const infinite = true
     expect(
-      () => getAdjacentIndexes(pageIndex, pagesCount, infinite)
+      () => getAdjacentIndexes({
+        pageIndex,
+        pagesCount,
+        infinite,
+      })
     ).toThrowError('pagesCount must be at least 1')
   })
 })
