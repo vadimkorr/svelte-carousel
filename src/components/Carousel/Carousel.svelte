@@ -21,7 +21,6 @@
     getCurrentPageIndexWithoutClones,
     getPagesCountWithoutClones,
     getClonesCount,
-    getIsPartialOffset,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
@@ -292,14 +291,6 @@
       // _duration is an offset animation time
       _duration = animated ? duration : 0
 
-      const isPartialOffset = getIsPartialOffset({
-        pagesCountWithoutClones,
-        headClonesCount: clonesCount.head,
-        pagesToScroll,
-        currentPageIndexWithoutClones,
-      })
-      console.log('isPartialOffset', isPartialOffset)
-
       offset = -currentPageIndex * pageWidth
 
       setTimeout(() => {
@@ -315,7 +306,7 @@
       if (currentPageIndex === 0) {
         await showPage(pagesCount - clonesCount.total, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - clonesCount.head ) {
+      } else if (currentPageIndex === pagesCount - clonesCount.tail) {
         await showPage(clonesCount.head, { animated: false })
         jumped = true
       }
@@ -363,6 +354,7 @@
         infinite,
         pagesCount,
         pagesToScroll,
+        clonesCountTail: clonesCount.tail,
       }),
       options,
     )

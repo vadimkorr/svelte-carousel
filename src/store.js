@@ -40,12 +40,14 @@ function createStore() {
     infinite,
     pagesCount,
     pagesToScroll,
+    clonesCountTail,
   }) {
     update(store => {
       const newCurrentPageIndex = getNextPageIndexFn(infinite)({
         currentPageIndex: store.currentPageIndex,
         pagesCount,
         pagesToScroll,
+        clonesCountTail,
       })
       return {
         ...store,

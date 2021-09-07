@@ -2,6 +2,7 @@ export function getNextPageIndexLimited({
   currentPageIndex,
   pagesCount,
   pagesToScroll,
+  clonesCountTail,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   return Math.min(Math.max(currentPageIndex + pagesToScroll, 0), pagesCount - 1)
@@ -11,9 +12,10 @@ export function getNextPageIndexInfinte({
   currentPageIndex,
   pagesCount,
   pagesToScroll,
+  clonesCountTail,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + pagesToScroll
+  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + Math.min(pagesCount - clonesCountTail - currentPageIndex, pagesToScroll)
   return newCurrentPageIndex > pagesCount - 1 ? 0 : Math.max(newCurrentPageIndex, 0)
 }
 
@@ -36,7 +38,7 @@ export function getPrevPageIndexInfinte({
   pagesToScroll,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - pagesToScroll
+  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - Math.min(currentPageIndex, pagesToScroll)
   return newCurrentPageIndex >= 0 ? Math.min(newCurrentPageIndex, pagesCount - 1) : pagesCount - 1
 }
 
@@ -168,7 +170,6 @@ export function getPagesCountWithoutClones({
 
 export function getClonesCount({
   infinite,
-  // pagesToScroll,
   pagesToShow,
   partialPageSize,
 }) {
@@ -190,16 +191,3 @@ export function getClonesCount({
     total: clonesCount.head + clonesCount.tail,
   }
 }
-
-export function getIsPartialOffset({
-  pagesCountWithoutClones,
-  headClonesCount,
-  pagesToScroll,
-  currentPageIndexWithoutClones,
-}) {
-  return (
-    pagesCountWithoutClones + headClonesCount ===
-    currentPageIndexWithoutClones + pagesToScroll
-  )
-}
-
