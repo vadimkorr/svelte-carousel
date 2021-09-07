@@ -20,12 +20,13 @@
     applyPageSizes,
     getCurrentPageIndexWithoutClones,
     getPagesCountWithoutClones,
-    getOneSideClonesCount,
+    getClonesCount,
+    getIsPartialOffset,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
-  import { getIsOdd } from '../../utils/math'
+  import { getIsOdd, getPartialPageSize } from '../../utils/math'
 
   const dispatch = createEventDispatcher()
 
@@ -120,7 +121,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(pageIndex * pagesToScroll + oneSideClonesCount, { animated })
+    await showPage(pageIndex * pagesToScroll + clonesCount.head, { animated })
   }
 
   export async function goToPrev(options) {
@@ -134,29 +135,28 @@
   }
 
   let store = createStore()
-  let oneSideClonesCount = getOneSideClonesCount({
+
+  $: clonesCount = getClonesCount({
     infinite,
-    pagesToScroll,
     pagesToShow,
+    partialPageSize,
   })
 
   let currentPageIndex = 0
   $: currentPageIndexWithoutClones = getCurrentPageIndexWithoutClones({
     currentPageIndex,
     pagesCount,
-    oneSideClonesCount,
+    headClonesCount: clonesCount.head,
     infinite,
     pagesToScroll,
   })
   $: dispatch('pageChange', currentPageIndexWithoutClones)
 
   let pagesCount = 0
-  $: pagesCountWithoutClones = getPagesCountWithoutClones({
-    pagesCount,
-    infinite,
-    oneSideClonesCount,
-    pagesToScroll,
-  })
+  let pagesCountWithoutClones = 1
+  $: scrollsCount = Math.ceil(pagesCountWithoutClones / pagesToScroll)
+
+  let partialPageSize = 0
 
   let pagesWindowWidth = 0
   let pageWidth = 0
@@ -204,18 +204,20 @@
     pagesWindowWidth = sizes.pagesWindowWidth
     pageWidth = sizes.pageWidth
     pagesCount = sizes.pagesCount
- 
+
     offsetPage({
       animated: false,
     })
   }
   
   function addClones() {
+    console.log('addClones', clonesCount)
     const {
       clonesToAppend,
       clonesToPrepend,
     } = getClones({
-      oneSideClonesCount,
+      headClonesCount: clonesCount.head,
+      tailClonesCount: clonesCount.tail,
       pagesContainerChildren: pagesContainer.children,
     })
     applyClones({
@@ -253,13 +255,20 @@
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesContainer && pageWindowElement) {
+        pagesCountWithoutClones = pagesContainer.children.length
+
+        partialPageSize = getPartialPageSize({
+          pagesToScroll,
+          pagesToShow,
+          pagesCountWithoutClones,
+        })
         // load first and last child to clone them
         // TODO: update
         loaded = [0, pagesContainer.children.length - 1]
         await tick()
         infinite && addClones()
 
-        store.init(initialPageIndex + oneSideClonesCount)
+        store.init(initialPageIndex + clonesCount.head)
         initPageSizes()
       }
 
@@ -273,7 +282,7 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(pageIndex * pagesToScroll + oneSideClonesCount)
+    await showPage(pageIndex * pagesToScroll + clonesCount.head)
   }
 
   function offsetPage(options) {
@@ -282,6 +291,15 @@
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
+
+      const isPartialOffset = getIsPartialOffset({
+        pagesCountWithoutClones,
+        headClonesCount: clonesCount.head,
+        pagesToScroll,
+        currentPageIndexWithoutClones,
+      })
+      console.log('isPartialOffset', isPartialOffset)
+
       offset = -currentPageIndex * pageWidth
 
       setTimeout(() => {
@@ -294,11 +312,11 @@
   async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
-      if (currentPageIndex === 0) { // oneSideClonesCount - 1) {
-        await showPage(pagesCount - 2 * oneSideClonesCount, { animated: false })
+      if (currentPageIndex === 0) {
+        await showPage(pagesCount - clonesCount.total, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - oneSideClonesCount ) {
-        await showPage(oneSideClonesCount, { animated: false })
+      } else if (currentPageIndex === pagesCount - clonesCount.head ) {
+        await showPage(clonesCount.head, { animated: false })
         jumped = true
       }
     }
@@ -446,9 +464,9 @@
       showPage={handlePageChange}
     >
     {currentPageIndex}/{pagesCount};
-    {currentPageIndexWithoutClones}/{pagesCountWithoutClones}
+    {currentPageIndexWithoutClones}/{scrollsCount}
       <Dots
-        pagesCount={pagesCountWithoutClones}
+        pagesCount={scrollsCount}
         currentPageIndex={currentPageIndexWithoutClones}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>

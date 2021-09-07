@@ -17,11 +17,15 @@ export function getIsOdd(num) {
 
 // TODO: refactor pagesToShow <= pagesToScroll
 // TODO: think about case if pagesCount < pagesToShow and pagesCount < pagesToScroll
+
+// TODO: math to page
 export function getPartialPageSize({
   pagesToScroll,
   pagesToShow,
-  pagesCount
+  pagesCountWithoutClones
 }) {
+
+  console.log('getPartialPageSize ==>', pagesToScroll, pagesToShow, pagesCountWithoutClones)
 
   if (pagesToShow <= pagesToScroll) {
     const overlap = pagesToShow - pagesToScroll
@@ -35,7 +39,7 @@ export function getPartialPageSize({
       // let fp = _pages - overlap
       _pages = _pages - overlap + d
       // console.log('pages', _pages)
-      const diff = pagesCount - _pages
+      const diff = pagesCountWithoutClones - _pages
       if (diff < pagesToShow) {
         // console.log('diff', diff)
         // console.log('pagesToShow - diff', pagesToShow - Math.abs(diff) - overlap)
@@ -55,7 +59,7 @@ export function getPartialPageSize({
     console.log('pages', _pages)
   
     while(true) {
-      const diff = pagesCount - _pages + overlap
+      const diff = pagesCountWithoutClones - _pages + overlap
       if (diff < pagesToShow) {
         return diff
       }

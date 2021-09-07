@@ -75,18 +75,19 @@ export function getAdjacentIndexes({
 }
 
 export function getClones({
-  oneSideClonesCount,
+  headClonesCount,
+  tailClonesCount,
   pagesContainerChildren,
 }) {
   // TODO: add fns to remove clones if needed
   const clonesToAppend = []
-  for (let i=0; i<oneSideClonesCount; i++) {
+  for (let i=0; i<tailClonesCount; i++) {
     clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
   }
 
   const clonesToPrepend = []
   const len = pagesContainerChildren.length
-  for (let i=len-1; i>len-1-oneSideClonesCount; i--) {
+  for (let i=len-1; i>len-1-headClonesCount; i--) {
     clonesToPrepend.push(pagesContainerChildren[i].cloneNode(true))
   }
 
@@ -101,6 +102,8 @@ export function applyClones({
   clonesToAppend,
   clonesToPrepend,
 }) {
+  console.log('clonesToPrepend', clonesToPrepend.length)
+  console.log('clonesToAppend', clonesToAppend.length)
   for (let i=0; i<clonesToAppend.length; i++) {
     pagesContainer.append(clonesToAppend[i])
   }
@@ -138,14 +141,14 @@ export function applyPageSizes({
 export function getCurrentPageIndexWithoutClones({
   currentPageIndex,
   pagesCount,
-  oneSideClonesCount,
+  headClonesCount,
   infinite,
   pagesToScroll,
 }) {
   if (infinite) {
-    if (currentPageIndex === pagesCount - oneSideClonesCount) return 0
-    if (currentPageIndex === 0) return pagesCount - oneSideClonesCount
-    return Math.floor((currentPageIndex - oneSideClonesCount) / pagesToScroll)
+    if (currentPageIndex === pagesCount - headClonesCount) return 0
+    if (currentPageIndex === 0) return pagesCount - headClonesCount
+    return Math.floor((currentPageIndex - headClonesCount) / pagesToScroll)
   }
   return currentPageIndex
 }
@@ -153,23 +156,50 @@ export function getCurrentPageIndexWithoutClones({
 export function getPagesCountWithoutClones({
   pagesCount,
   infinite,
-  oneSideClonesCount,
+  totalClonesCount,
   pagesToScroll,
 }) {
-  const bothSidesClonesCount = oneSideClonesCount * 2
   return Math.max(
     Math.ceil(
-      (pagesCount - (infinite ? bothSidesClonesCount : 0)) / pagesToScroll
+      (pagesCount - (infinite ? totalClonesCount : 0)) / pagesToScroll
     ),
   1)
 }
 
-export function getOneSideClonesCount({
+export function getClonesCount({
   infinite,
-  pagesToScroll,
+  // pagesToScroll,
   pagesToShow,
+  partialPageSize,
 }) {
-  return infinite
-    ? Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
-    : 0
+  console.log('partialPageSize', partialPageSize)
+  // Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
+  const clonesCount = infinite
+    ? {
+      head: partialPageSize || pagesToShow,
+      tail: pagesToShow,
+    } : {
+      head: 0,
+      tail: 0,
+    }
+
+  console.log('partialPageSize', partialPageSize)
+
+  return {
+    ...clonesCount,
+    total: clonesCount.head + clonesCount.tail,
+  }
 }
+
+export function getIsPartialOffset({
+  pagesCountWithoutClones,
+  headClonesCount,
+  pagesToScroll,
+  currentPageIndexWithoutClones,
+}) {
+  return (
+    pagesCountWithoutClones + headClonesCount ===
+    currentPageIndexWithoutClones + pagesToScroll
+  )
+}
+
