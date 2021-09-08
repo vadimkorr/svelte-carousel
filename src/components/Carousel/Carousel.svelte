@@ -107,13 +107,12 @@
   /**
    * Number of pages to show 
    */
-  export let pagesToShow = 4 // 2 // 2 // 1 // 3
+  export let pagesToShow = 1
 
   /**
    * Number of pages to scroll 
    */
-  export let pagesToScroll = 3 // 2 // 1 // 1  // 2
-
+  export let pagesToScroll = 1
 
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
@@ -284,13 +283,10 @@
 
   function offsetPage(options) {
     const animated = get(options, 'animated', true)
-    // TODO: remove const pagesToScroll = get(options, 'pagesToScroll', 0)
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
-
       offset = -currentPageIndex * pageWidth
-
       setTimeout(() => {
         resolve()
       }, _duration)
@@ -453,8 +449,6 @@
       pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
-    {currentPageIndex}/{pagesCount};
-    {currentPageIndexWithoutClones}/{scrollsCount}
       <Dots
         pagesCount={scrollsCount}
         currentPageIndex={currentPageIndexWithoutClones}
