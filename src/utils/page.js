@@ -2,15 +2,10 @@ export function getNextPageIndexLimited({
   currentPageIndex,
   pagesCount,
   pagesToScroll,
-  clonesCountTail,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.min(
-    Math.max(currentPageIndex +
-      Math.min(pagesCount - clonesCountTail - currentPageIndex, pagesToScroll),
-    0),
-    pagesCount - 1
-  )
+  console.log('next',  pagesCount, currentPageIndex, pagesCount - currentPageIndex)
+  return currentPageIndex + Math.min(pagesCount - (currentPageIndex+1) - pagesToScroll, pagesToScroll)
 }
 
 export function getNextPageIndexInfinte({
@@ -160,7 +155,7 @@ export function getCurrentPageIndexWithoutClones({
     if (currentPageIndex === 0) return pagesCount - headClonesCount
     return Math.floor((currentPageIndex - headClonesCount) / pagesToScroll)
   }
-  return currentPageIndex
+  return Math.ceil(currentPageIndex / pagesToScroll)
 }
 
 export function getPagesCountWithoutClones({
@@ -213,4 +208,14 @@ export function getPartialPageSize({
     }
     _pages += pagesToShow + overlap
   }
+}
+
+export function getScrollsCount({
+  infinite,
+  pagesCountWithoutClones,
+  pagesToScroll,
+}) {
+  return infinite
+    ? Math.ceil(pagesCountWithoutClones / pagesToScroll)
+    : Math.round(pagesCountWithoutClones / pagesToScroll)
 }

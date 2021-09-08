@@ -22,6 +22,7 @@
     getPagesCountWithoutClones,
     getClonesCount,
     getPartialPageSize,
+    getScrollsCount,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
@@ -152,7 +153,11 @@
 
   let pagesCount = 0
   let pagesCountWithoutClones = 1
-  $: scrollsCount = Math.ceil(pagesCountWithoutClones / pagesToScroll)
+  $: scrollsCount = getScrollsCount({
+    infinite,
+    pagesCountWithoutClones,
+    pagesToScroll,
+  })
 
   let partialPageSize = 0
 
@@ -334,6 +339,7 @@
     )
   }
   async function showPrevPage(options) {
+    // TODO: return if disabled
     await changePage(
       () => store.prev({
         infinite,
@@ -344,6 +350,7 @@
     )
   }
   async function showNextPage(options) {
+    // TODO: return if disabled
     await changePage(
       () => store.next({
         infinite,
@@ -436,7 +443,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!infinite && currentPageIndexWithoutClones === pagesCountWithoutClones - 1}
+            disabled={!infinite && currentPageIndexWithoutClones === scrollsCount - 1}
             on:click={showNextPage}
           />
         </div>
