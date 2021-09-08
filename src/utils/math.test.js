@@ -23,96 +23,103 @@ describe('getPartialPageSize', () => {
 
   it('getPartialPageSize', () => {
     // ==== pagesToShow <= pagesToScroll
-    // const r1 = getPartialPageSize({
-    //   pagesCount: 15,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 5,
-    // })
-    // expect(r1).toBe(0)
+    const r0 = getPartialPageSize({
+      pagesCountWithoutClones: 9,
+      pagesToShow: 2,
+      pagesToScroll: 3,
+    })
+    expect(r0).toBe(0)
 
-    // const r2 = getPartialPageSize({
-    //   pagesCount: 16,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 5,
-    // })
-    // expect(r2).toBe(1)
+    const r1 = getPartialPageSize({
+      pagesCountWithoutClones: 15,
+      pagesToShow: 4,
+      pagesToScroll: 5,
+    })
+    expect(r1).toBe(0)
 
-    // const r3 = getPartialPageSize({
-    //   pagesCount: 17,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 5,
-    // })
-    // expect(r3).toBe(2)
+    const r2 = getPartialPageSize({
+      pagesCountWithoutClones: 16,
+      pagesToShow: 4,
+      pagesToScroll: 5,
+    })
+    expect(r2).toBe(1)
 
-    // const r4 = getPartialPageSize({
-    //   pagesCount: 18,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 5,
-    // })
-    // expect(r4).toBe(3)
+    const r3 = getPartialPageSize({
+      pagesCountWithoutClones: 17,
+      pagesToShow: 4,
+      pagesToScroll: 5,
+    })
+    expect(r3).toBe(2)
 
-    // const r5 = getPartialPageSize({
-    //   pagesCount: 8,
-    //   pagesToShow: 2,
-    //   pagesToScroll: 2,
-    // })
-    // expect(r5).toBe(0)
+    const r4 = getPartialPageSize({
+      pagesCountWithoutClones: 18,
+      pagesToShow: 4,
+      pagesToScroll: 5,
+    })
+    expect(r4).toBe(3)
+
+    const r5 = getPartialPageSize({
+      pagesCountWithoutClones: 8,
+      pagesToShow: 2,
+      pagesToScroll: 2,
+    })
+    expect(r5).toBe(0)
 
     // ====== pagesToScroll < pagesToShow
 
-    // const r6 = getPartialPageSize({
-    //   pagesCount: 8,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 2,
-    // })
-    // expect(r6).toBe(2)
+    const r6 = getPartialPageSize({
+      pagesCountWithoutClones: 8,
+      pagesToShow: 4,
+      pagesToScroll: 2,
+    })
+    expect(r6).toBe(2)
 
-    // const r7 = getPartialPageSize({
-    //   pagesCount: 7,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 3,
-    // })
-    // expect(r7).toBe(1)
+    const r7 = getPartialPageSize({
+      pagesCountWithoutClones: 7,
+      pagesToShow: 4,
+      pagesToScroll: 3,
+    })
+    expect(r7).toBe(1)
 
-    // const r8 = getPartialPageSize({
-    //   pagesCount: 8,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 3,
-    // })
-    // expect(r8).toBe(2)
+    const r8 = getPartialPageSize({
+      pagesCountWithoutClones: 8,
+      pagesToShow: 4,
+      pagesToScroll: 3,
+    })
+    expect(r8).toBe(2)
 
-    // const r9 = getPartialPageSize({
-    //   pagesCount: 8,
-    //   pagesToShow: 2,
-    //   pagesToScroll: 2,
-    // })
-    // expect(r9).toBe(0)
+    const r9 = getPartialPageSize({
+      pagesCountWithoutClones: 8,
+      pagesToShow: 2,
+      pagesToScroll: 2,
+    })
+    expect(r9).toBe(0)
 
-    // const r10 = getPartialPageSize({
-    //   pagesCount: 9,
-    //   pagesToShow: 4,
-    //   pagesToScroll: 3,
-    // })
-    // expect(r10).toBe(3)
+    const r10 = getPartialPageSize({
+      pagesCountWithoutClones: 9,
+      pagesToShow: 4,
+      pagesToScroll: 3,
+    })
+    expect(r10).toBe(3)
 
-    // const r11 = getPartialPageSize({
-    //   pagesCount: 8,
-    //   pagesToShow: 3,
-    //   pagesToScroll: 2,
-    // })
-    // expect(r11).toBe(2)
+    const r11 = getPartialPageSize({
+      pagesCountWithoutClones: 8,
+      pagesToShow: 3,
+      pagesToScroll: 2,
+    })
+    expect(r11).toBe(2)
 
-    
+
     const r12 = getPartialPageSize({
-      pagesCount: 6,
+      pagesCountWithoutClones: 6,
       pagesToShow: 3,
       pagesToScroll: 1,
     })
     expect(r12).toBe(2)
 
-    
+
     const r13 = getPartialPageSize({
-      pagesCount: 7,
+      pagesCountWithoutClones: 7,
       pagesToShow: 3,
       pagesToScroll: 1,
     })
