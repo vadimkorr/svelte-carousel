@@ -5,7 +5,12 @@ export function getNextPageIndexLimited({
   clonesCountTail,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.min(Math.max(currentPageIndex + pagesToScroll, 0), pagesCount - 1)
+  return Math.min(
+    Math.max(currentPageIndex +
+      Math.min(pagesCount - clonesCountTail - currentPageIndex, pagesToScroll),
+    0),
+    pagesCount - 1
+  )
 }
 
 export function getNextPageIndexInfinte({
@@ -29,7 +34,12 @@ export function getPrevPageIndexLimited({
   pagesToScroll,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.max(Math.min(currentPageIndex - pagesToScroll, pagesCount - 1), 0)
+  return Math.max(
+    Math.min(
+      currentPageIndex - Math.min(currentPageIndex, pagesToScroll),
+      pagesCount - 1
+    ),
+  0)
 }
 
 export function getPrevPageIndexInfinte({

@@ -264,7 +264,8 @@
         await tick()
         infinite && addClones()
 
-        store.init(initialPageIndex + clonesCount.head)
+        // TODO: validate initialPageIndex, initialPageIndex is an initialScrollIndex
+        store.init(initialPageIndex * pagesToScroll + clonesCount.head)
         initPageSizes()
       }
 
