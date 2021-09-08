@@ -104,8 +104,6 @@ export function applyClones({
   clonesToAppend,
   clonesToPrepend,
 }) {
-  console.log('clonesToPrepend', clonesToPrepend.length)
-  console.log('clonesToAppend', clonesToAppend.length)
   for (let i=0; i<clonesToAppend.length; i++) {
     pagesContainer.append(clonesToAppend[i])
   }
@@ -173,7 +171,6 @@ export function getClonesCount({
   pagesToShow,
   partialPageSize,
 }) {
-  console.log('partialPageSize', partialPageSize)
   // Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
   const clonesCount = infinite
     ? {
@@ -184,10 +181,26 @@ export function getClonesCount({
       tail: 0,
     }
 
-  console.log('partialPageSize', partialPageSize)
-
   return {
     ...clonesCount,
     total: clonesCount.head + clonesCount.tail,
+  }
+}
+
+// TODO: think about case if pagesCount < pagesToShow and pagesCount < pagesToScroll
+export function getPartialPageSize({
+  pagesToScroll,
+  pagesToShow,
+  pagesCountWithoutClones
+}) {
+  const overlap = pagesToScroll - pagesToShow
+  let _pages = pagesToShow
+
+  while(true) {
+    const diff = pagesCountWithoutClones - _pages - overlap
+    if (diff < pagesToShow) {
+      return diff
+    }
+    _pages += pagesToShow + overlap
   }
 }

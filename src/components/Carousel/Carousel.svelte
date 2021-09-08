@@ -21,11 +21,11 @@
     getCurrentPageIndexWithoutClones,
     getPagesCountWithoutClones,
     getClonesCount,
+    getPartialPageSize,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
-  import { getIsOdd, getPartialPageSize } from '../../utils/math'
 
   const dispatch = createEventDispatcher()
 
@@ -210,7 +210,6 @@
   }
   
   function addClones() {
-    console.log('addClones', clonesCount)
     const {
       clonesToAppend,
       clonesToPrepend,
@@ -250,7 +249,6 @@
       await tick()
       cleanupFns.push(store.subscribe(value => {
         currentPageIndex = value.currentPageIndex
-        console.log('currentPageIndex', currentPageIndex)
       }))
       cleanupFns.push(() => progressManager.reset())
       if (pagesContainer && pageWindowElement) {
