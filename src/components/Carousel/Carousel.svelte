@@ -18,12 +18,13 @@
     applyClones,
     getPageSizes,
     applyPageSizes,
-    getCurrentPageIndexWithoutClones,
+    getCurrentScrollIndex,
     getPagesCountWithoutClones,
     getClonesCount,
     getPartialPageSize,
     getScrollsCount,
     getPageIndexByScrollIndex,
+    getIndexesOfPagesWithoutClonesInScroll,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
@@ -152,14 +153,14 @@
   })
 
   let currentPageIndex = 0
-  $: currentPageIndexWithoutClones = getCurrentPageIndexWithoutClones({
+  $: currentScrollIndex = getCurrentScrollIndex({
     currentPageIndex,
     pagesCount,
     headClonesCount: clonesCount.head,
     infinite,
     pagesToScroll,
   })
-  $: dispatch('pageChange', currentPageIndexWithoutClones)
+  $: dispatch('pageChange', currentScrollIndex)
 
   let pagesCount = 0
   let pagesCountWithoutClones = 1
@@ -198,10 +199,12 @@
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes({
-    pageIndex: currentPageIndexWithoutClones,
+    scrollIndex: currentScrollIndex,
+    scrollsCount,
     pagesCount: pagesCountWithoutClones,
-    infinite,
-  })
+    pagesToShow,
+    pagesToScroll,
+  }).pageIndexes
 
   function initPageSizes() {
     const sizes = getPageSizes({
@@ -274,8 +277,27 @@
           pagesCountWithoutClones,
         })
         // load first and last child to clone them
-        // TODO: update
-        loaded = [0, pagesContainer.children.length - 1]
+
+        scrollsCount = getScrollsCount({
+          infinite,
+          pagesCountWithoutClones,
+          pagesToScroll,
+        })
+
+        loaded = [
+          ...getIndexesOfPagesWithoutClonesInScroll({
+            scrollIndex: 0,
+            pagesToShow,
+            pagesToScroll,
+            pagesCount: pagesCountWithoutClones,
+          }),
+          ...getIndexesOfPagesWithoutClonesInScroll({
+            scrollIndex: scrollsCount - 1,
+            pagesToShow,
+            pagesToScroll,
+            pagesCount: pagesCountWithoutClones,
+          }),
+        ]
         await tick()
         infinite && addClones()
 
@@ -424,7 +446,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
-            disabled={!infinite && currentPageIndexWithoutClones === 0}
+            disabled={!infinite && currentScrollIndex === 0}
             on:click={showPrevPage}
           />
         </div>
@@ -468,7 +490,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!infinite && currentPageIndexWithoutClones === scrollsCount - 1}
+            disabled={!infinite && currentScrollIndex === scrollsCount - 1}
             on:click={showNextPage}
           />
         </div>
@@ -478,13 +500,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={currentPageIndexWithoutClones}
+      currentPageIndex={currentScrollIndex}
       pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
       <Dots
         pagesCount={scrollsCount}
-        currentPageIndex={currentPageIndexWithoutClones}
+        currentPageIndex={currentScrollIndex}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
     </slot>

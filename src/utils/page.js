@@ -59,26 +59,49 @@ export function getPageIndex({
   return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
 }
 
-export function getAdjacentIndexes({
-  pageIndex,
+export function getIndexesOfPagesWithoutClonesInScroll({
+  scrollIndex,
+  pagesToShow,
+  pagesToScroll,
   pagesCount,
-  infinite,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const _pageIndex = Math.max(0, Math.min(pageIndex, pagesCount - 1))
-  let rangeStart = _pageIndex - 1;
-  let rangeEnd = _pageIndex + 1;
-  rangeStart = rangeStart < 0
-    ? infinite
-      ? pagesCount - 1
-      : 0
-    : rangeStart 
-  rangeEnd = rangeEnd > pagesCount - 1
-    ? infinite
-        ? 0
-        : pagesCount - 1
-    : rangeEnd
-  return [...new Set([rangeStart, rangeEnd, _pageIndex])].sort((a, b) => a - b)
+  const overlap = scrollIndex === 0 ? 0 : pagesToShow - pagesToScroll
+  const from = scrollIndex * pagesToShow - scrollIndex * overlap
+  const to = from + Math.max(pagesToShow, pagesToScroll) - 1
+  console.log('=======>', from, to)
+  const indexes = []
+  for (let i=from; i<=Math.min(pagesCount - 1, to); i++) {
+    indexes.push(i)
+  }
+  return indexes
+}
+
+export function getAdjacentIndexes({
+  scrollIndex,
+  scrollsCount,
+  pagesCount,
+  pagesToShow,
+  pagesToScroll,
+}) {
+  // not checking is infinite or not, as first and last scrolls are always shown to be cloned
+  const _scrollIndex = Math.max(0, Math.min(scrollIndex, scrollsCount - 1))
+  const rangeStart = Math.max(0, _scrollIndex - 1)
+  const rangeEnd = Math.min(_scrollIndex + 1, scrollsCount - 1)
+
+  const scrollIndexes = [...new Set([rangeStart, rangeEnd, _scrollIndex])].sort((a, b) => a - b)
+  const pageIndexes = []
+  scrollIndexes.forEach(scrollIndex => pageIndexes.push(
+    ...getIndexesOfPagesWithoutClonesInScroll({
+      scrollIndex,
+      pagesToShow,
+      pagesToScroll,
+      pagesCount,
+    })
+  ))
+  return {
+    scrollIndexes,
+    pageIndexes: [...new Set(pageIndexes)].sort((a, b) => a - b),
+  }
 }
 
 export function getClones({
@@ -143,7 +166,7 @@ export function applyPageSizes({
   }
 }
 
-export function getCurrentPageIndexWithoutClones({
+export function getCurrentScrollIndex({
   currentPageIndex,
   pagesCount,
   headClonesCount,
