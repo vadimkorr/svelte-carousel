@@ -281,7 +281,7 @@
         await tick()
         infinite && addClones()
 
-        initPageSizes()
+        
         
         // TODO: validate initialScrollIndex
         store.init(getPageIndexByScrollIndex({
@@ -292,6 +292,8 @@
           pagesCount,
           pagesToShow,
         }))
+
+        initPageSizes()
       }
 
       addResizeEventListener(initPageSizes)

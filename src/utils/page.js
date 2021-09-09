@@ -88,32 +88,30 @@ export function getAdjacentIndexes({
 
   let rangeStart = _scrollIndex - 1
   let rangeEnd = _scrollIndex + 1
-  rangeStart = rangeStart < 0
-    ? infinite
-      ? scrollsCount - 1
-      : 0
-    : rangeStart 
-  rangeEnd = rangeEnd > scrollsCount - 1
-    ? infinite
-        ? 0
-        : scrollsCount - 1
-    : rangeEnd
+
+  rangeStart = infinite
+    ? rangeStart < 0 ? scrollsCount - 1 : rangeStart
+    : Math.max(0, rangeStart)
+
+  rangeEnd = infinite
+    ? rangeEnd > scrollsCount - 1 ? 0 : rangeEnd
+    : Math.min(scrollsCount - 1, rangeEnd)
 
   const scrollIndexes = [...new Set([
     rangeStart,
     _scrollIndex,
     rangeEnd,
+    0, // needed to clone first scroll pages
     scrollsCount - 1, // needed to clone last scroll pages
   ])].sort((a, b) => a - b)
-  const pageIndexes = []
-  scrollIndexes.forEach(scrollIndex => pageIndexes.push(
-    ...getIndexesOfPagesWithoutClonesInScroll({
+  const pageIndexes = scrollIndexes.flatMap(
+    scrollIndex => getIndexesOfPagesWithoutClonesInScroll({
       scrollIndex,
       pagesToShow,
       pagesToScroll,
       pagesCount,
     })
-  ))
+  )
   return {
     scrollIndexes,
     pageIndexes: [...new Set(pageIndexes)].sort((a, b) => a - b),
