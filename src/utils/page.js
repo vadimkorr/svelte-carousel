@@ -219,3 +219,16 @@ export function getScrollsCount({
     ? Math.ceil(pagesCountWithoutClones / pagesToScroll)
     : Math.round(pagesCountWithoutClones / pagesToScroll)
 }
+
+export function getPageIndexByScrollIndex({
+  infinite,
+  scrollIndex,
+  clonesCountHead,
+  pagesToScroll,
+  pagesCount,
+  pagesToShow,
+}) {
+  return infinite
+    ? clonesCountHead + scrollIndex * pagesToScroll
+    : Math.min(scrollIndex * pagesToScroll, pagesCount - pagesToShow)
+}

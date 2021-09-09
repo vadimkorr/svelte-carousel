@@ -23,6 +23,7 @@
     getClonesCount,
     getPartialPageSize,
     getScrollsCount,
+    getPageIndexByScrollIndex,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
@@ -60,6 +61,7 @@
    * Page to start on
    */
   export let initialPageIndex = 0
+  $: initialScrollIndex = initialPageIndex
 
   /**
    * Transition duration (ms)
@@ -116,11 +118,19 @@
   export let pagesToScroll = 1
 
   export async function goTo(pageIndex, options) {
+    const scrollIndex = pageIndex
     const animated = get(options, 'animated', true)
-    if (typeof pageIndex !== 'number') {
+    if (typeof scrollIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(pageIndex * pagesToScroll + clonesCount.head, { animated })
+    await showPage(getPageIndexByScrollIndex({
+      infinite,
+      scrollIndex,
+      clonesCountHead: clonesCount.head,
+      pagesToScroll,
+      pagesCount,
+      pagesToShow,
+    }), { animated })
   }
 
   export async function goToPrev(options) {
@@ -269,9 +279,17 @@
         await tick()
         infinite && addClones()
 
-        // TODO: validate initialPageIndex, initialPageIndex is an initialScrollIndex
-        store.init(initialPageIndex * pagesToScroll + clonesCount.head)
         initPageSizes()
+        
+        // TODO: validate initialScrollIndex
+        store.init(getPageIndexByScrollIndex({
+          infinite,
+          scrollIndex: initialScrollIndex,
+          clonesCountHead: clonesCount.head,
+          pagesToScroll,
+          pagesCount,
+          pagesToShow,
+        }))
       }
 
       addResizeEventListener(initPageSizes)
@@ -284,7 +302,14 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(pageIndex * pagesToScroll + clonesCount.head)
+    await showPage(getPageIndexByScrollIndex({
+      infinite,
+      scrollIndex: pageIndex,
+      clonesCountHead: clonesCount.head,
+      pagesToScroll,
+      pagesCount,
+      pagesToShow,
+    }))
   }
 
   function offsetPage(options) {
