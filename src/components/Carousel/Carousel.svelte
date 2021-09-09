@@ -199,6 +199,7 @@
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes({
+    infinite,
     scrollIndex: currentScrollIndex,
     scrollsCount,
     pagesCount: pagesCountWithoutClones,
@@ -276,28 +277,7 @@
           pagesToShow,
           pagesCountWithoutClones,
         })
-        // load first and last child to clone them
 
-        scrollsCount = getScrollsCount({
-          infinite,
-          pagesCountWithoutClones,
-          pagesToScroll,
-        })
-
-        loaded = [
-          ...getIndexesOfPagesWithoutClonesInScroll({
-            scrollIndex: 0,
-            pagesToShow,
-            pagesToScroll,
-            pagesCount: pagesCountWithoutClones,
-          }),
-          ...getIndexesOfPagesWithoutClonesInScroll({
-            scrollIndex: scrollsCount - 1,
-            pagesToShow,
-            pagesToScroll,
-            pagesCount: pagesCountWithoutClones,
-          }),
-        ]
         await tick()
         infinite && addClones()
 

@@ -77,18 +77,34 @@ export function getIndexesOfPagesWithoutClonesInScroll({
 }
 
 export function getAdjacentIndexes({
+  infinite,
   scrollIndex,
   scrollsCount,
   pagesCount,
   pagesToShow,
   pagesToScroll,
 }) {
-  // not checking is infinite or not, as first and last scrolls are always shown to be cloned
   const _scrollIndex = Math.max(0, Math.min(scrollIndex, scrollsCount - 1))
-  const rangeStart = Math.max(0, _scrollIndex - 1)
-  const rangeEnd = Math.min(_scrollIndex + 1, scrollsCount - 1)
 
-  const scrollIndexes = [...new Set([rangeStart, rangeEnd, _scrollIndex])].sort((a, b) => a - b)
+  let rangeStart = _scrollIndex - 1
+  let rangeEnd = _scrollIndex + 1
+  rangeStart = rangeStart < 0
+    ? infinite
+      ? scrollsCount - 1
+      : 0
+    : rangeStart 
+  rangeEnd = rangeEnd > scrollsCount - 1
+    ? infinite
+        ? 0
+        : scrollsCount - 1
+    : rangeEnd
+
+  const scrollIndexes = [...new Set([
+    rangeStart,
+    _scrollIndex,
+    rangeEnd,
+    scrollsCount - 1, // needed to clone last scroll pages
+  ])].sort((a, b) => a - b)
   const pageIndexes = []
   scrollIndexes.forEach(scrollIndex => pageIndexes.push(
     ...getIndexesOfPagesWithoutClonesInScroll({
