@@ -13,19 +13,22 @@
     removeResizeEventListener
   } from '../../utils/event'
   import {
-    getAdjacentIndexes,
-    getClones,
-    applyClones,
     getPageSizes,
     applyPageSizes,
     getCurrentScrollIndex,
-    getPagesCountWithoutClones,
-    getClonesCount,
     getPartialPageSize,
     getScrollsCount,
     getPageIndexByScrollIndex,
-    getIndexesOfPagesWithoutClonesInScroll,
   } from '../../utils/page'
+  import {
+    getClones,
+    applyClones,
+    getPagesCountWithoutClones,
+    getClonesCount,
+  } from '../../utils/clones'
+  import {
+    getAdjacentIndexes,
+  } from '../../utils/lazy'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
@@ -281,8 +284,6 @@
         await tick()
         infinite && addClones()
 
-        
-        
         // TODO: validate initialScrollIndex
         store.init(getPageIndexByScrollIndex({
           infinite,

@@ -1,11 +1,14 @@
+import {
+  getValueInRange,
+} from './math'
+
 export function getNextPageIndexLimited({
   currentPageIndex,
   pagesCount,
   pagesToScroll,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  console.log('next',  pagesCount, currentPageIndex, pagesCount - currentPageIndex)
-  return currentPageIndex + Math.min(pagesCount - (currentPageIndex+1) - pagesToScroll, pagesToScroll)
+  return currentPageIndex + Math.min(pagesCount - (currentPageIndex + 1) - pagesToScroll, pagesToScroll)
 }
 
 export function getNextPageIndexInfinte({
@@ -29,12 +32,11 @@ export function getPrevPageIndexLimited({
   pagesToScroll,
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.max(
-    Math.min(
-      currentPageIndex - Math.min(currentPageIndex, pagesToScroll),
-      pagesCount - 1
-    ),
-  0)
+  return getValueInRange(
+    0,
+    currentPageIndex - Math.min(currentPageIndex, pagesToScroll),
+    pagesCount - 1
+  )
 }
 
 export function getPrevPageIndexInfinte({
@@ -57,101 +59,6 @@ export function getPageIndex({
 }) {
   if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
   return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
-}
-
-export function getIndexesOfPagesWithoutClonesInScroll({
-  scrollIndex,
-  pagesToShow,
-  pagesToScroll,
-  pagesCount,
-}) {
-  const overlap = scrollIndex === 0 ? 0 : pagesToShow - pagesToScroll
-  const from = scrollIndex * pagesToShow - scrollIndex * overlap
-  const to = from + Math.max(pagesToShow, pagesToScroll) - 1
-  console.log('=======>', from, to)
-  const indexes = []
-  for (let i=from; i<=Math.min(pagesCount - 1, to); i++) {
-    indexes.push(i)
-  }
-  return indexes
-}
-
-export function getAdjacentIndexes({
-  infinite,
-  scrollIndex,
-  scrollsCount,
-  pagesCount,
-  pagesToShow,
-  pagesToScroll,
-}) {
-  const _scrollIndex = Math.max(0, Math.min(scrollIndex, scrollsCount - 1))
-
-  let rangeStart = _scrollIndex - 1
-  let rangeEnd = _scrollIndex + 1
-
-  rangeStart = infinite
-    ? rangeStart < 0 ? scrollsCount - 1 : rangeStart
-    : Math.max(0, rangeStart)
-
-  rangeEnd = infinite
-    ? rangeEnd > scrollsCount - 1 ? 0 : rangeEnd
-    : Math.min(scrollsCount - 1, rangeEnd)
-
-  const scrollIndexes = [...new Set([
-    rangeStart,
-    _scrollIndex,
-    rangeEnd,
-    0, // needed to clone first scroll pages
-    scrollsCount - 1, // needed to clone last scroll pages
-  ])].sort((a, b) => a - b)
-  const pageIndexes = scrollIndexes.flatMap(
-    scrollIndex => getIndexesOfPagesWithoutClonesInScroll({
-      scrollIndex,
-      pagesToShow,
-      pagesToScroll,
-      pagesCount,
-    })
-  )
-  return {
-    scrollIndexes,
-    pageIndexes: [...new Set(pageIndexes)].sort((a, b) => a - b),
-  }
-}
-
-export function getClones({
-  headClonesCount,
-  tailClonesCount,
-  pagesContainerChildren,
-}) {
-  // TODO: add fns to remove clones if needed
-  const clonesToAppend = []
-  for (let i=0; i<tailClonesCount; i++) {
-    clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
-  }
-
-  const clonesToPrepend = []
-  const len = pagesContainerChildren.length
-  for (let i=len-1; i>len-1-headClonesCount; i--) {
-    clonesToPrepend.push(pagesContainerChildren[i].cloneNode(true))
-  }
-
-  return {
-    clonesToAppend,
-    clonesToPrepend,
-  }
-}
-
-export function applyClones({
-  pagesContainer,
-  clonesToAppend,
-  clonesToPrepend,
-}) {
-  for (let i=0; i<clonesToAppend.length; i++) {
-    pagesContainer.append(clonesToAppend[i])
-  }
-  for (let i=0; i<clonesToPrepend.length; i++) {
-    pagesContainer.prepend(clonesToPrepend[i])
-  }
 }
 
 export function getPageSizes({
@@ -193,40 +100,6 @@ export function getCurrentScrollIndex({
     return Math.floor((currentPageIndex - headClonesCount) / pagesToScroll)
   }
   return Math.ceil(currentPageIndex / pagesToScroll)
-}
-
-export function getPagesCountWithoutClones({
-  pagesCount,
-  infinite,
-  totalClonesCount,
-  pagesToScroll,
-}) {
-  return Math.max(
-    Math.ceil(
-      (pagesCount - (infinite ? totalClonesCount : 0)) / pagesToScroll
-    ),
-  1)
-}
-
-export function getClonesCount({
-  infinite,
-  pagesToShow,
-  partialPageSize,
-}) {
-  // Math.max(pagesToScroll, pagesToShow) // max - show 4, scroll 3, pages 7
-  const clonesCount = infinite
-    ? {
-      head: partialPageSize || pagesToShow,
-      tail: pagesToShow,
-    } : {
-      head: 0,
-      tail: 0,
-    }
-
-  return {
-    ...clonesCount,
-    total: clonesCount.head + clonesCount.tail,
-  }
 }
 
 // TODO: think about case if pagesCount < pagesToShow and pagesCount < pagesToScroll
