@@ -17,18 +17,20 @@
     applyParticleSizes,
     getCurrentPageIndex,
     getPartialPageSize,
-    getPagesCount,
+    getPagesCountByParticlesCount,
     getParticleIndexByPageIndex,
   } from '../../utils/page'
   import {
     getClones,
     applyClones,
-    getPagesCountWithoutClones,
     getClonesCount,
   } from '../../utils/clones'
   import {
     getAdjacentIndexes,
   } from '../../utils/lazy'
+  import {
+    getValueInRange,
+  } from '../../utils/math'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
@@ -164,10 +166,10 @@
   $: dispatch('pageChange', currentPageIndex)
 
   let particlesCount = 0
-  let pagesCountWithoutClones = 1
-  $: pagesCount = getPagesCount({
+  let particlesCountWithoutClones = 1
+  $: pagesCount = getPagesCountByParticlesCount({
     infinite,
-    pagesCountWithoutClones,
+    particlesCountWithoutClones,
     particlesToScroll,
   })
 
@@ -203,7 +205,7 @@
     infinite,
     pageIndex: currentPageIndex,
     pagesCount,
-    particlesCount: pagesCountWithoutClones,
+    particlesCount: particlesCountWithoutClones,
     particlesToShow,
     particlesToScroll,
   }).particleIndexes
@@ -271,18 +273,21 @@
       }))
       cleanupFns.push(() => progressManager.reset())
       if (particlesContainer && pageWindowElement) {
-        pagesCountWithoutClones = particlesContainer.children.length
+        particlesCountWithoutClones = particlesContainer.children.length
+
+        particlesToShow = getValueInRange(1, particlesToShow, particlesCountWithoutClones)
+        particlesToScroll = getValueInRange(1, particlesToScroll, particlesCountWithoutClones)
+        initialPageIndex = getValueInRange(0, initialPageIndex, particlesCountWithoutClones - 1)
 
         partialPageSize = getPartialPageSize({
           particlesToScroll,
           particlesToShow,
-          pagesCountWithoutClones,
+          particlesCountWithoutClones,
         })
 
         await tick()
         infinite && addClones()
 
-        // TODO: validate initialPageIndex
         store.init(getParticleIndexByPageIndex({
           infinite,
           pageIndex: initialPageIndex,
@@ -482,7 +487,7 @@
     <slot
       name="dots"
       currentPageIndex={currentPageIndex}
-      pagesCount={pagesCountWithoutClones}
+      pagesCount={pagesCount}
       showPage={handlePageChange}
     >
       <Dots

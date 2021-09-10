@@ -101,13 +101,13 @@ export function getCurrentPageIndex({
 export function getPartialPageSize({
   particlesToScroll,
   particlesToShow,
-  pagesCountWithoutClones, // TODO: rename 
+  particlesCountWithoutClones, 
 }) {
   const overlap = particlesToScroll - particlesToShow
   let particlesCount = particlesToShow
 
   while(true) {
-    const diff = pagesCountWithoutClones - particlesCount - overlap
+    const diff = particlesCountWithoutClones - particlesCount - overlap
     if (diff < particlesToShow) {
       return diff
     }
@@ -115,14 +115,14 @@ export function getPartialPageSize({
   }
 }
 
-export function getPagesCount({
+export function getPagesCountByParticlesCount({
   infinite,
-  pagesCountWithoutClones,
+  particlesCountWithoutClones,
   particlesToScroll,
 }) {
   return infinite
-    ? Math.ceil(pagesCountWithoutClones / particlesToScroll)
-    : Math.round(pagesCountWithoutClones / particlesToScroll)
+    ? Math.ceil(particlesCountWithoutClones / particlesToScroll)
+    : Math.round(particlesCountWithoutClones / particlesToScroll)
 }
 
 export function getParticleIndexByPageIndex({
