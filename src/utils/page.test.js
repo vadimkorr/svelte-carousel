@@ -3,7 +3,6 @@ import {
   getNextParticleIndexInfinte,
   getPrevParticleIndexLimited,
   getPrevParticleIndexInfinte,
-  getAdjacentIndexes,
   getPartialPageSize,
 } from './page.js'
 
