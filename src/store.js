@@ -2,74 +2,73 @@ import {
   writable,
 } from 'svelte/store';
 import {
-  getNextPageIndexFn,
-  getPrevPageIndexFn,
-  getPageIndex,
+  getNextParticleIndexFn,
+  getPrevParticleIndexFn,
 } from './utils/page'
+import {
+  getValueInRange,
+} from './utils/math'
 
 const initState = {
-  currentPageIndex: 0,
+  currentParticleIndex: 0,
 }
 
 function createStore() {
   const { subscribe, set, update } = writable(initState);
 
-  function init(initialPageIndex) {
+  function init(initialParticleIndex) {
     set({
       ...initState,
-      currentPageIndex: initialPageIndex,
+      currentParticleIndex: initialParticleIndex,
     })
   }
 
-  function moveToPage({
-    pageIndex,
-    pagesCount,
+  function moveToParticle({
+    particleIndex,
+    particlesCount,
   }) {
     update(store => {
       return {
         ...store,
-        currentPageIndex: getPageIndex({
-          pageIndex,
-          pagesCount,
-        }),
+        currentParticleIndex: getValueInRange(0, particleIndex, particlesCount - 1),
       }
     })
   }
 
   function next({
     infinite,
-    pagesCount,
-    pagesToScroll,
+    particlesCount,
+    particlesToScroll,
     clonesCountTail,
   }) {
     update(store => {
-      const newCurrentPageIndex = getNextPageIndexFn(infinite)({
-        currentPageIndex: store.currentPageIndex,
-        pagesCount,
-        pagesToScroll,
+      const newCurrentParticleIndex = getNextParticleIndexFn(infinite)({
+        currentParticleIndex: store.currentParticleIndex,
+        particlesCount,
+        particlesToScroll,
         clonesCountTail,
       })
       return {
         ...store,
-        currentPageIndex: newCurrentPageIndex,
+        currentParticleIndex: newCurrentParticleIndex,
       }
     })
   }
 
   function prev({
     infinite,
-    pagesCount,
-    pagesToScroll,
+    particlesCount,
+    particlesToScroll,
   }) {
     update(store => {
-      const newCurrentPageIndex = getPrevPageIndexFn(infinite)({
-        currentPageIndex: store.currentPageIndex,
-        pagesCount,
-        pagesToScroll,
+      const newCurrentParticleIndex = getPrevParticleIndexFn(infinite)({
+        currentParticleIndex: store.currentParticleIndex,
+        particlesCount,
+        particlesToScroll,
       })
       return {
         ...store,
-        currentPageIndex: newCurrentPageIndex,
+        currentParticleIndex: newCurrentParticleIndex,
       }
     })
   }
@@ -79,7 +78,7 @@ function createStore() {
     next,
     prev,
     init,
-    moveToPage,
+    moveToParticle,
   };
 }
 

@@ -4,68 +4,68 @@ import {
 } from './lazy.js'
 
 describe('getIndexesOfPagesWithoutClonesInScroll', () => {
-  it('returns correct range if pagesToShow < pagesToScroll', () => {
+  it('returns correct range if particlesToShow < particlesToScroll', () => {
     const testCases = [
-      { scrollIndex: 0, pagesToShow: 3, pagesCount: 9, pagesToScroll: 4, expected: [0, 1, 2, 3] },
-      { scrollIndex: 1, pagesToShow: 3, pagesCount: 9, pagesToScroll: 4, expected: [4, 5, 6, 7] },
-      { scrollIndex: 2, pagesToShow: 3, pagesCount: 9, pagesToScroll: 4, expected: [8] },
+      { pageIndex: 0, particlesToShow: 3, particlesCount: 9, particlesToScroll: 4, expected: [0, 1, 2, 3] },
+      { pageIndex: 1, particlesToShow: 3, particlesCount: 9, particlesToScroll: 4, expected: [4, 5, 6, 7] },
+      { pageIndex: 2, particlesToShow: 3, particlesCount: 9, particlesToScroll: 4, expected: [8] },
     ]
     testCases.forEach(({
-      scrollIndex,
-      pagesToShow,
-      pagesToScroll,
-      pagesCount,
+      pageIndex,
+      particlesToShow,
+      particlesToScroll,
+      particlesCount,
       expected,
     }) => {
       expect(getIndexesOfPagesWithoutClonesInScroll({
-        scrollIndex,
-        pagesToShow,
-        pagesToScroll,
-        pagesCount,
+        pageIndex,
+        particlesToShow,
+        particlesToScroll,
+        particlesCount,
       })).toEqual(expected)
     })
   })
 
-  it('returns correct range if pagesToShow > pagesToScroll', () => {
+  it('returns correct range if particlesToShow > particlesToScroll', () => {
     const testCases = [
-      { scrollIndex: 0, pagesToShow: 4, pagesToScroll: 3, pagesCount: 8, expected: [0, 1, 2, 3] },
-      { scrollIndex: 1, pagesToShow: 4, pagesToScroll: 3, pagesCount: 8, expected: [3, 4, 5, 6] },
-      { scrollIndex: 2, pagesToShow: 4, pagesToScroll: 3, pagesCount: 8, expected: [6, 7] },
+      { pageIndex: 0, particlesToShow: 4, particlesToScroll: 3, particlesCount: 8, expected: [0, 1, 2, 3] },
+      { pageIndex: 1, particlesToShow: 4, particlesToScroll: 3, particlesCount: 8, expected: [3, 4, 5, 6] },
+      { pageIndex: 2, particlesToShow: 4, particlesToScroll: 3, particlesCount: 8, expected: [6, 7] },
     ]
     testCases.forEach(({
-      scrollIndex,
-      pagesToShow,
-      pagesToScroll,
-      pagesCount,
+      pageIndex,
+      particlesToShow,
+      particlesToScroll,
+      particlesCount,
       expected,
     }) => {
       expect(getIndexesOfPagesWithoutClonesInScroll({
-        scrollIndex,
-        pagesToShow,
-        pagesToScroll,
-        pagesCount,
+        pageIndex,
+        particlesToShow,
+        particlesToScroll,
+        particlesCount,
       })).toEqual(expected)
     })
   })
 
-  it('returns correct range if pagesToShow == pagesToScroll', () => {
+  it('returns correct range if particlesToShow == particlesToScroll', () => {
     const testCases = [
-      { scrollIndex: 0, pagesToShow: 2, pagesToScroll: 2, pagesCount: 5, expected: [0, 1] },
-      { scrollIndex: 1, pagesToShow: 2, pagesToScroll: 2, pagesCount: 5, expected: [2, 3] },
-      { scrollIndex: 2, pagesToShow: 2, pagesToScroll: 2, pagesCount: 5, expected: [4] },
+      { pageIndex: 0, particlesToShow: 2, particlesToScroll: 2, particlesCount: 5, expected: [0, 1] },
+      { pageIndex: 1, particlesToShow: 2, particlesToScroll: 2, particlesCount: 5, expected: [2, 3] },
+      { pageIndex: 2, particlesToShow: 2, particlesToScroll: 2, particlesCount: 5, expected: [4] },
     ]
     testCases.forEach(({
-      scrollIndex,
-      pagesToShow,
-      pagesToScroll,
-      pagesCount,
+      pageIndex,
+      particlesToShow,
+      particlesToScroll,
+      particlesCount,
       expected,
     }) => {
       expect(getIndexesOfPagesWithoutClonesInScroll({
-        scrollIndex,
-        pagesToShow,
-        pagesToScroll,
-        pagesCount,
+        pageIndex,
+        particlesToShow,
+        particlesToScroll,
+        particlesCount,
       })).toEqual(expected)
     })
   })
@@ -75,87 +75,87 @@ describe('getAdjacentIndexes', () => {
   it('returns indexes as expected if it is infinite', () => {
     const testCases = [
       {
-        scrollIndex: 0,
-        scrollsCount: 2,
-        pagesCount: 4,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 0,
+        pagesCount: 2,
+        particlesCount: 4,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1],
-          pageIndexes: [0, 1, 2, 3],
+          pageIndexes: [0, 1],
+          particleIndexes: [0, 1, 2, 3],
         },
       },
       {
-        scrollIndex: -5,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: -5,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1, 4],
-          pageIndexes: [0, 1, 2, 3, 8, 9],
+          pageIndexes: [0, 1, 4],
+          particleIndexes: [0, 1, 2, 3, 8, 9],
         },
       },
       {
-        scrollIndex: 0,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 0,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes:  [0, 1, 4],
-          pageIndexes: [0, 1, 2, 3, 8, 9],
+          pageIndexes:  [0, 1, 4],
+          particleIndexes: [0, 1, 2, 3, 8, 9],
         },
       },
       {
-        scrollIndex: 2,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 2,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1, 2, 3, 4],
-          pageIndexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+          pageIndexes: [0, 1, 2, 3, 4],
+          particleIndexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         },
       },
       {
-        scrollIndex: 4,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 4,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 3, 4],
-          pageIndexes: [0, 1, 6, 7, 8, 9],
+          pageIndexes: [0, 3, 4],
+          particleIndexes: [0, 1, 6, 7, 8, 9],
         },
       },
       {
-        scrollIndex: 15,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 15,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 3, 4],
-          pageIndexes: [0, 1, 6, 7, 8, 9],
+          pageIndexes: [0, 3, 4],
+          particleIndexes: [0, 1, 6, 7, 8, 9],
         },
       },
     ]
     testCases.forEach(({
-      scrollIndex,
-      scrollsCount,
+      pageIndex,
       pagesCount,
-      pagesToShow,
-      pagesToScroll,
+      particlesCount,
+      particlesToShow,
+      particlesToScroll,
       expected,
     }) => {
       expect(getAdjacentIndexes({
         infinite: true,
-        scrollIndex,
-        scrollsCount,
+        pageIndex,
         pagesCount,
-        pagesToShow,
-        pagesToScroll,
+        particlesCount,
+        particlesToShow,
+        particlesToScroll,
       })).toEqual(expected)
     })
   })
@@ -163,87 +163,87 @@ describe('getAdjacentIndexes', () => {
   it('returns indexes as expected if it is not infinite', () => {
     const testCases = [
       {
-        scrollIndex: 0,
-        scrollsCount: 2,
-        pagesCount: 4,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 0,
+        pagesCount: 2,
+        particlesCount: 4,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1],
-          pageIndexes: [0, 1, 2, 3],
+          pageIndexes: [0, 1],
+          particleIndexes: [0, 1, 2, 3],
         },
       },
       {
-        scrollIndex: -5,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: -5,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1, 4],
-          pageIndexes: [0, 1, 2, 3, 8, 9],
+          pageIndexes: [0, 1, 4],
+          particleIndexes: [0, 1, 2, 3, 8, 9],
         },
       },
       {
-        scrollIndex: 0,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 0,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes:  [0, 1, 4],
-          pageIndexes: [0, 1, 2, 3, 8, 9],
+          pageIndexes:  [0, 1, 4],
+          particleIndexes: [0, 1, 2, 3, 8, 9],
         },
       },
       {
-        scrollIndex: 2,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 2,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 1, 2, 3, 4],
-          pageIndexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+          pageIndexes: [0, 1, 2, 3, 4],
+          particleIndexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         },
       },
       {
-        scrollIndex: 4,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 4,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 3, 4],
-          pageIndexes: [0, 1, 6, 7, 8, 9],
+          pageIndexes: [0, 3, 4],
+          particleIndexes: [0, 1, 6, 7, 8, 9],
         },
       },
       {
-        scrollIndex: 15,
-        scrollsCount: 5,
-        pagesCount: 10,
-        pagesToShow: 2,
-        pagesToScroll: 2,
+        pageIndex: 15,
+        pagesCount: 5,
+        particlesCount: 10,
+        particlesToShow: 2,
+        particlesToScroll: 2,
         expected: {
-          scrollIndexes: [0, 3, 4],
-          pageIndexes: [0, 1, 6, 7, 8, 9],
+          pageIndexes: [0, 3, 4],
+          particleIndexes: [0, 1, 6, 7, 8, 9],
         },
       },
     ]
     testCases.forEach(({
-      scrollIndex,
-      scrollsCount,
+      pageIndex,
       pagesCount,
-      pagesToShow,
-      pagesToScroll,
+      particlesCount,
+      particlesToShow,
+      particlesToScroll,
       expected,
     }) => {
       expect(getAdjacentIndexes({
         infinite: false,
-        scrollIndex,
-        scrollsCount,
+        pageIndex,
         pagesCount,
-        pagesToShow,
-        pagesToScroll,
+        particlesCount,
+        particlesToShow,
+        particlesToScroll,
       })).toEqual(expected)
     })
   })

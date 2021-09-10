@@ -13,12 +13,12 @@
     removeResizeEventListener
   } from '../../utils/event'
   import {
-    getPageSizes,
-    applyPageSizes,
-    getCurrentScrollIndex,
+    getSizes,
+    applyParticleSizes,
+    getCurrentPageIndex,
     getPartialPageSize,
-    getScrollsCount,
-    getPageIndexByScrollIndex,
+    getPagesCount,
+    getParticleIndexByPageIndex,
   } from '../../utils/page'
   import {
     getClones,
@@ -65,7 +65,6 @@
    * Page to start on
    */
   export let initialPageIndex = 0
-  $: initialScrollIndex = initialPageIndex
 
   /**
    * Transition duration (ms)
@@ -112,28 +111,27 @@
   export let swiping = true
 
   /**
-   * Number of pages to show 
+   * Number of particles to show 
    */
   export let pagesToShow = 1
 
   /**
-   * Number of pages to scroll 
+   * Number of particles to scroll 
    */
   export let pagesToScroll = 1
 
   export async function goTo(pageIndex, options) {
-    const scrollIndex = pageIndex
     const animated = get(options, 'animated', true)
-    if (typeof scrollIndex !== 'number') {
+    if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(getPageIndexByScrollIndex({
+    await showPage(getParticleIndexByPageIndex({
       infinite,
-      scrollIndex,
+      pageIndex,
       clonesCountHead: clonesCount.head,
-      pagesToScroll,
-      pagesCount,
-      pagesToShow,
+      particlesToScroll,
+      particlesCount,
+      particlesToShow,
     }), { animated })
   }
 
@@ -151,35 +149,35 @@
 
   $: clonesCount = getClonesCount({
     infinite,
-    pagesToShow,
+    particlesToShow,
     partialPageSize,
   })
 
-  let currentPageIndex = 0
-  $: currentScrollIndex = getCurrentScrollIndex({
-    currentPageIndex,
-    pagesCount,
+  let currentParticleIndex = 0
+  $: currentPageIndex = getCurrentPageIndex({
+    currentParticleIndex,
+    particlesCount,
     headClonesCount: clonesCount.head,
     infinite,
-    pagesToScroll,
+    particlesToScroll,
   })
-  $: dispatch('pageChange', currentScrollIndex)
+  $: dispatch('pageChange', currentPageIndex)
 
-  let pagesCount = 0
+  let particlesCount = 0
   let pagesCountWithoutClones = 1
-  $: scrollsCount = getScrollsCount({
+  $: pagesCount = getPagesCount({
     infinite,
     pagesCountWithoutClones,
-    pagesToScroll,
+    particlesToScroll,
   })
 
   let partialPageSize = 0
 
-  let pagesWindowWidth = 0
-  let pageWidth = 0
+  let pageWindowWidth = 0
+  let particleWidth = 0
   let offset = 0
   let pageWindowElement
-  let pagesContainer
+  let particlesContainer
   let focused = false
 
   let progressValue
@@ -203,27 +201,27 @@
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   $: loaded = getAdjacentIndexes({
     infinite,
-    scrollIndex: currentScrollIndex,
-    scrollsCount,
-    pagesCount: pagesCountWithoutClones,
-    pagesToShow,
-    pagesToScroll,
-  }).pageIndexes
+    pageIndex: currentPageIndex,
+    pagesCount,
+    particlesCount: pagesCountWithoutClones,
+    particlesToShow,
+    particlesToScroll,
+  }).particleIndexes
 
   function initPageSizes() {
-    const sizes = getPageSizes({
+    const sizes = getSizes({
       pageWindowElement,
-      pagesContainerChildren: pagesContainer.children,
-      pagesToShow,
+      particlesContainerChildren: particlesContainer.children,
+      particlesToShow,
     })
-    applyPageSizes({
-      pagesContainerChildren: pagesContainer.children,
-      pageWidth: sizes.pageWidth,
+    applyParticleSizes({
+      particlesContainerChildren: particlesContainer.children,
+      particleWidth: sizes.particleWidth,
     })
 
-    pagesWindowWidth = sizes.pagesWindowWidth
-    pageWidth = sizes.pageWidth
-    pagesCount = sizes.pagesCount
+    pageWindowWidth = sizes.pageWindowWidth
+    particleWidth = sizes.particleWidth
+    particlesCount = sizes.particlesCount
 
     offsetPage({
       animated: false,
@@ -237,10 +235,10 @@
     } = getClones({
       headClonesCount: clonesCount.head,
       tailClonesCount: clonesCount.tail,
-      pagesContainerChildren: pagesContainer.children,
+      particlesContainerChildren: particlesContainer.children,
     })
     applyClones({
-      pagesContainer,
+      particlesContainer,
       clonesToAppend,
       clonesToPrepend,
     })
@@ -250,8 +248,8 @@
     // prevent progress change if not infinite for first and last page
     if (
       !infinite && (
-        (autoplayDirection === NEXT && currentPageIndex === pagesCount - 1) || 
-        (autoplayDirection === PREV && currentPageIndex === 0)
+        (autoplayDirection === NEXT && currentParticleIndex === particlesCount - 1) || 
+        (autoplayDirection === PREV && currentParticleIndex === 0)
       )
     ) {
       progressManager.reset()
@@ -269,29 +267,29 @@
     (async () => {
       await tick()
       cleanupFns.push(store.subscribe(value => {
-        currentPageIndex = value.currentPageIndex
+        currentParticleIndex = value.currentParticleIndex
       }))
       cleanupFns.push(() => progressManager.reset())
-      if (pagesContainer && pageWindowElement) {
-        pagesCountWithoutClones = pagesContainer.children.length
+      if (particlesContainer && pageWindowElement) {
+        pagesCountWithoutClones = particlesContainer.children.length
 
         partialPageSize = getPartialPageSize({
-          pagesToScroll,
-          pagesToShow,
+          particlesToScroll,
+          particlesToShow,
           pagesCountWithoutClones,
         })
 
         await tick()
         infinite && addClones()
 
-        // TODO: validate initialScrollIndex
-        store.init(getPageIndexByScrollIndex({
+        // TODO: validate initialPageIndex
+        store.init(getParticleIndexByPageIndex({
           infinite,
-          scrollIndex: initialScrollIndex,
+          pageIndex: initialPageIndex,
           clonesCountHead: clonesCount.head,
-          pagesToScroll,
-          pagesCount,
-          pagesToShow,
+          particlesToScroll,
+          particlesCount,
+          particlesToShow,
         }))
 
         initPageSizes()
@@ -307,13 +305,13 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(getPageIndexByScrollIndex({
+    await showPage(getParticleIndexByPageIndex({
       infinite,
-      scrollIndex: pageIndex,
+      pageIndex,
       clonesCountHead: clonesCount.head,
-      pagesToScroll,
-      pagesCount,
-      pagesToShow,
+      particlesToScroll,
+      particlesCount,
+      particlesToShow,
     }))
   }
 
@@ -322,7 +320,7 @@
     return new Promise((resolve) => {
       // _duration is an offset animation time
       _duration = animated ? duration : 0
-      offset = -currentPageIndex * pageWidth
+      offset = -currentParticleIndex * particleWidth
       setTimeout(() => {
         resolve()
       }, _duration)
@@ -333,10 +331,10 @@
   async function jumpIfNeeded() {
     let jumped = false
     if (infinite) {
-      if (currentPageIndex === 0) {
-        await showPage(pagesCount - clonesCount.total, { animated: false })
+      if (currentParticleIndex === 0) {
+        await showPage(particlesCount - clonesCount.total, { animated: false })
         jumped = true
-      } else if (currentPageIndex === pagesCount - clonesCount.tail) {
+      } else if (currentParticleIndex === particlesCount - clonesCount.tail) {
         await showPage(clonesCount.head, { animated: false })
         jumped = true
       }
@@ -359,11 +357,11 @@
     !jumped && applyAutoplayIfNeeded(autoplay) // no need to wait it finishes
   }
 
-  async function showPage(pageIndex, options) {
+  async function showPage(particleIndex, options) {
     await changePage(
-      () => store.moveToPage({
-        pageIndex,
-        pagesCount,
+      () => store.moveToParticle({
+        particleIndex,
+        particlesCount,
       }),
       options
     )
@@ -373,8 +371,8 @@
     await changePage(
       () => store.prev({
         infinite,
-        pagesCount,
-        pagesToScroll,
+        particlesCount,
+        particlesToScroll,
       }),
       options,
     )
@@ -384,8 +382,8 @@
     await changePage(
       () => store.next({
         infinite,
-        pagesCount,
-        pagesToScroll,
+        particlesCount,
+        particlesToScroll,
         clonesCountTail: clonesCount.tail,
       }),
       options,
@@ -407,7 +405,7 @@
   }
   function handleSwipeEnd() {
     if (!swiping) return
-    showPage(currentPageIndex)
+    showPage(currentParticleIndex)
   }
   async function handleSwipeFailed() {
     if (!swiping) return
@@ -429,7 +427,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
-            disabled={!infinite && currentScrollIndex === 0}
+            disabled={!infinite && currentPageIndex === 0}
             on:click={showPrevPage}
           />
         </div>
@@ -447,7 +445,7 @@
     >
       <div
         class="sc-carousel__pages-container"
-        use:swipeable="{{ thresholdProvider: () => pagesWindowWidth/3 }}"
+        use:swipeable="{{ thresholdProvider: () => pageWindowWidth/3 }}"
         on:swipeStart={handleSwipeStart}
         on:swipeMove={handleSwipeMove}
         on:swipeEnd={handleSwipeEnd}
@@ -458,7 +456,7 @@
           transition-duration: {_duration}ms;
           transition-timing-function: {timingFunction};
         "
-        bind:this={pagesContainer}
+        bind:this={particlesContainer}
       >
         <slot {loaded}></slot>
       </div>
@@ -473,7 +471,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!infinite && currentScrollIndex === scrollsCount - 1}
+            disabled={!infinite && currentPageIndex === pagesCount - 1}
             on:click={showNextPage}
           />
         </div>
@@ -483,13 +481,13 @@
   {#if dots}
     <slot
       name="dots"
-      currentPageIndex={currentScrollIndex}
+      currentPageIndex={currentPageIndex}
       pagesCount={pagesCountWithoutClones}
       showPage={handlePageChange}
     >
       <Dots
-        pagesCount={scrollsCount}
-        currentPageIndex={currentScrollIndex}
+        pagesCount={pagesCount}
+        currentPageIndex={currentPageIndex}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
     </slot>

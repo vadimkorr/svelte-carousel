@@ -1,18 +1,18 @@
 export function getClones({
   headClonesCount,
   tailClonesCount,
-  pagesContainerChildren,
+  particlesContainerChildren,
 }) {
   // TODO: add fns to remove clones if needed
   const clonesToAppend = []
   for (let i=0; i<tailClonesCount; i++) {
-    clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
+    clonesToAppend.push(particlesContainerChildren[i].cloneNode(true))
   }
 
   const clonesToPrepend = []
-  const len = pagesContainerChildren.length
+  const len = particlesContainerChildren.length
   for (let i=len-1; i>len-1-headClonesCount; i--) {
-    clonesToPrepend.push(pagesContainerChildren[i].cloneNode(true))
+    clonesToPrepend.push(particlesContainerChildren[i].cloneNode(true))
   }
 
   return {
@@ -22,27 +22,27 @@ export function getClones({
 }
 
 export function applyClones({
-  pagesContainer,
+  particlesContainer,
   clonesToAppend,
   clonesToPrepend,
 }) {
   for (let i=0; i<clonesToAppend.length; i++) {
-    pagesContainer.append(clonesToAppend[i])
+    particlesContainer.append(clonesToAppend[i])
   }
   for (let i=0; i<clonesToPrepend.length; i++) {
-    pagesContainer.prepend(clonesToPrepend[i])
+    particlesContainer.prepend(clonesToPrepend[i])
   }
 }
 
 export function getClonesCount({
   infinite,
-  pagesToShow,
+  particlesToShow,
   partialPageSize,
 }) {
   const clonesCount = infinite
     ? {
-      head: partialPageSize || pagesToShow,
-      tail: pagesToShow,
+      head: partialPageSize || particlesToShow,
+      tail: particlesToShow,
     } : {
       head: 0,
       tail: 0,

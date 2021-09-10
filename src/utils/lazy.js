@@ -1,16 +1,16 @@
 import { getValueInRange } from './math'
 
 export function getIndexesOfPagesWithoutClonesInScroll({
-  scrollIndex,
-  pagesToShow,
-  pagesToScroll,
-  pagesCount,
+  pageIndex,
+  particlesToShow,
+  particlesToScroll,
+  particlesCount,
 }) {
-  const overlap = scrollIndex === 0 ? 0 : pagesToShow - pagesToScroll
-  const from = scrollIndex * pagesToShow - scrollIndex * overlap
-  const to = from + Math.max(pagesToShow, pagesToScroll) - 1
+  const overlap = pageIndex === 0 ? 0 : particlesToShow - particlesToScroll
+  const from = pageIndex * particlesToShow - pageIndex * overlap
+  const to = from + Math.max(particlesToShow, particlesToScroll) - 1
   const indexes = []
-  for (let i=from; i<=Math.min(pagesCount - 1, to); i++) {
+  for (let i=from; i<=Math.min(particlesCount - 1, to); i++) {
     indexes.push(i)
   }
   return indexes
@@ -18,44 +18,44 @@ export function getIndexesOfPagesWithoutClonesInScroll({
 
 export function getAdjacentIndexes({
   infinite,
-  scrollIndex,
-  scrollsCount,
+  pageIndex,
   pagesCount,
-  pagesToShow,
-  pagesToScroll,
+  particlesCount,
+  particlesToShow,
+  particlesToScroll,
 }) {
-  const _scrollIndex = getValueInRange(0, scrollIndex, scrollsCount - 1)
+  const _pageIndex = getValueInRange(0, pageIndex, pagesCount - 1)
 
-  let rangeStart = _scrollIndex - 1
-  let rangeEnd = _scrollIndex + 1
+  let rangeStart = _pageIndex - 1
+  let rangeEnd = _pageIndex + 1
 
   rangeStart = infinite
-    ? rangeStart < 0 ? scrollsCount - 1 : rangeStart
+    ? rangeStart < 0 ? pagesCount - 1 : rangeStart
     : Math.max(0, rangeStart)
 
   rangeEnd = infinite
-    ? rangeEnd > scrollsCount - 1 ? 0 : rangeEnd
-    : Math.min(scrollsCount - 1, rangeEnd)
+    ? rangeEnd > pagesCount - 1 ? 0 : rangeEnd
+    : Math.min(pagesCount - 1, rangeEnd)
 
-  const scrollIndexes = [...new Set([
+  const pageIndexes = [...new Set([
     rangeStart,
-    _scrollIndex,
+    _pageIndex,
     rangeEnd,
 
     // because of these values outputs for infinite/non-infinites are the same
-    0, // needed to clone first scroll pages
-    scrollsCount - 1, // needed to clone last scroll pages
+    0, // needed to clone first page particles
+    pagesCount - 1, // needed to clone last page particles
   ])].sort((a, b) => a - b)
-  const pageIndexes = scrollIndexes.flatMap(
-    scrollIndex => getIndexesOfPagesWithoutClonesInScroll({
-      scrollIndex,
-      pagesToShow,
-      pagesToScroll,
-      pagesCount,
+  const particleIndexes = pageIndexes.flatMap(
+    pageIndex => getIndexesOfPagesWithoutClonesInScroll({
+      pageIndex,
+      particlesToShow,
+      particlesToScroll,
+      particlesCount,
     })
   )
   return {
-    scrollIndexes,
-    pageIndexes: [...new Set(pageIndexes)].sort((a, b) => a - b),
+    pageIndexes,
+    particleIndexes: [...new Set(particleIndexes)].sort((a, b) => a - b),
   }
 }

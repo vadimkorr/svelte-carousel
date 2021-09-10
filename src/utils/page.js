@@ -2,143 +2,135 @@ import {
   getValueInRange,
 } from './math'
 
-export function getNextPageIndexLimited({
-  currentPageIndex,
-  pagesCount,
-  pagesToScroll,
+export function getNextParticleIndexLimited({
+  currentParticleIndex,
+  particlesCount,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return currentPageIndex + Math.min(pagesCount - (currentPageIndex + 1) - pagesToScroll, pagesToScroll)
+  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
+  return currentParticleIndex + Math.min(particlesCount - (currentParticleIndex + 1) - particlesToScroll, particlesToScroll)
 }
 
-export function getNextPageIndexInfinte({
-  currentPageIndex,
-  pagesCount,
-  pagesToScroll,
+export function getNextParticleIndexInfinte({
+  currentParticleIndex,
+  particlesCount,
+  particlesToScroll,
   clonesCountTail,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + Math.min(pagesCount - clonesCountTail - currentPageIndex, pagesToScroll)
-  return newCurrentPageIndex > pagesCount - 1 ? 0 : Math.max(newCurrentPageIndex, 0)
+  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
+  const newCurrentParticleIndex = Math.max(currentParticleIndex, 0) + Math.min(particlesCount - clonesCountTail - currentParticleIndex, particlesToScroll)
+  return newCurrentParticleIndex > particlesCount - 1 ? 0 : Math.max(newCurrentParticleIndex, 0)
 }
 
-export function getNextPageIndexFn(infinite) {
-  return infinite ? getNextPageIndexInfinte : getNextPageIndexLimited
+export function getNextParticleIndexFn(infinite) {
+  return infinite ? getNextParticleIndexInfinte : getNextParticleIndexLimited
 }
 
-export function getPrevPageIndexLimited({
-  currentPageIndex,
-  pagesCount,
-  pagesToScroll,
+export function getPrevParticleIndexLimited({
+  currentParticleIndex,
+  particlesCount,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
+  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
   return getValueInRange(
     0,
-    currentPageIndex - Math.min(currentPageIndex, pagesToScroll),
-    pagesCount - 1
+    currentParticleIndex - Math.min(currentParticleIndex, particlesToScroll),
+    particlesCount - 1
   )
 }
 
-export function getPrevPageIndexInfinte({
-  currentPageIndex,
-  pagesCount,
-  pagesToScroll,
+export function getPrevParticleIndexInfinte({
+  currentParticleIndex,
+  particlesCount,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - Math.min(currentPageIndex, pagesToScroll)
-  return newCurrentPageIndex >= 0 ? Math.min(newCurrentPageIndex, pagesCount - 1) : pagesCount - 1
+  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
+  const newCurrentParticleIndex = Math.min(currentParticleIndex, particlesCount - 1) - Math.min(currentParticleIndex, particlesToScroll)
+  return newCurrentParticleIndex >= 0 ? Math.min(newCurrentParticleIndex, particlesCount - 1) : particlesCount - 1
 }
 
-export function getPrevPageIndexFn(infinite) {
-  return infinite ? getPrevPageIndexInfinte : getPrevPageIndexLimited
+export function getPrevParticleIndexFn(infinite) {
+  return infinite ? getPrevParticleIndexInfinte : getPrevParticleIndexLimited
 }
 
-export function getPageIndex({
-  pageIndex,
-  pagesCount,
-}) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
-}
-
-export function getPageSizes({
+export function getSizes({
   pageWindowElement,
-  pagesContainerChildren,
-  pagesToShow,
+  particlesContainerChildren,
+  particlesToShow,
 }) {
-  const pagesWindowWidth = pageWindowElement.clientWidth
-  const pageWidth = pagesWindowWidth / pagesToShow
-  const pagesCount = pagesContainerChildren.length
+  const pageWindowWidth = pageWindowElement.clientWidth
+  const particleWidth = pageWindowWidth / particlesToShow
+  const particlesCount = particlesContainerChildren.length
 
   return {
-    pagesWindowWidth,
-    pageWidth,
-    pagesCount,
+    pageWindowWidth,
+    particleWidth,
+    particlesCount,
   }
 }
 
-export function applyPageSizes({
-  pagesContainerChildren,
-  pageWidth,
+export function applyParticleSizes({
+  particlesContainerChildren,
+  particleWidth,
 }) {
-  for (let pageIndex=0; pageIndex<pagesContainerChildren.length; pageIndex++) {
-    pagesContainerChildren[pageIndex].style.minWidth = `${pageWidth}px`
-    pagesContainerChildren[pageIndex].style.maxWidth = `${pageWidth}px`
+  for (let particleIndex=0; particleIndex<particlesContainerChildren.length; particleIndex++) {
+    particlesContainerChildren[particleIndex].style.minWidth = `${particleWidth}px`
+    particlesContainerChildren[particleIndex].style.maxWidth = `${particleWidth}px`
   }
 }
 
-export function getCurrentScrollIndex({
-  currentPageIndex,
-  pagesCount,
+export function getCurrentPageIndex({
+  currentParticleIndex,
+  particlesCount,
   headClonesCount,
   infinite,
-  pagesToScroll,
+  particlesToScroll,
 }) {
   if (infinite) {
-    if (currentPageIndex === pagesCount - headClonesCount) return 0
-    if (currentPageIndex === 0) return pagesCount - headClonesCount
-    return Math.floor((currentPageIndex - headClonesCount) / pagesToScroll)
+    if (currentParticleIndex === particlesCount - headClonesCount) return 0
+    if (currentParticleIndex === 0) return particlesCount - headClonesCount
+    return Math.floor((currentParticleIndex - headClonesCount) / particlesToScroll)
   }
-  return Math.ceil(currentPageIndex / pagesToScroll)
+  return Math.ceil(currentParticleIndex / particlesToScroll)
 }
 
-// TODO: think about case if pagesCount < pagesToShow and pagesCount < pagesToScroll
+// TODO: think about case if particlesCount < particlesToShow and particlesCount < particlesToScroll
 export function getPartialPageSize({
-  pagesToScroll,
-  pagesToShow,
-  pagesCountWithoutClones
+  particlesToScroll,
+  particlesToShow,
+  pagesCountWithoutClones, // TODO: rename 
 }) {
-  const overlap = pagesToScroll - pagesToShow
-  let _pages = pagesToShow
+  const overlap = particlesToScroll - particlesToShow
+  let particlesCount = particlesToShow
 
   while(true) {
-    const diff = pagesCountWithoutClones - _pages - overlap
-    if (diff < pagesToShow) {
+    const diff = pagesCountWithoutClones - particlesCount - overlap
+    if (diff < particlesToShow) {
       return diff
     }
-    _pages += pagesToShow + overlap
+    particlesCount += particlesToShow + overlap
   }
 }
 
-export function getScrollsCount({
+export function getPagesCount({
   infinite,
   pagesCountWithoutClones,
-  pagesToScroll,
+  particlesToScroll,
 }) {
   return infinite
-    ? Math.ceil(pagesCountWithoutClones / pagesToScroll)
-    : Math.round(pagesCountWithoutClones / pagesToScroll)
+    ? Math.ceil(pagesCountWithoutClones / particlesToScroll)
+    : Math.round(pagesCountWithoutClones / particlesToScroll)
 }
 
-export function getPageIndexByScrollIndex({
+export function getParticleIndexByPageIndex({
   infinite,
-  scrollIndex,
+  pageIndex,
   clonesCountHead,
-  pagesToScroll,
-  pagesCount,
-  pagesToShow,
+  particlesToScroll,
+  particlesCount,
+  particlesToShow,
 }) {
   return infinite
-    ? clonesCountHead + scrollIndex * pagesToScroll
-    : Math.min(scrollIndex * pagesToScroll, pagesCount - pagesToShow)
+    ? clonesCountHead + pageIndex * particlesToScroll
+    : Math.min(pageIndex * particlesToScroll, particlesCount - particlesToShow)
 }
