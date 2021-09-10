@@ -39,6 +39,7 @@ function createStore() {
     infinite,
     particlesCount,
     particlesToScroll,
+    particlesToShow,
     clonesCountTail,
   }) {
     update(store => {
@@ -46,6 +47,7 @@ function createStore() {
         currentParticleIndex: store.currentParticleIndex,
         particlesCount,
         particlesToScroll,
+        particlesToShow,
         clonesCountTail,
       })
       return {

@@ -9,21 +9,23 @@ import {
 describe('getNextParticleIndexLimited', () => {
   it('returns next page index as expected', () => {
     const testCases = [
-      { currentParticleIndex: -5, particlesCount: 7, particlesToScroll: 2, expected: 0 },
-      { currentParticleIndex: 0, particlesCount: 7, particlesToScroll: 2, expected: 2 },
-      { currentParticleIndex: 2, particlesCount: 7, particlesToScroll: 2, expected: 4 },
-      { currentParticleIndex: 7, particlesCount: 7, particlesToScroll: 2, expected: 4 },
+      { currentParticleIndex: -5, particlesCount: 7, particlesToScroll: 2, particlesToShow: 2, expected: 0 },
+      { currentParticleIndex: 0, particlesCount: 7, particlesToScroll: 2, particlesToShow: 2, expected: 2 },
+      { currentParticleIndex: 2, particlesCount: 7, particlesToScroll: 2, particlesToShow: 2, expected: 4 },
+      { currentParticleIndex: 7, particlesCount: 7, particlesToScroll: 2, particlesToShow: 2, expected: 5 },
     ]
     testCases.forEach(({
       currentParticleIndex,
       particlesCount,
       particlesToScroll,
+      particlesToShow,
       expected,
     }) => {
       expect(getNextParticleIndexLimited({
         currentParticleIndex,
         particlesCount,
         particlesToScroll,
+        particlesToShow,
       })).toBe(expected)
     })
   })
@@ -133,7 +135,7 @@ describe('getPrevParticleIndexInfinte', () => {
   })
   it('throws error if particlesCount is less than 1', () => {
     const currentParticleIndex = 2
-    const particlesCount = 7
+    const particlesCount = 0
     const particlesToScroll = 2
 
     expect(
@@ -149,45 +151,45 @@ describe('getPrevParticleIndexInfinte', () => {
 describe('getPartialPageSize', () => {
   it('returns result as expected if particlesToShow <= particlesToScroll', () => {
     const testCases = [{
-      pagesCountWithoutClones: 9,
+      particlesCountWithoutClones: 9,
       particlesToShow: 2,
       particlesToScroll: 3,
       expected: 0,
     }, {
-      pagesCountWithoutClones: 15,
+      particlesCountWithoutClones: 15,
       particlesToShow: 4,
       particlesToScroll: 5,
       expected: 0,
     }, {
-      pagesCountWithoutClones: 16,
+      particlesCountWithoutClones: 16,
       particlesToShow: 4,
       particlesToScroll: 5,
       expected: 1,
     }, {
-      pagesCountWithoutClones: 17,
+      particlesCountWithoutClones: 17,
       particlesToShow: 4,
       particlesToScroll: 5,
       expected: 2,
     }, {
-      pagesCountWithoutClones: 18,
+      particlesCountWithoutClones: 18,
       particlesToShow: 4,
       particlesToScroll: 5,
       expected: 3,
     }, {
-      pagesCountWithoutClones: 8,
+      particlesCountWithoutClones: 8,
       particlesToShow: 2,
       particlesToScroll: 2,
       expected: 0,
     }]
 
     testCases.forEach(({
-      pagesCountWithoutClones,
+      particlesCountWithoutClones,
       particlesToShow,
       particlesToScroll,
       expected,
     }) => {
       expect(getPartialPageSize({
-        pagesCountWithoutClones,
+        particlesCountWithoutClones,
         particlesToShow,
         particlesToScroll,
       })).toBe(expected)
@@ -196,55 +198,55 @@ describe('getPartialPageSize', () => {
 
   it('returns result as expected if particlesToShow > particlesToScroll', () => {
     const testCases = [{
-      pagesCountWithoutClones: 8,
+      particlesCountWithoutClones: 8,
       particlesToShow: 4,
       particlesToScroll: 2,
       expected: 2,
     }, {
-      pagesCountWithoutClones: 7,
+      particlesCountWithoutClones: 7,
       particlesToShow: 4,
       particlesToScroll: 3,
       expected: 1,
     }, {
-      pagesCountWithoutClones: 8,
+      particlesCountWithoutClones: 8,
       particlesToShow: 4,
       particlesToScroll: 3,
       expected: 2,
     }, {
-      pagesCountWithoutClones: 8,
+      particlesCountWithoutClones: 8,
       particlesToShow: 2,
       particlesToScroll: 2,
       expected: 0,
     }, {
-      pagesCountWithoutClones: 9,
+      particlesCountWithoutClones: 9,
       particlesToShow: 4,
       particlesToScroll: 3,
       expected: 3,
     }, {
-      pagesCountWithoutClones: 8,
+      particlesCountWithoutClones: 8,
       particlesToShow: 3,
       particlesToScroll: 2,
       expected: 2,
     }, {
-      pagesCountWithoutClones: 6,
+      particlesCountWithoutClones: 6,
       particlesToShow: 3,
       particlesToScroll: 1,
       expected: 2,
     }, {
-      pagesCountWithoutClones: 7,
+      particlesCountWithoutClones: 7,
       particlesToShow: 3,
       particlesToScroll: 1,
       expected: 2,
     }]
 
     testCases.forEach(({
-      pagesCountWithoutClones,
+      particlesCountWithoutClones,
       particlesToShow,
       particlesToScroll,
       expected,
     }) => {
       expect(getPartialPageSize({
-        pagesCountWithoutClones,
+        particlesCountWithoutClones,
         particlesToShow,
         particlesToScroll,
       })).toBe(expected)

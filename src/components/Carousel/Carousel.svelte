@@ -389,6 +389,7 @@
         infinite,
         particlesCount,
         particlesToScroll,
+        particlesToShow,
         clonesCountTail: clonesCount.tail,
       }),
       options,
