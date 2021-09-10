@@ -113,12 +113,12 @@
   /**
    * Number of particles to show 
    */
-  export let pagesToShow = 1
+  export let particlesToShow = 1
 
   /**
    * Number of particles to scroll 
    */
-  export let pagesToScroll = 1
+  export let particlesToScroll = 1
 
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
