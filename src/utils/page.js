@@ -8,7 +8,10 @@ export function getNextParticleIndexLimited({
   particlesToScroll,
 }) {
   if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
-  return currentParticleIndex + Math.min(particlesCount - (currentParticleIndex + 1) - particlesToScroll, particlesToScroll)
+  return Math.max(
+    currentParticleIndex + Math.min(particlesCount - (currentParticleIndex + 1) - particlesToScroll, particlesToScroll),
+    0
+  )
 }
 
 export function getNextParticleIndexInfinte({
