@@ -2,8 +2,7 @@ import {
   writable,
 } from 'svelte/store';
 import {
-  getNextParticleIndexFn,
-  getPrevParticleIndexFn,
+  getParticleIndexByPageIndex,
 } from './utils/page'
 import {
   getValueInRange,
@@ -37,18 +36,22 @@ function createStore() {
 
   function next({
     infinite,
+    currentPageIndex,
     particlesCount,
     particlesToScroll,
     particlesToShow,
+    clonesCountHead,
     clonesCountTail,
   }) {
     update(store => {
-      const newCurrentParticleIndex = getNextParticleIndexFn(infinite)({
-        currentParticleIndex: store.currentParticleIndex,
-        particlesCount,
-        particlesToScroll,
-        particlesToShow,
+      const newCurrentParticleIndex = getParticleIndexByPageIndex({
+        infinite,
+        pageIndex: currentPageIndex + 1,
+        clonesCountHead,
         clonesCountTail,
+        particlesToScroll,
+        particlesCount,
+        particlesToShow,
       })
       return {
         ...store,
@@ -59,14 +62,22 @@ function createStore() {
 
   function prev({
     infinite,
-    particlesCount,
+    currentPageIndex,
+    clonesCountHead,
+    clonesCountTail,
     particlesToScroll,
+    particlesCount,
+    particlesToShow,
   }) {
     update(store => {
-      const newCurrentParticleIndex = getPrevParticleIndexFn(infinite)({
-        currentParticleIndex: store.currentParticleIndex,
-        particlesCount,
+      const newCurrentParticleIndex = getParticleIndexByPageIndex({
+        infinite,
+        pageIndex: currentPageIndex - 1,
+        clonesCountHead,
+        clonesCountTail,
         particlesToScroll,
+        particlesCount,
+        particlesToShow,
       })
       return {
         ...store,

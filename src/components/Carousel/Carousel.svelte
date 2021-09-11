@@ -131,6 +131,7 @@
       infinite,
       pageIndex,
       clonesCountHead: clonesCount.head,
+      clonesCountTail: clonesCount.tail,
       particlesToScroll,
       particlesCount,
       particlesToShow,
@@ -292,6 +293,7 @@
           infinite,
           pageIndex: initialPageIndex,
           clonesCountHead: clonesCount.head,
+          clonesCountTail: clonesCount.tail,
           particlesToScroll,
           particlesCount,
           particlesToShow,
@@ -314,6 +316,7 @@
       infinite,
       pageIndex,
       clonesCountHead: clonesCount.head,
+      clonesCountTail: clonesCount.tail,
       particlesToScroll,
       particlesCount,
       particlesToShow,
@@ -376,8 +379,12 @@
     await changePage(
       () => store.prev({
         infinite,
-        particlesCount,
+        currentPageIndex,
+        clonesCountHead: clonesCount.head,
+        clonesCountTail: clonesCount.tail,
         particlesToScroll,
+        particlesCount,
+        particlesToShow,
       }),
       options,
     )
@@ -387,9 +394,11 @@
     await changePage(
       () => store.next({
         infinite,
+        currentPageIndex,
         particlesCount,
         particlesToScroll,
         particlesToShow,
+        clonesCountHead: clonesCount.head,
         clonesCountTail: clonesCount.tail,
       }),
       options,

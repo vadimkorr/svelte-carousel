@@ -1,59 +1,7 @@
 import {
   getValueInRange,
 } from './math'
-
-export function getNextParticleIndexLimited({
-  currentParticleIndex,
-  particlesCount,
-  particlesToScroll,
-  particlesToShow,
-}) {
-  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
-  return getValueInRange(0, currentParticleIndex + particlesToScroll, particlesCount - particlesToShow)
-}
-
-export function getNextParticleIndexInfinte({
-  currentParticleIndex,
-  particlesCount,
-  particlesToScroll,
-  clonesCountTail,
-}) {
-  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
-  const newCurrentParticleIndex = Math.max(currentParticleIndex, 0) + Math.min(particlesCount - clonesCountTail - currentParticleIndex, particlesToScroll)
-  return newCurrentParticleIndex > particlesCount - 1 ? 0 : Math.max(newCurrentParticleIndex, 0)
-}
-
-export function getNextParticleIndexFn(infinite) {
-  return infinite ? getNextParticleIndexInfinte : getNextParticleIndexLimited
-}
-
-export function getPrevParticleIndexLimited({
-  currentParticleIndex,
-  particlesCount,
-  particlesToScroll,
-}) {
-  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
-  return getValueInRange(
-    0,
-    currentParticleIndex - Math.min(currentParticleIndex, particlesToScroll),
-    particlesCount - 1
-  )
-}
-
-export function getPrevParticleIndexInfinte({
-  currentParticleIndex,
-  particlesCount,
-  particlesToScroll,
-}) {
-  if (particlesCount < 1) throw new Error('particlesCount must be at least 1')
-  const newCurrentParticleIndex = Math.min(currentParticleIndex, particlesCount - 1) - Math.min(currentParticleIndex, particlesToScroll)
-  return newCurrentParticleIndex >= 0 ? Math.min(newCurrentParticleIndex, particlesCount - 1) : particlesCount - 1
-}
-
-export function getPrevParticleIndexFn(infinite) {
-  return infinite ? getPrevParticleIndexInfinte : getPrevParticleIndexLimited
-}
-
+ 
 export function getSizes({
   pageWindowElement,
   particlesContainerChildren,
@@ -123,15 +71,54 @@ export function getPagesCountByParticlesCount({
     : Math.round(particlesCountWithoutClones / particlesToScroll)
 }
 
+export function getParticleIndexByPageIndexInfinite({
+  pageIndex,
+  clonesCountHead,
+  clonesCountTail,
+  particlesToScroll,
+  particlesCount,
+}) {
+  return getValueInRange(
+    clonesCountHead,
+    Math.min(clonesCountHead + pageIndex * particlesToScroll, particlesCount - clonesCountTail),
+    particlesCount - 1
+  )
+}
+
+export function getParticleIndexByPageIndexLimited({
+  pageIndex,
+  particlesToScroll,
+  particlesCount,
+  particlesToShow,
+}) {
+  return getValueInRange(
+    0,
+    Math.min(pageIndex * particlesToScroll, particlesCount - particlesToShow),
+    particlesCount - 1
+  ) 
+}
+
 export function getParticleIndexByPageIndex({
   infinite,
   pageIndex,
   clonesCountHead,
+  clonesCountTail,
   particlesToScroll,
   particlesCount,
   particlesToShow,
 }) {
   return infinite
-    ? clonesCountHead + pageIndex * particlesToScroll
-    : Math.min(pageIndex * particlesToScroll, particlesCount - particlesToShow)
+    ? getParticleIndexByPageIndexInfinite({
+      pageIndex,
+      clonesCountHead,
+      clonesCountTail,
+      particlesToScroll,
+      particlesCount,
+    })
+    : getParticleIndexByPageIndexLimited({
+      pageIndex,
+      particlesToScroll,
+      particlesCount,
+      particlesToShow,
+    })
 }
