@@ -105,21 +105,6 @@ export function applyClones({
   }
 }
 
-export function getPageSizes({
-  pageWindowElement,
-  pagesContainerChildren,
-}) {
-  const pagesWindowWidth = pageWindowElement.clientWidth
-  const pageWidth = pagesWindowWidth
-  const pagesCount = pagesContainerChildren.length
-
-  return {
-    pagesWindowWidth,
-    pageWidth,
-    pagesCount,
-  }
-}
-
 export function applyPageSizes({
   pagesContainerChildren,
   pageWidth,
@@ -156,4 +141,12 @@ export function getOneSideClonesCount({
   infinite,
 }) {
   return infinite ? 1 : 0
+}
+
+export function createResizeObserver(onResize) {
+  return new ResizeObserver(entries => {
+    onResize({
+      width: entries[0].contentRect.width,
+    })
+  });
 }
