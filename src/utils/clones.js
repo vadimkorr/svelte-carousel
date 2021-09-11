@@ -41,8 +41,9 @@ export function getClonesCount({
 }) {
   const clonesCount = infinite
     ? {
-      head: partialPageSize || particlesToShow,
-      tail: particlesToShow,
+      // need to round with ceil as particlesToShow, particlesToShow can be floating (e.g. 1.5, 3.75)
+      head: Math.ceil(partialPageSize || particlesToShow),
+      tail: Math.ceil(particlesToShow),
     } : {
       head: 0,
       tail: 0,
