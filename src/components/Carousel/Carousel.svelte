@@ -9,18 +9,14 @@
   import { hoverable } from '../../actions/hoverable'
   import { tappable } from '../../actions/tappable'
   import {
-    addResizeEventListener,
-    removeResizeEventListener
-  } from '../../utils/event'
-  import {
     getAdjacentIndexes,
     getClones,
     applyClones,
-    getPageSizes,
     applyPageSizes,
     getCurrentPageIndexWithoutClones,
     getPagesCountWithoutClones,
     getOneSideClonesCount,
+    createResizeObserver,
   } from '../../utils/page'
   import { get } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
@@ -145,6 +141,21 @@
   let pageWidth = 0
   let offset = 0
   let pageWindowElement
+
+  const pageWindowElementResizeObserver = createResizeObserver(({ width }) => {
+    pagesWindowWidth = width
+    pageWidth = width
+
+    applyPageSizes({
+      pagesContainerChildren: pagesContainer.children,
+      pageWidth,
+    })
+
+    offsetPage({
+      animated: false,
+    })
+  })
+
   let pagesContainer
   let focused = false
 
@@ -172,25 +183,6 @@
     pagesCount: pagesCountWithoutClones,
     infinite,
   })
-
-  function initPageSizes() {
-    const sizes = getPageSizes({
-      pageWindowElement,
-      pagesContainerChildren: pagesContainer.children,
-    })
-    applyPageSizes({
-      pagesContainerChildren: pagesContainer.children,
-      pageWidth: sizes.pageWidth,
-    })
-
-    pagesWindowWidth = sizes.pagesWindowWidth
-    pageWidth = sizes.pageWidth
-    pagesCount = sizes.pagesCount
- 
-    offsetPage({
-      animated: false,
-    })
-  }
   
   function addClones() {
     const {
@@ -239,17 +231,17 @@
         loaded = [0, pagesContainer.children.length - 1]
         await tick()
         infinite && addClones()
-
+        
+        pagesCount = pagesContainer.children.length
         store.init(initialPageIndex + oneSideClonesCount)
-        initPageSizes()
-      }
 
-      addResizeEventListener(initPageSizes)
+        pageWindowElementResizeObserver.observe(pageWindowElement);
+      }
     })()
   })
 
   onDestroy(() => {
-    removeResizeEventListener(initPageSizes)
+    pageWindowElementResizeObserver.disconnect()
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
 
