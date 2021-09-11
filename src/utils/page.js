@@ -1,22 +1,6 @@
 import {
   getValueInRange,
 } from './math'
- 
-export function getSizes({
-  pageWindowElement,
-  particlesContainerChildren,
-  particlesToShow,
-}) {
-  const pageWindowWidth = pageWindowElement.clientWidth
-  const particleWidth = pageWindowWidth / particlesToShow
-  const particlesCount = particlesContainerChildren.length
-
-  return {
-    pageWindowWidth,
-    particleWidth,
-    particlesCount,
-  }
-}
 
 export function applyParticleSizes({
   particlesContainerChildren,
@@ -121,4 +105,12 @@ export function getParticleIndexByPageIndex({
       particlesCount,
       particlesToShow,
     })
+}
+
+export function createResizeObserver(onResize) {
+  return new ResizeObserver(entries => {
+    onResize({
+      width: entries[0].contentRect.width,
+    })
+  });
 }

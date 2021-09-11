@@ -13,12 +13,12 @@
     removeResizeEventListener
   } from '../../utils/event'
   import {
-    getSizes,
     applyParticleSizes,
     getCurrentPageIndex,
     getPartialPageSize,
     getPagesCountByParticlesCount,
     getParticleIndexByPageIndex,
+    createResizeObserver,
   } from '../../utils/page'
   import {
     getClones,
@@ -181,6 +181,22 @@
   let offset = 0
   let pageWindowElement
   let particlesContainer
+
+  const pageWindowElementResizeObserver = createResizeObserver(({
+    width,
+  }) => {
+    pageWindowWidth = width
+    particleWidth = pageWindowWidth / particlesToShow
+    
+    applyParticleSizes({
+      particlesContainerChildren: particlesContainer.children,
+      particleWidth,
+    })
+    offsetPage({
+      animated: false,
+    })
+  })
+
   let focused = false
 
   let progressValue
@@ -211,26 +227,6 @@
     particlesToScroll,
   }).particleIndexes
 
-  function initPageSizes() {
-    const sizes = getSizes({
-      pageWindowElement,
-      particlesContainerChildren: particlesContainer.children,
-      particlesToShow,
-    })
-    applyParticleSizes({
-      particlesContainerChildren: particlesContainer.children,
-      particleWidth: sizes.particleWidth,
-    })
-
-    pageWindowWidth = sizes.pageWindowWidth
-    particleWidth = sizes.particleWidth
-    particlesCount = sizes.particlesCount
-
-    offsetPage({
-      animated: false,
-    })
-  }
-  
   function addClones() {
     const {
       clonesToAppend,
@@ -288,6 +284,7 @@
 
         await tick()
         infinite && addClones()
+        particlesCount = particlesContainer.children.length
 
         store.init(getParticleIndexByPageIndex({
           infinite,
@@ -299,15 +296,13 @@
           particlesToShow,
         }))
 
-        initPageSizes()
+        pageWindowElementResizeObserver.observe(pageWindowElement);
       }
-
-      addResizeEventListener(initPageSizes)
     })()
   })
 
   onDestroy(() => {
-    removeResizeEventListener(initPageSizes)
+    pageWindowElementResizeObserver.disconnect()
     cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
   })
 
