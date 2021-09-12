@@ -1,17 +1,17 @@
 export function getClones({
-  headClonesCount,
-  tailClonesCount,
+  clonesCountHead,
+  clonesCountTail,
   particlesContainerChildren,
 }) {
   // TODO: add fns to remove clones if needed
   const clonesToAppend = []
-  for (let i=0; i<tailClonesCount; i++) {
+  for (let i=0; i<clonesCountTail; i++) {
     clonesToAppend.push(particlesContainerChildren[i].cloneNode(true))
   }
 
   const clonesToPrepend = []
   const len = particlesContainerChildren.length
-  for (let i=len-1; i>len-1-headClonesCount; i--) {
+  for (let i=len-1; i>len-1-clonesCountHead; i--) {
     clonesToPrepend.push(particlesContainerChildren[i].cloneNode(true))
   }
 

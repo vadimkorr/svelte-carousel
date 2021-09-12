@@ -14,7 +14,7 @@
   } from '../../utils/event'
   import {
     applyParticleSizes,
-    getCurrentPageIndex,
+    getCurrentPageIndexByCurrentParticleIndex,
     getPartialPageSize,
     getPagesCountByParticlesCount,
     getParticleIndexByPageIndex,
@@ -157,10 +157,11 @@
   })
 
   let currentParticleIndex = 0
-  $: currentPageIndex = getCurrentPageIndex({
+  $: currentPageIndex = getCurrentPageIndexByCurrentParticleIndex({
     currentParticleIndex,
     particlesCount,
-    headClonesCount: clonesCount.head,
+    clonesCountHead: clonesCount.head,
+    clonesCountTotal: clonesCount.total,
     infinite,
     particlesToScroll,
   })
@@ -232,8 +233,8 @@
       clonesToAppend,
       clonesToPrepend,
     } = getClones({
-      headClonesCount: clonesCount.head,
-      tailClonesCount: clonesCount.tail,
+      clonesCountHead: clonesCount.head,
+      clonesCountTail: clonesCount.tail,
       particlesContainerChildren: particlesContainer.children,
     })
     applyClones({

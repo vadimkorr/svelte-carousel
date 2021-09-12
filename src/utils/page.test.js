@@ -1,5 +1,6 @@
 import {
   getPartialPageSize,
+  _getCurrentPageIndexByCurrentParticleIndexInfinite
   // getCurrentPageIndex,
   // getPagesCountByParticlesCount,
   // getParticleIndexByPageIndexInfinite,
@@ -106,6 +107,127 @@ describe('getPartialPageSize', () => {
       expect(getPartialPageSize({
         particlesCountWithoutClones,
         particlesToShow,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+})
+
+describe('_getCurrentPageIndexByCurrentParticleIndexInfinite', () => {
+  it('returns result as expected if particlesCount: 12; clonesCountHead: 2; clonesCountTotal: 5; particlesToScroll: 2', () => {
+    const testCases = [{
+      particlesCount: 12,
+      clonesCountHead: 2,
+      clonesCountTotal: 5,
+      particlesToScroll: 2,
+      currentParticleIndex: 0,
+      expected: 3,
+    }, {
+      particlesCount: 12,
+      clonesCountHead: 2,
+      clonesCountTotal: 5,
+      particlesToScroll: 2,
+      currentParticleIndex: 2,
+      expected: 0,
+    }, {
+      particlesCount: 12,
+      clonesCountHead: 2,
+      clonesCountTotal: 5,
+      particlesToScroll: 2,
+      currentParticleIndex: 4,
+      expected: 1,
+    }, {
+      particlesCount: 12,
+      clonesCountHead: 2,
+      clonesCountTotal: 5,
+      particlesToScroll: 2,
+      currentParticleIndex: 8,
+      expected: 3,
+    }, {
+      particlesCount: 12,
+      clonesCountHead: 2,
+      clonesCountTotal: 5,
+      particlesToScroll: 2,
+      currentParticleIndex: 10,
+      expected: 0,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesCount,
+      clonesCountHead,
+      clonesCountTotal,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexInfinite({
+        currentParticleIndex,
+        particlesCount,
+        clonesCountHead,
+        clonesCountTotal,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCount: 10; clonesCountHead: 1; clonesCountTotal: 3; particlesToScroll: 2', () => {
+    const testCases = [{
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 0,
+      expected: 3,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 1,
+      expected: 0,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 3,
+      expected: 1,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 5,
+      expected: 2,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 7,
+      expected: 3,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 2,
+      currentParticleIndex: 9,
+      expected: 0,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesCount,
+      clonesCountHead,
+      clonesCountTotal,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexInfinite({
+        currentParticleIndex,
+        particlesCount,
+        clonesCountHead,
+        clonesCountTotal,
         particlesToScroll,
       })).toBe(expected)
     })
