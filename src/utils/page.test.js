@@ -1,10 +1,12 @@
 import {
   getPartialPageSize,
-  _getCurrentPageIndexByCurrentParticleIndexInfinite
-  // getCurrentPageIndex,
-  // getPagesCountByParticlesCount,
-  // getParticleIndexByPageIndexInfinite,
-  // getParticleIndexByPageIndexLimited,
+  getPartialPageSize,
+  _getCurrentPageIndexByCurrentParticleIndexInfinite,
+  _getCurrentPageIndexByCurrentParticleIndexLimited,
+  _getPagesCountByParticlesCountInfinite,
+  _getPagesCountByParticlesCountLimited,
+  _getParticleIndexByPageIndexInfinite,
+  _getParticleIndexByPageIndexLimited,
 } from './page.js'
 
 describe('getPartialPageSize', () => {

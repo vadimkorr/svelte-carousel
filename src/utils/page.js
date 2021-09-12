@@ -2,15 +2,6 @@ import {
   getValueInRange,
 } from './math'
 
-export function applyParticleSizes({
-  particlesContainerChildren,
-  particleWidth,
-}) {
-  for (let particleIndex=0; particleIndex<particlesContainerChildren.length; particleIndex++) {
-    particlesContainerChildren[particleIndex].style.minWidth = `${particleWidth}px`
-    particlesContainerChildren[particleIndex].style.maxWidth = `${particleWidth}px`
-  }
-}
 
 // getCurrentPageIndexByCurrentParticleIndex
 
@@ -56,24 +47,6 @@ export function getCurrentPageIndexByCurrentParticleIndex({
       currentParticleIndex,
       particlesToScroll,
     })
-}
-
-// TODO: think about case if particlesCount < particlesToShow and particlesCount < particlesToScroll
-export function getPartialPageSize({
-  particlesToScroll,
-  particlesToShow,
-  particlesCountWithoutClones, 
-}) {
-  const overlap = particlesToScroll - particlesToShow
-  let particlesCount = particlesToShow
-
-  while(true) {
-    const diff = particlesCountWithoutClones - particlesCount - overlap
-    if (diff < particlesToShow) {
-      return diff
-    }
-    particlesCount += particlesToShow + overlap
-  }
 }
 
 // getPagesCountByParticlesCount
@@ -160,6 +133,34 @@ export function getParticleIndexByPageIndex({
       particlesCount,
       particlesToShow,
     })
+}
+
+export function applyParticleSizes({
+  particlesContainerChildren,
+  particleWidth,
+}) {
+  for (let particleIndex=0; particleIndex<particlesContainerChildren.length; particleIndex++) {
+    particlesContainerChildren[particleIndex].style.minWidth = `${particleWidth}px`
+    particlesContainerChildren[particleIndex].style.maxWidth = `${particleWidth}px`
+  }
+}
+
+// TODO: think about case if particlesCount < particlesToShow and particlesCount < particlesToScroll
+export function getPartialPageSize({
+  particlesToScroll,
+  particlesToShow,
+  particlesCountWithoutClones, 
+}) {
+  const overlap = particlesToScroll - particlesToShow
+  let particlesCount = particlesToShow
+
+  while(true) {
+    const diff = particlesCountWithoutClones - particlesCount - overlap
+    if (diff < particlesToShow) {
+      return diff
+    }
+    particlesCount += particlesToShow + overlap
+  }
 }
 
 export function createResizeObserver(onResize) {
