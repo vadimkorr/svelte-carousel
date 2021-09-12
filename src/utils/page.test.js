@@ -114,7 +114,7 @@ describe('getPartialPageSize', () => {
 })
 
 describe('_getCurrentPageIndexByCurrentParticleIndexInfinite', () => {
-  it('returns result as expected if particlesCount: 12; clonesCountHead: 2; clonesCountTotal: 5; particlesToScroll: 2', () => {
+  it('returns result as expected if particlesCount: 12; clonesCountHead: 2; clonesCountTotal: 5; particlesToScroll: 2 (particlesToShow: 3)', () => {
     const testCases = [{
       particlesCount: 12,
       clonesCountHead: 2,
@@ -170,7 +170,7 @@ describe('_getCurrentPageIndexByCurrentParticleIndexInfinite', () => {
     })
   })
 
-  it('returns result as expected if particlesCount: 10; clonesCountHead: 1; clonesCountTotal: 3; particlesToScroll: 2', () => {
+  it('returns result as expected if particlesCount: 10; clonesCountHead: 1; clonesCountTotal: 3; particlesToScroll: 2 (particlesToShow: 2)', () => {
     const testCases = [{
       particlesCount: 10,
       clonesCountHead: 1,
@@ -211,6 +211,62 @@ describe('_getCurrentPageIndexByCurrentParticleIndexInfinite', () => {
       clonesCountHead: 1,
       clonesCountTotal: 3,
       particlesToScroll: 2,
+      currentParticleIndex: 9,
+      expected: 0,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesCount,
+      clonesCountHead,
+      clonesCountTotal,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexInfinite({
+        currentParticleIndex,
+        particlesCount,
+        clonesCountHead,
+        clonesCountTotal,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCount: 10; clonesCountHead: 1; clonesCountTotal: 3; particlesToScroll: 3 (particlesToShow: 2)', () => {
+    const testCases = [{
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 3,
+      currentParticleIndex: 0,
+      expected: 2,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 3,
+      currentParticleIndex: 1,
+      expected: 0,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 3,
+      currentParticleIndex: 4,
+      expected: 1,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 3,
+      currentParticleIndex: 7,
+      expected: 2,
+    }, {
+      particlesCount: 10,
+      clonesCountHead: 1,
+      clonesCountTotal: 3,
+      particlesToScroll: 3,
       currentParticleIndex: 9,
       expected: 0,
     }]
