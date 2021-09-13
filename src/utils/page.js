@@ -2,7 +2,6 @@ import {
   getValueInRange,
 } from './math'
 
-
 // getCurrentPageIndexByCurrentParticleIndex
 
 export function _getCurrentPageIndexByCurrentParticleIndexInfinite({
