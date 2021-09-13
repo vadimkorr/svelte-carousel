@@ -1,6 +1,5 @@
 import {
   getPartialPageSize,
-  getPartialPageSize,
   _getCurrentPageIndexByCurrentParticleIndexInfinite,
   _getCurrentPageIndexByCurrentParticleIndexLimited,
   _getPagesCountByParticlesCountInfinite,
@@ -286,6 +285,81 @@ describe('_getCurrentPageIndexByCurrentParticleIndexInfinite', () => {
         particlesCount,
         clonesCountHead,
         clonesCountTotal,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+})
+
+describe('_getCurrentPageIndexByCurrentParticleIndexLimited particlesCount: 5', () => {
+  it('returns result as expected if particlesToScroll: 2 (particlesToShow: 2)', () => {
+    const testCases = [{
+      currentParticleIndex: 0,
+      particlesToScroll: 2,
+      expected: 0,
+    }, {
+      currentParticleIndex: 2,
+      particlesToScroll: 2,
+      expected: 1,
+    }, {
+      currentParticleIndex: 4,
+      particlesToScroll: 2,
+      expected: 2,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexLimited({
+        currentParticleIndex,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesToScroll: 2 (particlesToShow: 3)', () => {
+    const testCases = [{
+      currentParticleIndex: 0,
+      particlesToScroll: 2,
+      expected: 0,
+    }, {
+      currentParticleIndex: 2,
+      particlesToScroll: 2,
+      expected: 1,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexLimited({
+        currentParticleIndex,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesToScroll: 3 (particlesToShow: 2)', () => {
+    const testCases = [{
+      currentParticleIndex: 0,
+      particlesToScroll: 3,
+      expected: 0,
+    }, {
+      currentParticleIndex: 3,
+      particlesToScroll: 3,
+      expected: 1,
+    }]
+
+    testCases.forEach(({
+      currentParticleIndex,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getCurrentPageIndexByCurrentParticleIndexLimited({
+        currentParticleIndex,
         particlesToScroll,
       })).toBe(expected)
     })
