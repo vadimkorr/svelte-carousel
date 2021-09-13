@@ -157,7 +157,7 @@ export function getPartialPageSize({
   while(true) {
     const diff = particlesCountWithoutClones - particlesCount - overlap
     if (diff < particlesToShow) {
-      return diff
+      return Math.max(diff, 0) // show: 2; scroll: 3, n: 5 => -1
     }
     particlesCount += particlesToShow + overlap
   }

@@ -40,6 +40,11 @@ describe('getPartialPageSize', () => {
       particlesToShow: 2,
       particlesToScroll: 2,
       expected: 0,
+    }, {
+      particlesCountWithoutClones: 5,
+      particlesToShow: 2,
+      particlesToScroll: 3,
+      expected: 0,
     }]
 
     testCases.forEach(({
