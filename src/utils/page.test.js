@@ -365,3 +365,62 @@ describe('_getCurrentPageIndexByCurrentParticleIndexLimited particlesCount: 5', 
     })
   })
 })
+
+describe('_getPagesCountByParticlesCountInfinite', () => {
+  it('returns result as expected if particlesCountWithoutClones: 5; particlesToScroll: 2 (particlesToShow: 3, particlesCount: 8)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 5,
+      particlesToScroll: 2,
+      expected: 3,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountInfinite({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCountWithoutClones: 6; particlesToScroll: 2 (particlesToShow: 2, particlesCount: 10)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 6,
+      particlesToScroll: 2,
+      expected: 3,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountInfinite({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCountWithoutClones: 5; particlesToScroll: 3 (particlesToShow: 2, particlesCount: 9)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 5,
+      particlesToScroll: 3,
+      expected: 2,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountInfinite({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+})
