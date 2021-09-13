@@ -1,6 +1,6 @@
 import { getValueInRange } from './math'
 
-export function getIndexesOfPagesWithoutClonesInScroll({
+export function getIndexesOfParticlesWithoutClonesInPage({
   pageIndex,
   particlesToShow,
   particlesToScroll,
@@ -47,7 +47,7 @@ export function getAdjacentIndexes({
     pagesCount - 1, // needed to clone last page particles
   ])].sort((a, b) => a - b)
   const particleIndexes = pageIndexes.flatMap(
-    pageIndex => getIndexesOfPagesWithoutClonesInScroll({
+    pageIndex => getIndexesOfParticlesWithoutClonesInPage({
       pageIndex,
       particlesToShow,
       particlesToScroll,

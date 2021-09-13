@@ -1,9 +1,9 @@
 import {
-  getIndexesOfPagesWithoutClonesInScroll,
+  getIndexesOfParticlesWithoutClonesInPage,
   getAdjacentIndexes,
 } from './lazy.js'
 
-describe('getIndexesOfPagesWithoutClonesInScroll', () => {
+describe('getIndexesOfParticlesWithoutClonesInPage', () => {
   it('returns correct range if particlesToShow < particlesToScroll', () => {
     const testCases = [
       { pageIndex: 0, particlesToShow: 3, particlesCount: 9, particlesToScroll: 4, expected: [0, 1, 2, 3] },
@@ -17,7 +17,7 @@ describe('getIndexesOfPagesWithoutClonesInScroll', () => {
       particlesCount,
       expected,
     }) => {
-      expect(getIndexesOfPagesWithoutClonesInScroll({
+      expect(getIndexesOfParticlesWithoutClonesInPage({
         pageIndex,
         particlesToShow,
         particlesToScroll,
@@ -39,7 +39,7 @@ describe('getIndexesOfPagesWithoutClonesInScroll', () => {
       particlesCount,
       expected,
     }) => {
-      expect(getIndexesOfPagesWithoutClonesInScroll({
+      expect(getIndexesOfParticlesWithoutClonesInPage({
         pageIndex,
         particlesToShow,
         particlesToScroll,
@@ -61,7 +61,7 @@ describe('getIndexesOfPagesWithoutClonesInScroll', () => {
       particlesCount,
       expected,
     }) => {
-      expect(getIndexesOfPagesWithoutClonesInScroll({
+      expect(getIndexesOfParticlesWithoutClonesInPage({
         pageIndex,
         particlesToShow,
         particlesToScroll,

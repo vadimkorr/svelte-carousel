@@ -10,7 +10,7 @@
   import { tappable } from '../../actions/tappable'
   import {
     addResizeEventListener,
-    removeResizeEventListener
+    removeResizeEventListener,
   } from '../../utils/event'
   import {
     applyParticleSizes,
