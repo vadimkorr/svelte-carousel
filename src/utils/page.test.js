@@ -429,3 +429,62 @@ describe('_getPagesCountByParticlesCountInfinite', () => {
     })
   })
 })
+
+describe('_getPagesCountByParticlesCountLimited', () => {
+  it('returns result as expected if particlesCountWithoutClones: 5; particlesToScroll: 2 (particlesToShow: 3)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 5,
+      particlesToScroll: 2,
+      expected: 3,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountLimited({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCountWithoutClones: 6; particlesToScroll: 2 (particlesToShow: 2)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 6,
+      particlesToScroll: 2,
+      expected: 3,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountLimited({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCountWithoutClones: 5; particlesToScroll: 3 (particlesToShow: 2)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 5,
+      particlesToScroll: 3,
+      expected: 2,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountLimited({
+        particlesCountWithoutClones,
+        particlesToScroll,
+      })).toBe(expected)
+    })
+  })
+})
