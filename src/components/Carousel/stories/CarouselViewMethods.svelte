@@ -1,5 +1,5 @@
 <script>
-  import {onMount} from 'svelte'
+  import { onMount } from 'svelte'
   import Carousel from '../Carousel.svelte'
 
   const colors = [

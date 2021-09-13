@@ -61,6 +61,16 @@
    */
   export let swiping = true
 
+  /**
+   * Number of particles to show 
+   */
+  export let particlesToShow = 1
+
+  /**
+   * Number of particles to scroll 
+   */
+  export let particlesToScroll = 1
+
   const colors = [
     { color: '#e5f9f0', text: '0' },
     { color: '#ccf3e2', text: '1' },
@@ -95,6 +105,8 @@
     {autoplayProgressVisible}
     {dots}
     {swiping}
+    {particlesToShow}
+    {particlesToScroll}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }
@@ -122,6 +134,8 @@
     {autoplayProgressVisible}
     {dots}
     {swiping}
+    {particlesToShow}
+    {particlesToScroll}
   >
     {#each colors2 as { color, text } (color)}
       <div
