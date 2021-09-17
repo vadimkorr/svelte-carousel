@@ -9,10 +9,6 @@
   import { hoverable } from '../../actions/hoverable'
   import { tappable } from '../../actions/tappable'
   import {
-    addResizeEventListener,
-    removeResizeEventListener,
-  } from '../../utils/event'
-  import {
     applyParticleSizes,
     getCurrentPageIndexByCurrentParticleIndex,
     getPartialPageSize,
