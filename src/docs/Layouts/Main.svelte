@@ -1,9 +1,9 @@
 <script context="module">
-  import Table from './custom/Table.svelte';
-  import Th from './custom/Th.svelte';
-  import Tr from './custom/Tr.svelte';
-  import Td from './custom/Td.svelte';
-  import { H1, H2 } from './custom/H';
+  import Table from './custom/Table.svelte'
+  import Th from './custom/Th.svelte'
+  import Tr from './custom/Tr.svelte'
+  import Td from './custom/Td.svelte'
+  import { H1, H2 } from './custom/H'
   export {
     Table as table,
     Th as th,
@@ -11,7 +11,8 @@
     Td as td,
     H1 as h1,
     H2 as h2,
-  };
+  }
+  import pkg from '../../../package.json'
 </script>
 
 <script>
@@ -29,7 +30,10 @@
 
 <div class="docs__main-layout__main-container">
   <div class="docs__main-layout__header-container">
-    <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md.png" alt="svelte-carousel-logo" />
+    <div class="docs__main-layout__logo-container">
+      <span class="docs__main-layout__version">v{pkg.version}</span>
+      <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md.png" alt="svelte-carousel-logo" />
+    </div>
     <div class="docs__main-layout__links-container">
       {#each links as { url, title, iconName } (title)}
         <a href={url} target="_blank" rel="noopener noreferrer" class="docs__main-layout__link">
@@ -62,11 +66,28 @@
     box-sizing: border-box;
     background-color: #f0e68c;
   }
-  .docs__main-layout__logo {
+
+  .docs__main-layout__logo-container {
     height: 80%;
+    max-width: 100%;
+    position: relative;
+  }
+  .docs__main-layout__version {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #fff;
+    padding: 3px 7px;
+    border-radius: 5px;
+    line-height: 14px;
+    font-size: 14px;
+  }
+  .docs__main-layout__logo {
+    max-height: 100%;
     max-width: 100%;
     object-fit: contain;
   }
+
   .docs__main-layout__links-container {
     display: flex;
     justify-content: center;
