@@ -29,24 +29,22 @@
 <Divider />
 
 ## Multiple items!anchorId:features-multiple-items;
-<Carousel>
-  {#each _.chunk(colors, 3) as colorsChunk, chunkIndex (chunkIndex)}
-    <div style="display: flex;">
-      {#each colorsChunk as { color, text } (color)}
-        <Color {color} {text} />
-      {/each}
-    </div>
+<Carousel
+  particlesToShow={3}
+  particlesToScroll={3}
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
   {/each}
 </Carousel>
 
 ```jsx
-<Carousel>
-  {#each _.chunk(colors, 3) as colorsChunk, chunkIndex (chunkIndex)}
-    <div style="display: flex;">
-      {#each colorsChunk as { color, text } (color)}
-        <Color {color} {text} />
-      {/each}
-    </div>
+<Carousel
+  particlesToShow={3}
+  particlesToScroll={3}
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
   {/each}
 </Carousel>
 ```
@@ -276,6 +274,8 @@ Import component:
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 | `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
+| `particlesToShow`         | `number`   | `1`             | Number of elements to show                    |
+| `particlesToScroll`       | `number`   | `1`             | Number of elements to scroll                  |
 
 <Divider />
 
