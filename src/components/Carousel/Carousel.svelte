@@ -367,7 +367,8 @@
     )
   }
   async function showPrevPage(options) {
-    // TODO: return if disabled
+    if (disabled) return
+
     await changePage(
       () => store.prev({
         infinite,
@@ -382,7 +383,8 @@
     )
   }
   async function showNextPage(options) {
-    // TODO: return if disabled
+    if (disabled) return
+
     await changePage(
       () => store.next({
         infinite,

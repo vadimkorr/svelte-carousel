@@ -144,7 +144,6 @@ export function applyParticleSizes({
   }
 }
 
-// TODO: think about case if particlesCount < particlesToShow and particlesCount < particlesToScroll
 export function getPartialPageSize({
   particlesToScroll,
   particlesToShow,
