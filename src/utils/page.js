@@ -1,146 +1,164 @@
-export function getNextPageIndexLimited({
-  currentPageIndex,
-  pagesCount,
+import {
+  getValueInRange,
+} from './math'
+
+// getCurrentPageIndexByCurrentParticleIndex
+
+export function _getCurrentPageIndexByCurrentParticleIndexInfinite({
+  currentParticleIndex,
+  particlesCount,
+  clonesCountHead,
+  clonesCountTotal,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.min(Math.max(currentPageIndex + 1, 0), pagesCount - 1)
+  if (currentParticleIndex === particlesCount - clonesCountHead) return 0
+  if (currentParticleIndex === 0) return _getPagesCountByParticlesCountInfinite({
+    particlesCountWithoutClones: particlesCount - clonesCountTotal,
+    particlesToScroll,
+  }) - 1
+  return Math.floor((currentParticleIndex - clonesCountHead) / particlesToScroll)
 }
 
-export function getNextPageIndexInfinte({
-  currentPageIndex,
-  pagesCount,
+export function _getCurrentPageIndexByCurrentParticleIndexLimited({
+  currentParticleIndex,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.max(currentPageIndex, 0) + 1
-  return newCurrentPageIndex > pagesCount - 1 ? 0 : Math.max(newCurrentPageIndex, 0)
+  return Math.ceil(currentParticleIndex / particlesToScroll)
 }
 
-export function getNextPageIndexFn(infinite) {
-  return infinite ? getNextPageIndexInfinte : getNextPageIndexLimited
-}
-
-export function getPrevPageIndexLimited({
-  currentPageIndex,
-  pagesCount,
+export function getCurrentPageIndexByCurrentParticleIndex({
+  currentParticleIndex,
+  particlesCount,
+  clonesCountHead,
+  clonesCountTotal,
+  infinite,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return Math.max(Math.min(currentPageIndex - 1, pagesCount - 1), 0)
+  return infinite
+    ? _getCurrentPageIndexByCurrentParticleIndexInfinite({
+      currentParticleIndex,
+      particlesCount,
+      clonesCountHead,
+      clonesCountTotal,
+      particlesToScroll,
+    })
+    : _getCurrentPageIndexByCurrentParticleIndexLimited({
+      currentParticleIndex,
+      particlesToScroll,
+    })
 }
 
-export function getPrevPageIndexInfinte({
-  currentPageIndex,
-  pagesCount,
+// getPagesCountByParticlesCount
+
+export function _getPagesCountByParticlesCountInfinite({
+  particlesCountWithoutClones,
+  particlesToScroll,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const newCurrentPageIndex = Math.min(currentPageIndex, pagesCount - 1) - 1
-  return newCurrentPageIndex >= 0 ? Math.min(newCurrentPageIndex, pagesCount - 1) : pagesCount - 1
+  return Math.ceil(particlesCountWithoutClones / particlesToScroll)
 }
 
-export function getPrevPageIndexFn(infinite) {
-  return infinite ? getPrevPageIndexInfinte : getPrevPageIndexLimited
+export function _getPagesCountByParticlesCountLimited({
+  particlesCountWithoutClones,
+  particlesToScroll,
+}) {
+  return Math.round(particlesCountWithoutClones / particlesToScroll)
 }
 
-export function getPageIndex({
+export function getPagesCountByParticlesCount({
+  infinite,
+  particlesCountWithoutClones,
+  particlesToScroll,
+}) {
+  return infinite
+    ? _getPagesCountByParticlesCountInfinite({
+      particlesCountWithoutClones,
+      particlesToScroll,
+    })
+    : _getPagesCountByParticlesCountLimited({
+      particlesCountWithoutClones,
+      particlesToScroll,
+    })
+}
+
+// getParticleIndexByPageIndex
+
+export function _getParticleIndexByPageIndexInfinite({
   pageIndex,
-  pagesCount,
+  clonesCountHead,
+  clonesCountTail,
+  particlesToScroll,
+  particlesCount,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  return pageIndex < 0 ? 0 : Math.min(pageIndex, pagesCount - 1)
+  return getValueInRange(
+    0,
+    Math.min(clonesCountHead + pageIndex * particlesToScroll, particlesCount - clonesCountTail),
+    particlesCount - 1
+  )
 }
 
-export function getAdjacentIndexes({
+export function _getParticleIndexByPageIndexLimited({
   pageIndex,
-  pagesCount,
+  particlesToScroll,
+  particlesCount,
+  particlesToShow,
+}) {
+  return getValueInRange(
+    0,
+    Math.min(pageIndex * particlesToScroll, particlesCount - particlesToShow),
+    particlesCount - 1
+  ) 
+}
+
+export function getParticleIndexByPageIndex({
   infinite,
+  pageIndex,
+  clonesCountHead,
+  clonesCountTail,
+  particlesToScroll,
+  particlesCount,
+  particlesToShow,
 }) {
-  if (pagesCount < 1) throw new Error('pagesCount must be at least 1')
-  const _pageIndex = Math.max(0, Math.min(pageIndex, pagesCount - 1))
-  let rangeStart = _pageIndex - 1;
-  let rangeEnd = _pageIndex + 1;
-  rangeStart = rangeStart < 0
-    ? infinite
-      ? pagesCount - 1
-      : 0
-    : rangeStart 
-  rangeEnd = rangeEnd > pagesCount - 1
-    ? infinite
-        ? 0
-        : pagesCount - 1
-    : rangeEnd
-  return [...new Set([rangeStart, rangeEnd, _pageIndex])].sort((a, b) => a - b)
+  return infinite
+    ? _getParticleIndexByPageIndexInfinite({
+      pageIndex,
+      clonesCountHead,
+      clonesCountTail,
+      particlesToScroll,
+      particlesCount,
+    })
+    : _getParticleIndexByPageIndexLimited({
+      pageIndex,
+      particlesToScroll,
+      particlesCount,
+      particlesToShow,
+    })
 }
 
-export function getClones({
-  oneSideClonesCount,
-  pagesContainerChildren,
+export function applyParticleSizes({
+  particlesContainerChildren,
+  particleWidth,
 }) {
-  // TODO: add fns to remove clones if needed
-  const clonesToAppend = []
-  for (let i=0; i<oneSideClonesCount; i++) {
-    clonesToAppend.push(pagesContainerChildren[i].cloneNode(true))
-  }
-
-  const clonesToPrepend = []
-  const len = pagesContainerChildren.length
-  for (let i=len-1; i>len-1-oneSideClonesCount; i--) {
-    clonesToPrepend.push(pagesContainerChildren[i].cloneNode(true))
-  }
-
-  return {
-    clonesToAppend,
-    clonesToPrepend,
+  for (let particleIndex=0; particleIndex<particlesContainerChildren.length; particleIndex++) {
+    particlesContainerChildren[particleIndex].style.minWidth = `${particleWidth}px`
+    particlesContainerChildren[particleIndex].style.maxWidth = `${particleWidth}px`
   }
 }
 
-export function applyClones({
-  pagesContainer,
-  clonesToAppend,
-  clonesToPrepend,
+export function getPartialPageSize({
+  particlesToScroll,
+  particlesToShow,
+  particlesCountWithoutClones, 
 }) {
-  for (let i=0; i<clonesToAppend.length; i++) {
-    pagesContainer.append(clonesToAppend[i])
-  }
-  for (let i=0; i<clonesToPrepend.length; i++) {
-    pagesContainer.prepend(clonesToPrepend[i])
-  }
-}
+  const overlap = particlesToScroll - particlesToShow
+  let particlesCount = particlesToShow
 
-export function applyPageSizes({
-  pagesContainerChildren,
-  pageWidth,
-}) {
-  for (let pageIndex=0; pageIndex<pagesContainerChildren.length; pageIndex++) {
-    pagesContainerChildren[pageIndex].style.minWidth = `${pageWidth}px`
-    pagesContainerChildren[pageIndex].style.maxWidth = `${pageWidth}px`
+  while(true) {
+    const diff = particlesCountWithoutClones - particlesCount - overlap
+    if (diff < particlesToShow) {
+      return Math.max(diff, 0) // show: 2; scroll: 3, n: 5 => -1
+    }
+    particlesCount += particlesToShow + overlap
   }
-}
-
-export function getCurrentPageIndexWithoutClones({
-  currentPageIndex,
-  pagesCount,
-  oneSideClonesCount,
-  infinite,
-}) {
-  if (infinite) {
-    if (currentPageIndex === pagesCount - 1) return 0
-    if (currentPageIndex === 0) return (pagesCount - oneSideClonesCount * 2) - 1
-    return currentPageIndex - 1
-  }
-  return currentPageIndex
-}
-
-export function getPagesCountWithoutClones({
-  pagesCount,
-  oneSideClonesCount,
-}) {
-  const bothSidesClonesCount = oneSideClonesCount * 2
-  return Math.max(pagesCount - bothSidesClonesCount, 1)
-}
-
-export function getOneSideClonesCount({
-  infinite,
-}) {
-  return infinite ? 1 : 0
 }
 
 export function createResizeObserver(onResize) {

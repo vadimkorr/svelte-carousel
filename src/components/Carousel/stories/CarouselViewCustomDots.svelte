@@ -61,6 +61,16 @@
    */
   export let swiping = true
 
+  /**
+   * Number of particles to show 
+   */
+  export let particlesToShow = 1
+
+  /**
+   * Number of particles to scroll 
+   */
+  export let particlesToScroll = 1
+
   function onPageChange(event, showPage) {
     showPage(Number(event.target.value))
   }
@@ -93,6 +103,8 @@
     {autoplayProgressVisible}
     {dots}
     {swiping}
+    {particlesToShow}
+    {particlesToScroll}
     let:currentPageIndex
     let:pagesCount
     let:showPage

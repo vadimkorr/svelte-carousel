@@ -61,6 +61,16 @@
    */
   export let swiping = true
 
+  /**
+   * Number of particles to show 
+   */
+  export let particlesToShow = 1
+
+  /**
+   * Number of particles to scroll 
+   */
+  export let particlesToScroll = 1
+
   const colors = [
     '#e5f9f0',
     '#ccf3e2',
@@ -89,6 +99,8 @@
     {autoplayProgressVisible}
     {dots}
     {swiping}
+    {particlesToShow}
+    {particlesToScroll}
     let:showPrevPage
     let:showNextPage
   >

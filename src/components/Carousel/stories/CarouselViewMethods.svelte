@@ -1,5 +1,5 @@
 <script>
-  import {onMount} from 'svelte'
+  import { onMount } from 'svelte'
   import Carousel from '../Carousel.svelte'
 
   const colors = [
@@ -40,6 +40,8 @@
 <div class="main-container">
   <Carousel
     bind:this={carousel}
+    particlesToShow={3}
+    particlesToScroll={2}
   >
     {#each colors as { color, text } (color)}
       <div

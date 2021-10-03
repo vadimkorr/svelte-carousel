@@ -53,7 +53,7 @@ npm install svelte-carousel -D
   import { onMount } from 'svelte';
 
   let Carousel; // for saving Carousel component class
-  let carousel; // for calling methods of carousel instance
+  let carousel; // for calling methods of the carousel instance
   onMount(async () => {
     const module = await import('svelte-carousel');
     Carousel = module.default;
@@ -91,6 +91,8 @@ npm install svelte-carousel -D
 | `dots`                    | `boolean`  | `true`          | Current page indicator dots                   |
 | `timingFunction`          | `string`   | `'ease-in-out'` | CSS animation timing function                 |
 | `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
+| `particlesToShow`         | `number`   | `1`             | Number of elements to show                    |
+| `particlesToScroll`       | `number`   | `1`             | Number of elements to scroll                  |
 
 ## Events
 

@@ -4,3 +4,7 @@ export const getDistance = (p1, p2) => {
 
   return Math.sqrt((xDist * xDist) + (yDist * yDist));
 }
+
+export function getValueInRange(min, value, max) {
+  return Math.max(min, Math.min(value, max))
+}
