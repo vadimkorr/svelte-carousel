@@ -31,7 +31,7 @@
 ## Multiple items!anchorId:features-multiple-items;
 <Carousel
   particlesToShow={3}
-  particlesToScroll={3}
+  particlesToScroll={2}
 >
   {#each colors as { color, text } (color)}
     <Color {color} {text} />
@@ -41,7 +41,7 @@
 ```jsx
 <Carousel
   particlesToShow={3}
-  particlesToScroll={3}
+  particlesToScroll={2}
 >
   {#each colors as { color, text } (color)}
     <Color {color} {text} />
