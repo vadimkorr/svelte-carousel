@@ -28,6 +28,7 @@
 
 <Divider />
 
+
 ## Multiple items!anchorId:features-multiple-items;
 <Carousel
   particlesToShow={3}
