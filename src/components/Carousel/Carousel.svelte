@@ -123,7 +123,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showPage(getParticleIndexByPageIndex({
+    await showParticle(getParticleIndexByPageIndex({
       infinite,
       pageIndex,
       clonesCountHead: clonesCount.head,
@@ -304,7 +304,7 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showPage(getParticleIndexByPageIndex({
+    await showParticle(getParticleIndexByPageIndex({
       infinite,
       pageIndex,
       clonesCountHead: clonesCount.head,
@@ -332,10 +332,10 @@
     let jumped = false
     if (infinite) {
       if (currentParticleIndex === 0) {
-        await showPage(particlesCount - clonesCount.total, { animated: false })
+        await showParticle(particlesCount - clonesCount.total, { animated: false })
         jumped = true
       } else if (currentParticleIndex === particlesCount - clonesCount.tail) {
-        await showPage(clonesCount.head, { animated: false })
+        await showParticle(clonesCount.head, { animated: false })
         jumped = true
       }
     }
@@ -357,7 +357,7 @@
     !jumped && applyAutoplayIfNeeded(autoplay) // no need to wait it finishes
   }
 
-  async function showPage(particleIndex, options) {
+  async function showParticle(particleIndex, options) {
     await changePage(
       () => store.moveToParticle({
         particleIndex,
@@ -414,7 +414,7 @@
   }
   function handleSwipeEnd() {
     if (!swiping) return
-    showPage(currentParticleIndex)
+    showParticle(currentParticleIndex)
   }
   async function handleSwipeFailed() {
     if (!swiping) return
