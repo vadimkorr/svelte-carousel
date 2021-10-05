@@ -1,6 +1,5 @@
 <script>
   import { onDestroy, onMount, tick, createEventDispatcher } from 'svelte'
-  import { createStore } from '../../store'
   import Dots from '../Dots/Dots.svelte'
   import Arrow from '../Arrow/Arrow.svelte'
   import Progress from '../Progress/Progress.svelte'
@@ -31,6 +30,24 @@
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
+  import { carouselEngine } from './carousel'
+  import { reactive } from './reactive'
+
+  const data = reactive(
+    {
+      message: 'hello',
+      someValue: 'some-value'
+    },
+    {
+      renderFunction: (data) => {
+        console.log('renderFunction watcher called', data.message)
+      },
+    }
+  )
+  console.log('console', data)
+
+  data.message = 'Hello!'
+
   const dispatch = createEventDispatcher()
 
   const autoplayDirectionFnDescription = {
@@ -57,7 +74,10 @@
   /**
    * Infinite looping
    */
-  export let infinite = true
+  export let infinite
+  $: {
+    setInfinite(infinite)
+  }
 
   /**
    * Page to start on
@@ -112,11 +132,18 @@
    * Number of particles to show 
    */
   export let particlesToShow = 1
+  $: {
+    console.log('particlesToShow changed')
+    // setParticlesToShow(particlesToShow)
+  }
 
   /**
    * Number of particles to scroll 
    */
   export let particlesToScroll = 1
+  $: {
+    // setParticlesToScroll(particlesToScroll)
+  }
 
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
@@ -144,38 +171,48 @@
     await showNextPage({ animated })
   }
 
-  let store = createStore()
 
-  $: clonesCount = getClonesCount({
-    infinite,
-    particlesToShow,
-    partialPageSize,
-  })
-
+  ///// ==========================
+  let currentPageIndex
+  let pagesCount
+  let particlesCountWithoutClones
+  let clonesCount
   let currentParticleIndex = 0
-  $: currentPageIndex = getCurrentPageIndexByCurrentParticleIndex({
-    currentParticleIndex,
-    particlesCount,
-    clonesCountHead: clonesCount.head,
-    clonesCountTotal: clonesCount.total,
-    infinite,
-    particlesToScroll,
-  })
-  $: dispatch('pageChange', currentPageIndex)
-
   let particlesCount = 0
-  let particlesCountWithoutClones = 1
-  $: pagesCount = getPagesCountByParticlesCount({
-    infinite,
-    particlesCountWithoutClones,
-    particlesToScroll,
+  let _particlesToShow
+  let _particlesToScroll
+
+  const {
+    setParticlesToShow,
+    setParticlesToScroll,
+    setParticlesCountWithoutClones,
+    setPartialPageSize,
+    setParticlesCount,
+    setCurrentParticleIndex,
+    setInitialPageIndex,
+    setInfinite,
+    prev,
+    next,
+    moveToParticle,
+  } = carouselEngine((values, computed) => {
+    // console.log('hello')
+    currentPageIndex = computed.currentPageIndex
+    pagesCount = computed.pagesCount
+    particlesCountWithoutClones = values.particlesCountWithoutClones
+    clonesCount = computed.clonesCount
+    currentParticleIndex = values.currentParticleIndex
+    particlesCount = values.particlesCount
+    _particlesToShow = values.particlesToShow
+    _particlesToScroll = values.particlesToScroll
   })
 
-  let partialPageSize = 0
+  ///// ==========================
+
 
   let pageWindowWidth = 0
   let particleWidth = 0
   let offset = 0
+
   let pageWindowElement
   let particlesContainer
 
@@ -183,7 +220,7 @@
     width,
   }) => {
     pageWindowWidth = width
-    particleWidth = pageWindowWidth / particlesToShow
+    particleWidth = pageWindowWidth / _particlesToShow
     
     applyParticleSizes({
       particlesContainerChildren: particlesContainer.children,
@@ -215,14 +252,15 @@
   }
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
-  $: loaded = getAdjacentIndexes({
-    infinite,
-    pageIndex: currentPageIndex,
-    pagesCount,
-    particlesCount: particlesCountWithoutClones,
-    particlesToShow,
-    particlesToScroll,
-  }).particleIndexes
+  let loaded = []
+  // $: loaded = getAdjacentIndexes({
+  //   infinite,
+  //   pageIndex: currentPageIndex,
+  //   pagesCount,
+  //   particlesCount: particlesCountWithoutClones,
+  //   particlesToShow: _particlesToShow,
+  //   particlesToScroll,
+  // }).particleIndexes
 
   function addClones() {
     const {
@@ -262,36 +300,18 @@
   onMount(() => {
     (async () => {
       await tick()
-      cleanupFns.push(store.subscribe(value => {
-        currentParticleIndex = value.currentParticleIndex
-      }))
       cleanupFns.push(() => progressManager.reset())
       if (particlesContainer && pageWindowElement) {
-        particlesCountWithoutClones = particlesContainer.children.length
-
-        particlesToShow = getValueInRange(1, particlesToShow, particlesCountWithoutClones)
-        particlesToScroll = getValueInRange(1, particlesToScroll, particlesCountWithoutClones)
-        initialPageIndex = getValueInRange(0, initialPageIndex, particlesCountWithoutClones - 1)
-
-        partialPageSize = getPartialPageSize({
-          particlesToScroll,
-          particlesToShow,
-          particlesCountWithoutClones,
-        })
+        setParticlesCountWithoutClones(particlesContainer.children.length)
+        setParticlesToShow(particlesToShow)
+        setParticlesToScroll(particlesToScroll)
 
         await tick()
         infinite && addClones()
-        particlesCount = particlesContainer.children.length
 
-        store.init(getParticleIndexByPageIndex({
-          infinite,
-          pageIndex: initialPageIndex,
-          clonesCountHead: clonesCount.head,
-          clonesCountTail: clonesCount.tail,
-          particlesToScroll,
-          particlesCount,
-          particlesToShow,
-        }))
+        // call after adding clones
+        setParticlesCount(particlesContainer.children.length)
+        setInitialPageIndex(initialPageIndex)
 
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }
@@ -311,7 +331,7 @@
       clonesCountTail: clonesCount.tail,
       particlesToScroll,
       particlesCount,
-      particlesToShow,
+      particlesToShow: _particlesToShow,
     }))
   }
 
@@ -359,10 +379,7 @@
 
   async function showParticle(particleIndex, options) {
     await changePage(
-      () => store.moveToParticle({
-        particleIndex,
-        particlesCount,
-      }),
+      () => moveToParticle(particleIndex),
       options
     )
   }
@@ -370,15 +387,7 @@
     if (disabled) return
 
     await changePage(
-      () => store.prev({
-        infinite,
-        currentPageIndex,
-        clonesCountHead: clonesCount.head,
-        clonesCountTail: clonesCount.tail,
-        particlesToScroll,
-        particlesCount,
-        particlesToShow,
-      }),
+      prev,
       options,
     )
   }
@@ -386,15 +395,7 @@
     if (disabled) return
 
     await changePage(
-      () => store.next({
-        infinite,
-        currentPageIndex,
-        particlesCount,
-        particlesToScroll,
-        particlesToShow,
-        clonesCountHead: clonesCount.head,
-        clonesCountTail: clonesCount.tail,
-      }),
+      next,
       options,
     )
   }
@@ -548,3 +549,6 @@
     bottom: 0;
   }
 </style>
+
+
+
