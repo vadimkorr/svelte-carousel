@@ -17,7 +17,13 @@ import { reactive } from './reactive'
 
 // return only getters
 export const carousel2 = (onChange) => {
-  return reactive(
+  const progressManager = new ProgressManager({
+    onProgressValueChange: (value) => {
+      onChange('progressValue', 1 - value)
+    },
+  })
+
+  const [data, methods] = reactive(
     {
       particlesCountWithoutClones: 0,
       particlesToShow: 1,
@@ -26,12 +32,15 @@ export const carousel2 = (onChange) => {
       particlesCount: 1,
       currentParticleIndex: 1,
       infinite: false,
+      autoplayDuration: 1000,
       clonesCountHead: 0,
       clonesCountTail: 0,
       clonesCountTotal: 0,
       partialPageSize: 1,
       currentPageIndex: 1,
       pagesCount: 1,
+      pauseOnFocus: false,
+      focused: false,
     },
     {
       setCurrentPageIndex: (data) => {
@@ -71,6 +80,19 @@ export const carousel2 = (onChange) => {
           particlesToScroll: data.particlesToScroll,
         })
       },
+      setProgressManagerAutoplayDuration: (data) => {
+        // progressManager.setAutoplayDuration(data.autoplayDuration)
+        // progressManager.restart()
+      },
+      toggleProgressManager: (data) => {
+        if (data.pauseOnFocus) {
+          if (data.focused) {
+            progressManager.pause()
+          } else {
+            progressManager.resume()
+          }
+        }
+      },
     },
     {
       prev: (data) => {
@@ -105,7 +127,12 @@ export const carousel2 = (onChange) => {
         )
         data.currentParticleIndex = newCurrentParticleIndex
       },
+      toggleFocused: (data) => {
+        data.focused = !data.focused
+      },
     },
     onChange
   )
+
+  return [{ ...data, progressManager }, methods]
 }
