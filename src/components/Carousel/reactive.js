@@ -85,22 +85,17 @@ export const reactive = (data, watchers, methods, onChange) => {
   const { subscribe, notify } = useSubscription()
   const { watch, getTarget } = useWatcher()
 
-  const _data = {}
-
-  Object.keys(data).forEach((key) => {
-    let currentValue = data[key]
-
-    Object.defineProperty(_data, key, {
-      get() {
-        subscribe(getTarget(), { key, value: currentValue })
-        return currentValue
-      },
-      set(newVal) {
-        currentValue = newVal
-        onChange && onChange(key, newVal)
-        notify(_data)
-      },
-    })
+  const _data = new Proxy(data, {
+    get(target, key) {
+      subscribe(getTarget(), { key, value: target[key] })
+      return Reflect.get(...arguments)
+    },
+    set(_, key, value) {
+      Reflect.set(...arguments)
+      onChange && onChange(key, value)
+      notify(_data)
+      return true
+    },
   })
 
   Object.entries(watchers).forEach(([watcherName, watcher]) => {
