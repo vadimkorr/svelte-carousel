@@ -30,9 +30,7 @@
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
-  import { carouselEngine } from './carousel'
   import { carousel2 } from './carousel2'
-  import { reactive } from './reactive'
 
   let currentPageIndex
 
