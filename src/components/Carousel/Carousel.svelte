@@ -33,25 +33,28 @@
   import { carousel2 } from './carousel2'
 
   let currentPageIndex
+  let focused = false
+  let progressValue
+  let offset = 0
+  let _duration = 0
 
-  const [data, methods] = carousel2((key, value) => {
-    // console.log('onChange', key, value)
-    if (key === 'currentPageIndex') {
-      currentPageIndex = value
+  const [{ data, progressManager }, methods] = carousel2((key, value) => {
+    const description = {
+      'currentPageIndex': () => currentPageIndex = value,
+      'progressValue': () => progressValue = value,
+      'focused': () => focused = value,
+      'offset': () => offset = value,
+      '_duration': () => _duration = value,
     }
-  }) // put init data
+    description[key] && description[key]()
+  })
  
-
   const dispatch = createEventDispatcher()
 
-  const autoplayDirectionFnDescription = {
-    [NEXT]: async () => await progressManager.start(showNextPage),
-    [PREV]: async () => await progressManager.start(showPrevPage)
-  }
 
   const directionFnDescription = {
-    [NEXT]: showNextPage,
-    [PREV]: showPrevPage
+    [NEXT]: methods.showNextPage,
+    [PREV]: methods.showPrevPage
   }
 
   /**
@@ -82,30 +85,42 @@
    * Transition duration (ms)
    */
   export let duration = 500
-  let _duration = duration
+  $: {
+    data.duration = duration
+  }
 
   /**
    * Enables autoplay of pages
    */
   export let autoplay = false
   $: {
-    applyAutoplayIfNeeded(autoplay)
+    data.autoplay = autoplay
+    methods.applyAutoplayIfNeeded(autoplay) // call in carousel2
   }
 
   /**
    * Autoplay change interval (ms)
    */
   export let autoplayDuration = 3000
+  $: {
+    data.autoplayDuration = autoplayDuration
+  }
 
   /**
    * Autoplay change direction ('next', 'prev')
    */
   export let autoplayDirection = NEXT
+  $: {
+    data.autoplayDirection = autoplayDirection
+  }
 
   /**
    * Pause autoplay on focus
    */
   export let pauseOnFocus = false
+  $: {
+    data.pauseOnFocus = pauseOnFocus
+  }
 
   /**
    * Show autoplay duration progress indicator
@@ -127,8 +142,7 @@
    */
   export let particlesToShow = 1
   $: {
-    console.log('particlesToShow changed')
-    // setParticlesToShow(particlesToShow)
+    data.particlesToShow = particlesToShow // verify, normalize, use from data
   }
 
   /**
@@ -136,7 +150,7 @@
    */
   export let particlesToScroll = 1
   $: {
-    // setParticlesToScroll(particlesToScroll)
+    data.particlesToScroll = particlesToScroll // verify, normalize, use from data
   }
 
   export async function goTo(pageIndex, options) {
@@ -144,7 +158,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await showParticle(getParticleIndexByPageIndex({
+    await methods.showParticle(getParticleIndexByPageIndex({
       infinite: data.infinite,
       pageIndex,
       clonesCountHead: data.clonesCountHead,
@@ -157,17 +171,17 @@
 
   export async function goToPrev(options) {
     const animated = get(options, 'animated', true)
-    await showPrevPage({ animated })
+    await  methods.showPrevPage({ animated })
   }
 
   export async function goToNext(options) {
     const animated = get(options, 'animated', true)
-    await showNextPage({ animated })
+    await methods.showNextPage({ animated })
   }
 
   let pageWindowWidth = 0
   let particleWidth = 0
-  let offset = 0
+  
 
   let pageWindowElement
   let particlesContainer
@@ -177,35 +191,18 @@
   }) => {
     pageWindowWidth = width
     particleWidth = pageWindowWidth / data.particlesToShow
+    data.particleWidth = pageWindowWidth / data.particlesToShow
     
     applyParticleSizes({
       particlesContainerChildren: particlesContainer.children,
-      particleWidth,
+      particleWidth: data.particleWidth,
     })
-    offsetPage({
+    methods.offsetPage({
       animated: false,
     })
   })
 
-  let focused = false
 
-  let progressValue
-  const progressManager = new ProgressManager({
-    autoplayDuration,
-    onProgressValueChange: (value) => {
-      progressValue = 1 - value
-    }
-  })
-
-  $: {
-    if (pauseOnFocus) {
-      if (focused) {
-        progressManager.pause()
-      } else {
-        progressManager.resume()
-      }
-    }
-  }
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   let loaded = []
@@ -234,22 +231,6 @@
     })
   }
 
-  async function applyAutoplayIfNeeded(autoplay) {
-    // prevent progress change if not infinite for first and last page
-    if (
-      !data.infinite && (
-        (autoplayDirection === NEXT && data.currentParticleIndex === data.particlesCount - 1) || 
-        (autoplayDirection === PREV && data.currentParticleIndex === 0)
-      )
-    ) {
-      progressManager.reset()
-      return
-    }
-
-    if (autoplay) {
-      await autoplayDirectionFnDescription[autoplayDirection]()
-    }
-  }
 
   let cleanupFns = []
 
@@ -280,7 +261,7 @@
   })
 
   async function handlePageChange(pageIndex) {
-    await showParticle(getParticleIndexByPageIndex({
+    await methods.showParticle(getParticleIndexByPageIndex({
       infinite: data.infinite,
       pageIndex,
       clonesCountHead: data.clonesCountHead,
@@ -289,72 +270,6 @@
       particlesCount: data.particlesCount,
       particlesToShow: data.particlesToShow,
     }))
-  }
-
-  function offsetPage(options) {
-    const animated = get(options, 'animated', true)
-    return new Promise((resolve) => {
-      // _duration is an offset animation time
-      _duration = animated ? duration : 0
-      offset = -data.currentParticleIndex * particleWidth
-      setTimeout(() => {
-        resolve()
-      }, _duration)
-    })
-  }
-
-  // makes delayed jump to 1st or last element
-  async function jumpIfNeeded() {
-    let jumped = false
-    if (data.infinite) {
-      if (data.currentParticleIndex === 0) {
-        await showParticle(data.particlesCount - data.clonesCountTotal, { animated: false })
-        jumped = true
-      } else if (data.currentParticleIndex === data.particlesCount - data.clonesCountTail) {
-        await showParticle(data.clonesCountHead, { animated: false })
-        jumped = true
-      }
-    }
-    return jumped
-  }
-
-  // Disable page change while animation is in progress
-  let disabled = false
-  async function changePage(updateStoreFn, options) {
-    progressManager.reset()
-    if (disabled) return
-    disabled = true
-
-    updateStoreFn()
-    await offsetPage({ animated: get(options, 'animated', true) })
-    disabled = false
-
-    const jumped = await jumpIfNeeded()
-    !jumped && applyAutoplayIfNeeded(autoplay) // no need to wait it finishes
-  }
-
-  async function showParticle(particleIndex, options) {
-    console.log('showParticle => particleIndex', particleIndex)
-    await changePage(
-      () => methods.moveToParticle(particleIndex),
-      options
-    )
-  }
-  async function showPrevPage(options) {
-    if (disabled) return
-
-    await changePage(
-      methods.prev,
-      options,
-    )
-  }
-  async function showNextPage(options) {
-    if (disabled) return
-
-    await changePage(
-      methods.next,
-      options,
-    )
   }
 
   // gestures
@@ -372,30 +287,30 @@
   }
   function handleSwipeEnd() {
     if (!swiping) return
-    showParticle(data.currentParticleIndex)
+    methods.showParticle(data.currentParticleIndex)
   }
   async function handleSwipeFailed() {
     if (!swiping) return
-    await offsetPage({ animated: true })
+    await methods.offsetPage({ animated: true })
   }
 
   function handleHovered(event) {
-    focused = event.detail.value
+    data.focused = event.detail.value
   } 
   function handleTapped(event) {
-    focused = !focused
+    methods.toggleFocused()
   } 
 </script>
 
 <div class="sc-carousel__carousel-container">
   <div class="sc-carousel__content-container">
     {#if arrows}
-      <slot name="prev" {showPrevPage}>
+      <slot name="prev" showPrevPage={methods.showPrevPage}>
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
             disabled={!data.infinite && currentPageIndex === 0}
-            on:click={showPrevPage}
+            on:click={methods.showPrevPage}
           />
         </div>
       </slot>
@@ -434,12 +349,12 @@
       {/if}
     </div>
     {#if arrows}
-      <slot name="next" {showNextPage}>
+      <slot name="next" showNextPage={methods.showNextPage}>
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
             disabled={!data.infinite && currentPageIndex === data.pagesCount - 1}
-            on:click={showNextPage}
+            on:click={methods.showNextPage}
           />
         </div>
       </slot>

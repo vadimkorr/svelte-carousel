@@ -10,12 +10,12 @@ export class ProgressManager {
   #interval
   #paused = false
 
-  constructor({
-    autoplayDuration,
-    onProgressValueChange,
-  }) {
-    this.#autoplayDuration = autoplayDuration
+  constructor({ onProgressValueChange }) {
     this.#onProgressValueChange = onProgressValueChange
+  }
+
+  setAutoplayDuration(autoplayDuration) {
+    this.#autoplayDuration = autoplayDuration
   }
 
   start(onFinish) {

@@ -104,7 +104,7 @@ export const reactive = (data, watchers, methods, onChange) => {
 
   const _methods = {}
   Object.entries(methods).forEach(([methodName, method]) => {
-    _methods[methodName] = (args) => method(_data, args)
+    _methods[methodName] = (...args) => method(_data, _methods, ...args)
   })
 
   return [_data, _methods]
