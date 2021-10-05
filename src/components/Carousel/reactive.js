@@ -1,80 +1,116 @@
-// let data = {
-//   message: '',
-// }
-
-// let methods = {
-//   changeMessage: function () {
-//     data.message = document.getElementById('messageInput').value
-//   },
-// }
-
 // Code that has to run when a
 // reactive property changes it's value.
-let target = null
 
-class Dep {
-  constructor() {
-    this.subscribers = []
-  }
-  depend() {
-    // Saves target function into subscribers array
-    if (target && !this.subscribers.includes(target)) {
-      this.subscribers.push(target)
+const objectsAreSame = (x, y) => {
+  // return false
+  let _objectsAreSame = true
+  for (let propertyName in x) {
+    if (Number.isNaN(x[propertyName]) || Number.isNaN(y[propertyName])) {
+      continue
+    }
+    if (x[propertyName] !== y[propertyName]) {
+      _objectsAreSame = false
+      break
     }
   }
-  notify() {
-    // Replays target functions saved in the subscribers array
-    this.subscribers.forEach((sub) => sub())
+
+  return _objectsAreSame
+}
+
+const getObject = (oldData, newData) => {
+  const newDeps = {}
+
+  Object.entries(oldData).forEach(([key, value]) => {
+    // console.log('oldData', key, value)
+    newDeps[key] = newData[key]
+  })
+  // console.log('isDiff', oldData, newDeps)
+
+  return newDeps
+}
+
+const useSubscription = () => {
+  const subscribers = {}
+
+  const memoDependency = (target, dep) => {
+    const { watcherName, fn } = target
+    const { key, value } = dep
+
+    if (!subscribers[watcherName]) {
+      subscribers[watcherName] = {
+        deps: {},
+        fn,
+      }
+    }
+    subscribers[watcherName].deps[key] = value
+  }
+
+  return {
+    subscribe: (target, dep) => {
+      if (target) {
+        memoDependency(target, dep)
+      }
+    },
+    notify: (data) => {
+      Object.entries(subscribers).forEach(([watcherName, { deps }]) => {
+        const newDeps = getObject(deps, data)
+        if (!objectsAreSame(deps, newDeps)) {
+          subscribers[watcherName].deps = newDeps
+          subscribers[watcherName].fn()
+        }
+      })
+    },
   }
 }
 
-let watch = function (func) {
-  // Here, a watcher is a function that encapsulates the code
-  // that needs to recorded/watched.
-  // PS: It just runs once, because after that, the target code is stored
-  // in the subscriber's list of the Dep() instance.
-  target = func // Then it assigns the function to target
-  target() // Run the target function
-  target = null // Reset target to null
+const useWatcher = () => {
+  let target = null
+
+  return {
+    watch: (watcherName, fn) => {
+      target = {
+        watcherName,
+        fn,
+      }
+      target.fn()
+      target = null
+    },
+    getTarget: () => {
+      return target
+    },
+  }
 }
 
-// reactive(
-//   {
-//     message: '',
-//   },
-//   {
-//     renderFunction: (data) => {
-//       console.log(data.message)
-//     },
-//   }
-// )
+export const reactive = (data, watchers, methods, onChange) => {
+  const { subscribe, notify } = useSubscription()
+  const { watch, getTarget } = useWatcher()
 
-export const reactive = (data, watchers, methods) => {
   const _data = {}
 
   Object.keys(data).forEach((key) => {
-    let internalValue = data[key]
-
-    // Each property gets a dependency instance
-    const dep = new Dep()
+    let currentValue = data[key]
 
     Object.defineProperty(_data, key, {
       get() {
-        console.log(`Getting value, ${internalValue}`)
-        dep.depend() // Saves the target function into the subscribers array
-        return internalValue
+        subscribe(getTarget(), { key, value: currentValue })
+        return currentValue
       },
       set(newVal) {
-        console.log(`Setting the internalValue to ${newVal}`)
-        internalValue = newVal
-        dep.notify() // Reruns saved target functions in the subscribers array
+        currentValue = newVal
+        onChange && onChange(key, newVal)
+        notify(_data)
       },
     })
   })
 
   Object.entries(watchers).forEach(([watcherName, watcher]) => {
-    watch(() => watcher(_data))
+    watch(watcherName, () => watcher(_data))
   })
 
-  return _data
+  const _methods = {}
+  Object.entries(methods).forEach(([methodName, method]) => {
+    _methods[methodName] = (args) => method(_data, args)
+  })
+
+  return [_data, _methods]
 }
