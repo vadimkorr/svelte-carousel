@@ -30,26 +30,26 @@
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
-  import { carousel2 } from './carousel2'
+  import createCarousel from './createCarousel'
 
-  // TODO: apply normalize value before saving to reactive
-  // TODO: 
-
+  // used for lazy loading images, preloaded only current, adjacent and cloanable images
+  let loaded = []
   let currentPageIndex
   let focused = false
   let progressValue
   let offset = 0
-  let _duration = 0
+  let durationMs = 0
   let pagesCount = 1
 
-  const [{ data, progressManager }, methods] = carousel2((key, value) => {
+  const [{ data, progressManager }, methods, service] = createCarousel((key, value) => {
     switcher({
       'currentPageIndex': () => currentPageIndex = value,
       'progressValue': () => progressValue = value,
       'focused': () => focused = value,
       'offset': () => offset = value,
-      '_duration': () => _duration = value,
+      'durationMs': () => durationMs = value,
       'pagesCount': () => pagesCount = value,
+      'loaded': () => loaded = value,
     })(key)
   })
  
@@ -78,13 +78,16 @@
    * Page to start on
    */
   export let initialPageIndex = 0
+  $: {
+    data.initialPageIndexInit = initialPageIndex
+  }
 
   /**
    * Transition duration (ms)
    */
   export let duration = 500
   $: {
-    data.duration = duration
+    data.durationMsInit = duration
   }
 
   /**
@@ -160,7 +163,7 @@
 
   export async function goToPrev(options) {
     const animated = get(options, 'animated', true)
-    await  methods.showPrevPage({ animated })
+    await methods.showPrevPage({ animated })
   }
 
   export async function goToNext(options) {
@@ -186,17 +189,6 @@
     })
     methods.offsetPage({ animated: false })
   })
-
-  // used for lazy loading images, preloaded only current, adjacent and cloanable images
-  let loaded = []
-  // $: loaded = getAdjacentIndexes({
-  //   infinite,
-  //   pageIndex: currentPageIndex,
-  //   pagesCount,
-  //   particlesCount: particlesCountWithoutClones,
-  //   particlesToShow: _particlesToShow,
-  //   particlesToScroll,
-  // }).particleIndexes
 
   function addClones() {
     const {
@@ -244,7 +236,7 @@
   // gestures
   function handleSwipeStart() {
     if (!swiping) return
-    data._duration = 0
+    data.durationMs = 0
   }
   async function handleSwipeThresholdReached(event) {
     if (!swiping) return
@@ -272,6 +264,11 @@
   function handleTapped(event) {
     methods.toggleFocused()
   } 
+
+  function showPrevPage() {
+    methods.showPrevPage()
+    console.log(service._getSubscribers())
+  }
 </script>
 
 <div class="sc-carousel__carousel-container">
@@ -282,7 +279,7 @@
           <Arrow
             direction="prev"
             disabled={!infinite && currentPageIndex === 0}
-            on:click={methods.showPrevPage}
+            on:click={showPrevPage}
           />
         </div>
       </slot>
@@ -307,7 +304,7 @@
         on:swipeThresholdReached={handleSwipeThresholdReached}
         style="
           transform: translateX({offset}px);
-          transition-duration: {_duration}ms;
+          transition-duration: {durationMs}ms;
           transition-timing-function: {timingFunction};
         "
         bind:this={particlesContainer}

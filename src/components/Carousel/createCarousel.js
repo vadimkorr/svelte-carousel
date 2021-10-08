@@ -1,36 +1,34 @@
+import simplyReactive from 'simply-reactive'
+
 import { NEXT, PREV } from '../../direction'
 import {
-  applyParticleSizes,
   getCurrentPageIndexByCurrentParticleIndex,
   getPartialPageSize,
   getPagesCountByParticlesCount,
   getParticleIndexByPageIndex,
-  createResizeObserver,
 } from '../../utils/page'
-import { getClones, applyClones, getClonesCount } from '../../utils/clones'
+import { getClonesCount } from '../../utils/clones'
 import { getAdjacentIndexes } from '../../utils/lazy'
 import { getValueInRange } from '../../utils/math'
 import { get, switcher } from '../../utils/object'
 import { ProgressManager } from '../../utils/ProgressManager'
-import { wait } from '../../utils/interval'
-import simplyReactive from 'simply-reactive'
 
-// return only getters
-export const carousel2 = (onChange) => {
+function createCarousel(onChange) {
   const progressManager = new ProgressManager({
     onProgressValueChange: (value) => {
       onChange('progressValue', 1 - value)
     },
   })
 
-  const [data, methods] = simplyReactive(
+  const [data, methods, service] = simplyReactive(
     {
       particlesCountWithoutClones: 0,
       particlesToShow: 1, // normalized
       particlesToShowInit: 1, // initial value
       particlesToScroll: 1, // normalized
       particlesToScrollInit: 1, // initial value
-      initialPageIndex: 1,
+      initialPageIndex: 1, // normalized
+      initialPageIndexInit: 1, // initial value
       particlesCount: 1,
       currentParticleIndex: 1,
       infinite: false,
@@ -46,10 +44,11 @@ export const carousel2 = (onChange) => {
       autoplay: false,
       autoplayDirection: 'next',
       disabled: false, // Disable page change while animation is in progress
-      duration: 1000,
-      _duration: 1000,
+      durationMsInit: 1000,
+      durationMs: 1000,
       offset: 0,
       particleWidth: 0,
+      loaded: [],
     },
     {
       setCurrentPageIndex: (data) => {
@@ -100,10 +99,12 @@ export const carousel2 = (onChange) => {
         }
       },
       initDuration: (data) => {
-        data._duration = data.duration
+        data.durationMs = data.durationMsInit
       },
-      applyAutoplay: (data, { applyAutoplayIfNeeded }) => {
-        applyAutoplayIfNeeded(data.autoplay)
+      applyAutoplay: (data, { _applyAutoplayIfNeeded }) => {
+        // prevent _applyAutoplayIfNeeded to be called with watcher
+        // to prevent its data added to deps
+        data.autoplay && _applyAutoplayIfNeeded(data.autoplay)
       },
       setParticlesToShow(data) {
         data.particlesToShow = getValueInRange(
@@ -118,6 +119,23 @@ export const carousel2 = (onChange) => {
           data.particlesToScrollInit,
           data.particlesCountWithoutClones
         )
+      },
+      setInitialPageIndex(data) {
+        data.initialPageIndex = getValueInRange(
+          1,
+          data.initialPageIndexInit,
+          data.pagesCount
+        )
+      },
+      setLoaded(data) {
+        data.loaded = getAdjacentIndexes({
+          infinite: data.infinite,
+          pageIndex: data.currentPageIndex,
+          pagesCount: data.pagesCount,
+          particlesCount: data.particlesCountWithoutClones,
+          particlesToShow: data.particlesToShow,
+          particlesToScroll: data.particlesToScroll,
+        }).particleIndexes
       },
     },
     {
@@ -156,7 +174,7 @@ export const carousel2 = (onChange) => {
       toggleFocused: (data) => {
         data.focused = !data.focused
       },
-      applyAutoplayIfNeeded: async (
+      async _applyAutoplayIfNeeded(
         {
           infinite,
           autoplayDirection,
@@ -165,7 +183,7 @@ export const carousel2 = (onChange) => {
           autoplay,
         },
         { showNextPage, showPrevPage }
-      ) => {
+      ) {
         // prevent progress change if not infinite for first and last page
         if (
           !infinite &&
@@ -180,8 +198,8 @@ export const carousel2 = (onChange) => {
         if (autoplay) {
           const onFinish = () =>
             switcher({
-              [NEXT]: showNextPage,
-              [PREV]: showPrevPage,
+              [NEXT]: async () => showNextPage(),
+              [PREV]: async () => showPrevPage(),
             })(autoplayDirection)
 
           await progressManager.start(onFinish)
@@ -221,7 +239,7 @@ export const carousel2 = (onChange) => {
 
       changePage: async (
         data,
-        { offsetPage, applyAutoplayIfNeeded, _jumpIfNeeded },
+        { offsetPage, _applyAutoplayIfNeeded, _jumpIfNeeded },
         updateStoreFn,
         options
       ) => {
@@ -234,7 +252,7 @@ export const carousel2 = (onChange) => {
         data.disabled = false
 
         const jumped = await _jumpIfNeeded()
-        !jumped && applyAutoplayIfNeeded() // no need to wait it finishes
+        !jumped && _applyAutoplayIfNeeded() // no need to wait it finishes
       },
       showNextPage: async ({ disabled }, { changePage, _next }, options) => {
         if (disabled) return
@@ -266,21 +284,22 @@ export const carousel2 = (onChange) => {
           options
         )
       },
-      offsetPage: (data, _, options) => {
+      offsetPage(data, _, options) {
         const animated = get(options, 'animated', true)
         return new Promise((resolve) => {
-          // _duration is an offset animation time
-          data._duration = animated ? data.duration : 0
+          // durationMs is an offset animation time
+          data.durationMs = animated ? data.durationMsInit : 0
           data.offset = -data.currentParticleIndex * data.particleWidth
           setTimeout(() => {
             resolve()
-          }, data._duration)
+          }, data.durationMs)
         })
       },
     },
     onChange
   )
 
-  return [{ data, progressManager }, methods]
-  // return [{ ...data, progressManager }, methods]
+  return [{ data, progressManager }, methods, service]
 }
+
+export default createCarousel
