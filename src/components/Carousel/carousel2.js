@@ -10,10 +10,10 @@ import {
 import { getClones, applyClones, getClonesCount } from '../../utils/clones'
 import { getAdjacentIndexes } from '../../utils/lazy'
 import { getValueInRange } from '../../utils/math'
-import { get } from '../../utils/object'
+import { get, switcher } from '../../utils/object'
 import { ProgressManager } from '../../utils/ProgressManager'
 import { wait } from '../../utils/interval'
-import { reactive } from './reactive'
+import simplyReactive from 'simply-reactive'
 
 // return only getters
 export const carousel2 = (onChange) => {
@@ -23,11 +23,13 @@ export const carousel2 = (onChange) => {
     },
   })
 
-  const [data, methods] = reactive(
+  const [data, methods] = simplyReactive(
     {
       particlesCountWithoutClones: 0,
-      particlesToShow: 1,
-      particlesToScroll: 1,
+      particlesToShow: 1, // normalized
+      particlesToShowInit: 1, // initial value
+      particlesToScroll: 1, // normalized
+      particlesToScrollInit: 1, // initial value
       initialPageIndex: 1,
       particlesCount: 1,
       currentParticleIndex: 1,
@@ -100,6 +102,23 @@ export const carousel2 = (onChange) => {
       initDuration: (data) => {
         data._duration = data.duration
       },
+      applyAutoplay: (data, { applyAutoplayIfNeeded }) => {
+        applyAutoplayIfNeeded(data.autoplay)
+      },
+      setParticlesToShow(data) {
+        data.particlesToShow = getValueInRange(
+          1,
+          data.particlesToShowInit,
+          data.particlesCountWithoutClones
+        )
+      },
+      setParticlesToScroll(data) {
+        data.particlesToScroll = getValueInRange(
+          1,
+          data.particlesToScrollInit,
+          data.particlesCountWithoutClones
+        )
+      },
     },
     {
       _prev: (data) => {
@@ -159,12 +178,13 @@ export const carousel2 = (onChange) => {
         }
 
         if (autoplay) {
-          const autoplayDirectionFnDescription = {
-            [NEXT]: async () => await progressManager.start(showNextPage),
-            [PREV]: async () => await progressManager.start(showPrevPage),
-          }
+          const onFinish = () =>
+            switcher({
+              [NEXT]: showNextPage,
+              [PREV]: showPrevPage,
+            })(autoplayDirection)
 
-          await autoplayDirectionFnDescription[autoplayDirection]()
+          await progressManager.start(onFinish)
         }
       },
       // makes delayed jump to 1st or last element
@@ -231,6 +251,20 @@ export const carousel2 = (onChange) => {
         options
       ) => {
         await changePage(() => _moveToParticle(particleIndex), options)
+      },
+      showPage: async (data, { showParticle }, pageIndex, options) => {
+        await showParticle(
+          getParticleIndexByPageIndex({
+            infinite: data.infinite,
+            pageIndex,
+            clonesCountHead: data.clonesCountHead,
+            clonesCountTail: data.clonesCountTail,
+            particlesToScroll: data.particlesToScroll,
+            particlesCount: data.particlesCount,
+            particlesToShow: data.particlesToShow,
+          }),
+          options
+        )
       },
       offsetPage: (data, _, options) => {
         const animated = get(options, 'animated', true)

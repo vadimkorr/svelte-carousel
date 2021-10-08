@@ -26,36 +26,34 @@
   import {
     getValueInRange,
   } from '../../utils/math'
-  import { get } from '../../utils/object'
+  import { get, switcher } from '../../utils/object'
   import { ProgressManager } from '../../utils/ProgressManager'
   import { wait } from '../../utils/interval'
 
   import { carousel2 } from './carousel2'
+
+  // TODO: apply normalize value before saving to reactive
+  // TODO: 
 
   let currentPageIndex
   let focused = false
   let progressValue
   let offset = 0
   let _duration = 0
+  let pagesCount = 1
 
   const [{ data, progressManager }, methods] = carousel2((key, value) => {
-    const description = {
+    switcher({
       'currentPageIndex': () => currentPageIndex = value,
       'progressValue': () => progressValue = value,
       'focused': () => focused = value,
       'offset': () => offset = value,
       '_duration': () => _duration = value,
-    }
-    description[key] && description[key]()
+      'pagesCount': () => pagesCount = value,
+    })(key)
   })
  
   const dispatch = createEventDispatcher()
-
-
-  const directionFnDescription = {
-    [NEXT]: methods.showNextPage,
-    [PREV]: methods.showPrevPage
-  }
 
   /**
    * CSS animation timing function
@@ -95,7 +93,6 @@
   export let autoplay = false
   $: {
     data.autoplay = autoplay
-    methods.applyAutoplayIfNeeded(autoplay) // call in carousel2
   }
 
   /**
@@ -142,7 +139,7 @@
    */
   export let particlesToShow = 1
   $: {
-    data.particlesToShow = particlesToShow // verify, normalize, use from data
+    data.particlesToShowInit = particlesToShow
   }
 
   /**
@@ -150,7 +147,7 @@
    */
   export let particlesToScroll = 1
   $: {
-    data.particlesToScroll = particlesToScroll // verify, normalize, use from data
+    data.particlesToScrollInit = particlesToScroll
   }
 
   export async function goTo(pageIndex, options) {
@@ -158,15 +155,7 @@
     if (typeof pageIndex !== 'number') {
       throw new Error('pageIndex should be a number')
     }
-    await methods.showParticle(getParticleIndexByPageIndex({
-      infinite: data.infinite,
-      pageIndex,
-      clonesCountHead: data.clonesCountHead,
-      clonesCountTail: data.clonesCountTail,
-      particlesToScroll: data.particlesToScroll,
-      particlesCount: data.particlesCount,
-      particlesToShow: data.particlesToShow,
-    }), { animated })
+    await methods.showPage(pageIndex, { animated })
   }
 
   export async function goToPrev(options) {
@@ -181,8 +170,6 @@
 
   let pageWindowWidth = 0
   let particleWidth = 0
-  
-
   let pageWindowElement
   let particlesContainer
 
@@ -197,12 +184,8 @@
       particlesContainerChildren: particlesContainer.children,
       particleWidth: data.particleWidth,
     })
-    methods.offsetPage({
-      animated: false,
-    })
+    methods.offsetPage({ animated: false })
   })
-
-
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   let loaded = []
@@ -231,17 +214,11 @@
     })
   }
 
-
-  let cleanupFns = []
-
   onMount(() => {
     (async () => {
       await tick()
-      cleanupFns.push(() => progressManager.reset())
       if (particlesContainer && pageWindowElement) {
         data.particlesCountWithoutClones = particlesContainer.children.length
-        data.particlesToShow = particlesToShow
-        data.particlesToScroll = particlesToScroll
 
         await tick()
         data.infinite && addClones()
@@ -257,33 +234,28 @@
 
   onDestroy(() => {
     pageWindowElementResizeObserver.disconnect()
-    cleanupFns.filter(fn => fn && typeof fn === 'function').forEach(fn => fn())
+    progressManager.reset()
   })
 
   async function handlePageChange(pageIndex) {
-    await methods.showParticle(getParticleIndexByPageIndex({
-      infinite: data.infinite,
-      pageIndex,
-      clonesCountHead: data.clonesCountHead,
-      clonesCountTail: data.clonesCountTail,
-      particlesToScroll: data.particlesToScroll,
-      particlesCount: data.particlesCount,
-      particlesToShow: data.particlesToShow,
-    }))
+    await methods.showPage(pageIndex, { animated: true })
   }
 
   // gestures
   function handleSwipeStart() {
     if (!swiping) return
-    _duration = 0
+    data._duration = 0
   }
   async function handleSwipeThresholdReached(event) {
     if (!swiping) return
-    await directionFnDescription[event.detail.direction]()
+    await switcher({
+      [NEXT]: methods.showNextPage,
+      [PREV]: methods.showPrevPage
+    })(event.detail.direction)
   }
   function handleSwipeMove(event) {
     if (!swiping) return
-    offset += event.detail.dx
+    data.offset += event.detail.dx
   }
   function handleSwipeEnd() {
     if (!swiping) return
@@ -309,7 +281,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="prev"
-            disabled={!data.infinite && currentPageIndex === 0}
+            disabled={!infinite && currentPageIndex === 0}
             on:click={methods.showPrevPage}
           />
         </div>
@@ -353,7 +325,7 @@
         <div class="sc-carousel__arrow-container">
           <Arrow
             direction="next"
-            disabled={!data.infinite && currentPageIndex === data.pagesCount - 1}
+            disabled={!infinite && currentPageIndex === pagesCount - 1}
             on:click={methods.showNextPage}
           />
         </div>
@@ -364,11 +336,11 @@
     <slot
       name="dots"
       currentPageIndex={currentPageIndex}
-      pagesCount={data.pagesCount}
+      pagesCount={pagesCount}
       showPage={handlePageChange}
     >
       <Dots
-        pagesCount={data.pagesCount}
+        pagesCount={pagesCount}
         currentPageIndex={currentPageIndex}
         on:pageChange={event => handlePageChange(event.detail)}
       ></Dots>
