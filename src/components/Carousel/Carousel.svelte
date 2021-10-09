@@ -79,7 +79,8 @@
    */
   export let initialPageIndex = 0
   $: {
-    data.initialPageIndexInit = initialPageIndex
+    console.log('initialPageIndex', initialPageIndex)
+    data.initialPageIndex = initialPageIndex
   }
 
   /**
@@ -217,7 +218,6 @@
 
         // call after adding clones
         data.particlesCount = particlesContainer.children.length
-        data.initialPageIndex = initialPageIndex
 
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }
