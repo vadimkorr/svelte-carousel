@@ -78,10 +78,6 @@
    * Page to start on
    */
   export let initialPageIndex = 0
-  $: {
-    console.log('initialPageIndex', initialPageIndex)
-    data.initialPageIndex = initialPageIndex
-  }
 
   /**
    * Transition duration (ms)
@@ -218,6 +214,8 @@
 
         // call after adding clones
         data.particlesCount = particlesContainer.children.length
+
+        methods.showPage(initialPageIndex, { animated: false })
 
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }

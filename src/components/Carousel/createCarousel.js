@@ -28,7 +28,6 @@ function createCarousel(onChange) {
         particlesToShowInit: 1, // initial value
         particlesToScroll: 1, // normalized
         particlesToScrollInit: 1, // initial value
-        initialPageIndex: 0,
         particlesCount: 1,
         currentParticleIndex: 1,
         infinite: false,
@@ -109,19 +108,19 @@ function createCarousel(onChange) {
           // to prevent its data added to deps
           data.autoplay && _applyAutoplayIfNeeded(data.autoplay)
         },
-        setParticlesToShow({ data }) {
-          data.particlesToShow = getValueInRange(
-            1,
-            data.particlesToShowInit,
-            data.particlesCountWithoutClones
-          )
-        },
         setPagesCount({ data }) {
           data.pagesCount = getPagesCountByParticlesCount({
             infinite: data.infinite,
             particlesCountWithoutClones: data.particlesCountWithoutClones,
             particlesToScroll: data.particlesToScroll,
           })
+        },
+        setParticlesToShow({ data }) {
+          data.particlesToShow = getValueInRange(
+            1,
+            data.particlesToShowInit,
+            data.particlesCountWithoutClones
+          )
         },
         setParticlesToScroll({ data }) {
           data.particlesToScroll = getValueInRange(
@@ -130,17 +129,10 @@ function createCarousel(onChange) {
             data.particlesCountWithoutClones
           )
         },
-        setInitialPageIndex({ data, methods: { showPage } }) {
-          const ind = getValueInRange(0, data.initialPageIndex, data.pagesCount)
-          console.log('ind', data.initialPageIndex, ind)
-          showPage(5, {
-            animated: false,
-          })
-        },
       },
       methods: {
         _prev({ data }) {
-          const newCurrentParticleIndex = getParticleIndexByPageIndex({
+          data.currentParticleIndex = getParticleIndexByPageIndex({
             infinite: data.infinite,
             pageIndex: data.currentPageIndex - 1,
             clonesCountHead: data.clonesCountHead,
@@ -149,10 +141,9 @@ function createCarousel(onChange) {
             particlesCount: data.particlesCount,
             particlesToShow: data.particlesToShow,
           })
-          data.currentParticleIndex = newCurrentParticleIndex
         },
         _next({ data }) {
-          const newCurrentParticleIndex = getParticleIndexByPageIndex({
+          data.currentParticleIndex = getParticleIndexByPageIndex({
             infinite: data.infinite,
             pageIndex: data.currentPageIndex + 1,
             clonesCountHead: data.clonesCountHead,
@@ -161,15 +152,13 @@ function createCarousel(onChange) {
             particlesCount: data.particlesCount,
             particlesToShow: data.particlesToShow,
           })
-          data.currentParticleIndex = newCurrentParticleIndex
         },
         _moveToParticle({ data }, particleIndex) {
-          const newCurrentParticleIndex = getValueInRange(
+          data.currentParticleIndex = getValueInRange(
             0,
             particleIndex,
             data.particlesCount - 1
           )
-          data.currentParticleIndex = newCurrentParticleIndex
         },
         toggleFocused({ data }) {
           data.focused = !data.focused
@@ -247,8 +236,8 @@ function createCarousel(onChange) {
             options
           )
         },
-        async showPage({ data, methods }, pageIndex, options) {
-          const ind = getParticleIndexByPageIndex({
+        _getParticleIndexByPageIndex({ data }, pageIndex) {
+          return getParticleIndexByPageIndex({
             infinite: data.infinite,
             pageIndex,
             clonesCountHead: data.clonesCountHead,
@@ -257,8 +246,10 @@ function createCarousel(onChange) {
             particlesCount: data.particlesCount,
             particlesToShow: data.particlesToShow,
           })
-          console.log('ParticleIndex', ind)
-          await methods.showParticle(ind, options)
+        },
+        async showPage({ methods }, pageIndex, options) {
+          const particleIndex = methods._getParticleIndexByPageIndex(pageIndex)
+          await methods.showParticle(particleIndex, options)
         },
         offsetPage({ data }, options) {
           const animated = get(options, 'animated', true)
