@@ -20,7 +20,7 @@ function createCarousel(onChange) {
     },
   })
 
-  const [data, methods, service] = simplyReactive(
+  const reactive = simplyReactive(
     {
       data: {
         particlesCountWithoutClones: 0,
@@ -42,7 +42,7 @@ function createCarousel(onChange) {
         focused: false,
         autoplay: false,
         autoplayDirection: 'next',
-        disabled: false, // Disable page change while animation is in progress
+        disabled: false, // disable page change while animation is in progress
         durationMsInit: 1000,
         durationMs: 1000,
         offset: 0,
@@ -268,8 +268,9 @@ function createCarousel(onChange) {
       onChange,
     }
   )
+  const [data, methods] = reactive
 
-  return [{ data, progressManager }, methods, service]
+  return [{ data, progressManager }, methods, reactive._internal]
 }
 
 export default createCarousel

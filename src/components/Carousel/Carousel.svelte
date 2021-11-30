@@ -9,33 +9,18 @@
   import { tappable } from '../../actions/tappable'
   import {
     applyParticleSizes,
-    getCurrentPageIndexByCurrentParticleIndex,
-    getPartialPageSize,
-    getPagesCountByParticlesCount,
-    getParticleIndexByPageIndex,
     createResizeObserver,
   } from '../../utils/page'
   import {
     getClones,
     applyClones,
-    getClonesCount,
   } from '../../utils/clones'
-  import {
-    getAdjacentIndexes,
-  } from '../../utils/lazy'
-  import {
-    getValueInRange,
-  } from '../../utils/math'
   import { get, switcher } from '../../utils/object'
-  import { ProgressManager } from '../../utils/ProgressManager'
-  import { wait } from '../../utils/interval'
-
   import createCarousel from './createCarousel'
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   let loaded = []
   let currentPageIndex
-  let focused = false
   let progressValue
   let offset = 0
   let durationMs = 0
@@ -45,7 +30,6 @@
     switcher({
       'currentPageIndex': () => currentPageIndex = value,
       'progressValue': () => progressValue = value,
-      'focused': () => focused = value,
       'offset': () => offset = value,
       'durationMs': () => durationMs = value,
       'pagesCount': () => pagesCount = value,
@@ -169,7 +153,6 @@
   }
 
   let pageWindowWidth = 0
-  let particleWidth = 0
   let pageWindowElement
   let particlesContainer
 
@@ -177,7 +160,6 @@
     width,
   }) => {
     pageWindowWidth = width
-    particleWidth = pageWindowWidth / data.particlesToShow
     data.particleWidth = pageWindowWidth / data.particlesToShow
     
     applyParticleSizes({
@@ -259,7 +241,7 @@
   function handleHovered(event) {
     data.focused = event.detail.value
   } 
-  function handleTapped(event) {
+  function handleTapped() {
     methods.toggleFocused()
   } 
 
@@ -388,6 +370,3 @@
     bottom: 0;
   }
 </style>
-
-
-

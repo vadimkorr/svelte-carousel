@@ -121,7 +121,7 @@
     {/each}
   </Carousel>
 
-  <!-- <Carousel
+  <Carousel
     {timingFunction}
     {arrows}
     {infinite}
@@ -145,7 +145,7 @@
         <p>{text}</p>
       </div>
     {/each}
-  </Carousel> -->
+  </Carousel>
 </div>
 
 <style>
