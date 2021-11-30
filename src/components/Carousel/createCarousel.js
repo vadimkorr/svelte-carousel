@@ -113,6 +113,7 @@ function createCarousel(onChange) {
             infinite: data.infinite,
             particlesCountWithoutClones: data.particlesCountWithoutClones,
             particlesToScroll: data.particlesToScroll,
+            particlesToShow: data.particlesToShow,
           })
         },
         setParticlesToShow({ data }) {
