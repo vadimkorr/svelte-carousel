@@ -1,4 +1,5 @@
 <script context="module">
+  import Carousel from '../../components/Carousel/Carousel.svelte'
   import Table from './custom/Table.svelte'
   import Th from './custom/Th.svelte'
   import Tr from './custom/Tr.svelte'
@@ -31,8 +32,12 @@
 <div class="docs__main-layout__main-container">
   <div class="docs__main-layout__header-container">
     <div class="docs__main-layout__logo-container">
+      <Carousel>
+        {#each Array.from(Array(3).keys()) as index (index)}
+          <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md-full-width.png" alt="svelte-carousel-logo" />
+        {/each}
+      </Carousel>
       <span class="docs__main-layout__version">v{pkg.version}</span>
-      <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md.png" alt="svelte-carousel-logo" />
     </div>
     <div class="docs__main-layout__links-container">
       {#each links as { url, title, iconName } (title)}
@@ -68,9 +73,8 @@
   }
 
   .docs__main-layout__logo-container {
-    height: 80%;
-    max-width: 100%;
     position: relative;
+    max-width: min(90%, 500px);
   }
   .docs__main-layout__version {
     position: absolute;
