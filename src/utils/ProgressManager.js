@@ -4,35 +4,35 @@ const STEP_MS = 35
 const MAX_VALUE = 1
 
 export class ProgressManager {
-  #autoplayDuration
-  #onProgressValueChange
-
-  #interval
-  #paused = false
-
   constructor({ onProgressValueChange }) {
-    this.#onProgressValueChange = onProgressValueChange
+    this._onProgressValueChange = onProgressValueChange
+
+    this._autoplayDuration
+    this._onProgressValueChange
+  
+    this._interval
+    this._paused = false
   }
 
   setAutoplayDuration(autoplayDuration) {
-    this.#autoplayDuration = autoplayDuration
+    this._autoplayDuration = autoplayDuration
   }
 
   start(onFinish) {
     return new Promise((resolve) => {
       this.reset()
 
-      const stepMs = Math.min(STEP_MS, this.#autoplayDuration)
+      const stepMs = Math.min(STEP_MS, this._autoplayDuration)
       let progress = -stepMs
   
-      this.#interval = setIntervalImmediate(async () => {
-        if (this.#paused) {
+      this._interval = setIntervalImmediate(async () => {
+        if (this._paused) {
           return
         }
         progress += stepMs
   
-        const value = progress / this.#autoplayDuration
-        this.#onProgressValueChange(value)
+        const value = progress / this._autoplayDuration
+        this._onProgressValueChange(value)
   
         if (value > MAX_VALUE) {
           this.reset()
@@ -44,15 +44,15 @@ export class ProgressManager {
   }
 
   pause() {
-    this.#paused = true
+    this._paused = true
   }
 
   resume() {
-    this.#paused = false
+    this._paused = false
   }
 
   reset() {
-    clearInterval(this.#interval)
-    this.#onProgressValueChange(MAX_VALUE)
+    clearInterval(this._interval)
+    this._onProgressValueChange(MAX_VALUE)
   }
 }
