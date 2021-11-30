@@ -53,7 +53,7 @@
   /**
    * Infinite looping
    */
-  export let infinite = false
+  export let infinite = true
   $: {
     data.infinite = infinite
   }
