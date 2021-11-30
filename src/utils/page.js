@@ -60,14 +60,21 @@ export function _getPagesCountByParticlesCountInfinite({
 export function _getPagesCountByParticlesCountLimited({
   particlesCountWithoutClones,
   particlesToScroll,
+  particlesToShow,
 }) {
-  return Math.round(particlesCountWithoutClones / particlesToScroll)
+  const partialPageSize = getPartialPageSize({
+    particlesCountWithoutClones,
+    particlesToScroll,
+    particlesToShow,
+  })
+  return Math.ceil(particlesCountWithoutClones / particlesToScroll) - partialPageSize
 }
 
 export function getPagesCountByParticlesCount({
   infinite,
   particlesCountWithoutClones,
   particlesToScroll,
+  particlesToShow,
 }) {
   return infinite
     ? _getPagesCountByParticlesCountInfinite({
@@ -77,6 +84,7 @@ export function getPagesCountByParticlesCount({
     : _getPagesCountByParticlesCountLimited({
       particlesCountWithoutClones,
       particlesToScroll,
+      particlesToShow,
     })
 }
 

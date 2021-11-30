@@ -7,3 +7,7 @@ export const get = (object, fieldName, defaultValue) => {
   }
   return defaultValue
 }
+
+export const switcher = (description) => (key) => {
+  description[key] && description[key]()
+}

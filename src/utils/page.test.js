@@ -435,17 +435,42 @@ describe('_getPagesCountByParticlesCountLimited', () => {
     const testCases = [{
       particlesCountWithoutClones: 5,
       particlesToScroll: 2,
-      expected: 3,
+      particlesToShow: 3,
+      expected: 2,
     }]
 
     testCases.forEach(({
       particlesCountWithoutClones,
       particlesToScroll,
+      particlesToShow,
       expected,
     }) => {
       expect(_getPagesCountByParticlesCountLimited({
         particlesCountWithoutClones,
         particlesToScroll,
+        particlesToShow,
+      })).toBe(expected)
+    })
+  })
+
+  it('returns result as expected if particlesCountWithoutClones: 9; particlesToScroll: 2 (particlesToShow: 3)', () => {
+    const testCases = [{
+      particlesCountWithoutClones: 9,
+      particlesToScroll: 2,
+      particlesToShow: 3,
+      expected: 4,
+    }]
+
+    testCases.forEach(({
+      particlesCountWithoutClones,
+      particlesToScroll,
+      particlesToShow,
+      expected,
+    }) => {
+      expect(_getPagesCountByParticlesCountLimited({
+        particlesCountWithoutClones,
+        particlesToScroll,
+        particlesToShow,
       })).toBe(expected)
     })
   })
@@ -454,17 +479,20 @@ describe('_getPagesCountByParticlesCountLimited', () => {
     const testCases = [{
       particlesCountWithoutClones: 6,
       particlesToScroll: 2,
+      particlesToShow: 2,
       expected: 3,
     }]
 
     testCases.forEach(({
       particlesCountWithoutClones,
       particlesToScroll,
+      particlesToShow,
       expected,
     }) => {
       expect(_getPagesCountByParticlesCountLimited({
         particlesCountWithoutClones,
         particlesToScroll,
+        particlesToShow,
       })).toBe(expected)
     })
   })
@@ -473,17 +501,20 @@ describe('_getPagesCountByParticlesCountLimited', () => {
     const testCases = [{
       particlesCountWithoutClones: 5,
       particlesToScroll: 3,
+      particlesToShow: 2,
       expected: 2,
     }]
 
     testCases.forEach(({
       particlesCountWithoutClones,
       particlesToScroll,
+      particlesToShow,
       expected,
     }) => {
       expect(_getPagesCountByParticlesCountLimited({
         particlesCountWithoutClones,
         particlesToScroll,
+        particlesToShow,
       })).toBe(expected)
     })
   })
