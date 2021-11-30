@@ -53,5 +53,7 @@
     "svelte": "^3.31.2",
     "svelte-loader": "^2.13.6"
   },
-  "dependencies": {}
+  "dependencies": {
+    "simply-reactive": "vadimkorr/simply-reactive#1.0.0"
+  }
 }
