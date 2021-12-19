@@ -247,7 +247,6 @@
 
   function showPrevPage() {
     methods.showPrevPage()
-    console.log(service._getSubscribers())
   }
 </script>
 
