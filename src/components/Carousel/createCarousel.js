@@ -1,4 +1,4 @@
-import simplyReactive from '../../../../simply-reactive/main'
+import simplyReactive from 'simply-reactive'
 
 import { NEXT, PREV } from '../../direction'
 import {
