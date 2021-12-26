@@ -9950,9 +9950,9 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
 
-simply-reactive@vadimkorr/simply-reactive#1.0.1:
+simply-reactive@vadimkorr/simply-reactive#1.0.2:
   version "1.0.0"
-  resolved "https://codeload.github.com/vadimkorr/simply-reactive/tar.gz/8b412d63ea91a4222eb8b4cdb0319e5b28699ccd"
+  resolved "https://codeload.github.com/vadimkorr/simply-reactive/tar.gz/f403097d695030306bdfd0f849411fd28ad7d474"
   dependencies:
     lodash.clonedeep "^4.5.0"
     lodash.get "^4.4.2"
