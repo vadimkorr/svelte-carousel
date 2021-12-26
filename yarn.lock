@@ -9952,7 +9952,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
 
 simply-reactive@vadimkorr/simply-reactive#1.0.2:
   version "1.0.0"
-  resolved "https://codeload.github.com/vadimkorr/simply-reactive/tar.gz/f8c9fdba67a3e39cd76f2005045cf48f0bcd40b1"
+  resolved "https://codeload.github.com/vadimkorr/simply-reactive/tar.gz/f403097d695030306bdfd0f849411fd28ad7d474"
   dependencies:
     lodash.clonedeep "^4.5.0"
     lodash.get "^4.4.2"
