@@ -32,7 +32,9 @@
 <div class="docs__main-layout__main-container">
   <div class="docs__main-layout__header-container">
     <div class="docs__main-layout__logo-container">
-      <Carousel>
+      <Carousel
+        initialPageIndex={1}
+      >
         {#each Array.from(Array(3).keys()) as index (index)}
           <img class="docs__main-layout__logo" src="./svelte-carousel-logo-md-full-width.png" alt="svelte-carousel-logo" />
         {/each}

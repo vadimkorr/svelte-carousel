@@ -76,6 +76,42 @@ npm install svelte-carousel -D
 <button on:click={handleNextClick}>Next</button>
 ```
 
+## Vite support
+1. Extend `optimizeDeps.include` in `vite.config.js`
+
+```js
+export default defineConfig({
+  optimizeDeps: {
+    include: ['lodash.get', 'lodash.isequal', 'lodash.clonedeep']
+  }
+})
+
+```
+
+2. Import and use it:
+
+```jsx
+
+<script>
+  import Carousel from 'svelte-carousel'
+
+  let carousel; // for calling methods of the carousel instance
+  const handleNextClick = () => {
+    carousel.goToNext()
+  }
+</script>
+
+<Carousel
+  bind:this={carousel}
+>
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</Carousel>
+
+<button on:click={handleNextClick}>Next</button>
+```
+
 ## Props
 | Prop                      | Type       | Default         | Description                                   | 
 |---------------------------|------------|-----------------|-----------------------------------------------|
