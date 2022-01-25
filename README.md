@@ -45,7 +45,19 @@ yarn add svelte-carousel -D
 npm install svelte-carousel -D
 ```
 
-2. Import and use it:
+2. Extend `kit` in `svelte.config.js` to include the `vite` property
+
+```js
+const config = {
+  // existing props
+  kit: {
+    // existing props
+    vite: { optimizeDeps: { include: ['lodash.get', 'lodash.isequal', 'lodash.clonedeep'] } }
+  }
+}
+```
+
+3. Import and use it:
 
 ```jsx
 
