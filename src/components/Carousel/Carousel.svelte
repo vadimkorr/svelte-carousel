@@ -20,7 +20,6 @@
 
   // used for lazy loading images, preloaded only current, adjacent and cloanable images
   let loaded = []
-  let currentPageIndex
   let progressValue
   let offset = 0
   let durationMs = 0
@@ -36,7 +35,7 @@
       'loaded': () => loaded = value,
     })(key)
   })
- 
+
   const dispatch = createEventDispatcher()
 
   /**
@@ -61,7 +60,7 @@
   /**
    * Page to start on
    */
-  export let initialPageIndex = 0
+  export let currentPageIndex = 0
 
   /**
    * Transition duration (ms)
@@ -119,7 +118,7 @@
   export let swiping = true
 
   /**
-   * Number of particles to show 
+   * Number of particles to show
    */
   export let particlesToShow = 1
   $: {
@@ -127,7 +126,7 @@
   }
 
   /**
-   * Number of particles to scroll 
+   * Number of particles to scroll
    */
   export let particlesToScroll = 1
   $: {
@@ -161,7 +160,7 @@
   }) => {
     pageWindowWidth = width
     data.particleWidth = pageWindowWidth / data.particlesToShow
-    
+
     applyParticleSizes({
       particlesContainerChildren: particlesContainer.children,
       particleWidth: data.particleWidth,
@@ -197,7 +196,7 @@
         // call after adding clones
         data.particlesCount = particlesContainer.children.length
 
-        methods.showPage(initialPageIndex, { animated: false })
+        methods.showPage(currentPageIndex, { animated: false })
 
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }
@@ -240,10 +239,10 @@
 
   function handleHovered(event) {
     data.focused = event.detail.value
-  } 
+  }
   function handleTapped() {
     methods.toggleFocused()
-  } 
+  }
 
   function showPrevPage() {
     methods.showPrevPage()
