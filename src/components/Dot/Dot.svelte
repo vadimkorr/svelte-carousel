@@ -23,6 +23,11 @@
     cursor: pointer;
   }
 
+  button:focus {
+    outline: 1px dotted #212121;
+    outline: 5px auto -webkit-focus-ring-color;
+  }
+
   .sc-carousel-dot__dot {
     background-color: var(--sc-color-rgb-light);
     border-radius: 50%;
