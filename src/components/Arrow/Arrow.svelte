@@ -12,7 +12,7 @@
   export let disabled = false
 </script>
 
-<div
+<button
   class="sc-carousel-arrow__circle"
   class:sc-carousel-arrow__circle_disabled={disabled}
   on:click
@@ -22,7 +22,7 @@
     class:sc-carousel-arrow__arrow-next={direction === NEXT}
     class:sc-carousel-arrow__arrow-prev={direction === PREV}
   ></i>
-</div>
+</button>
 
 <style>
   :root {
