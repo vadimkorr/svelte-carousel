@@ -17,6 +17,12 @@
     --sc-active-dot-size: 8px;
     --sc-dot-size-animation-time: 250ms;
   }
+
+  button {
+    all: unset;
+    cursor: pointer;
+  }
+
   .sc-carousel-dot__dot {
     background-color: var(--sc-color-rgb-light);
     border-radius: 50%;
