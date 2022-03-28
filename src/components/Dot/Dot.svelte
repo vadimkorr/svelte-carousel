@@ -5,11 +5,11 @@
   export let active = false
 </script>
 
-<div
+<button
   class="sc-carousel-dot__dot"
   class:sc-carousel-dot__dot_active={active}
   on:click
-></div>
+></button>
 
 <style>
   :root {
