@@ -22,7 +22,7 @@ export class ProgressManager {
     return new Promise((resolve) => {
       this.reset()
 
-      const stepMs = Math.min(STEP_MS, this._autoplayDuration)
+      const stepMs = Math.min(STEP_MS, Math.max(this._autoplayDuration, 1))
       let progress = -stepMs
   
       this._interval = setIntervalImmediate(async () => {
