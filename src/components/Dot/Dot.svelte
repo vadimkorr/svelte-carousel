@@ -6,7 +6,7 @@
 </script>
 
 <button
-  class="sc-carousel-dot__dot"
+  class="sc-carousel-button sc-carousel-dot__dot"
   class:sc-carousel-dot__dot_active={active}
   on:click
 ></button>
@@ -16,16 +16,6 @@
     --sc-dot-size: 6px;
     --sc-active-dot-size: 8px;
     --sc-dot-size-animation-time: 250ms;
-  }
-
-  button {
-    all: unset;
-    cursor: pointer;
-  }
-
-  button:focus {
-    outline: 1px dotted #212121;
-    outline: 5px auto -webkit-focus-ring-color;
   }
 
   .sc-carousel-dot__dot {
