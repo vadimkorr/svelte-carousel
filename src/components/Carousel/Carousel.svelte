@@ -368,4 +368,11 @@
     position: absolute;
     bottom: 0;
   }
+  :global(.sc-carousel-button) {
+    all: unset;
+    cursor: pointer;
+  }
+  :global(.sc-carousel-button:focus) {
+    outline: 5px auto;
+  }
 </style>

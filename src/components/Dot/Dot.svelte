@@ -5,11 +5,11 @@
   export let active = false
 </script>
 
-<div
-  class="sc-carousel-dot__dot"
+<button
+  class="sc-carousel-button sc-carousel-dot__dot"
   class:sc-carousel-dot__dot_active={active}
   on:click
-></div>
+></button>
 
 <style>
   :root {
@@ -17,6 +17,7 @@
     --sc-active-dot-size: 8px;
     --sc-dot-size-animation-time: 250ms;
   }
+
   .sc-carousel-dot__dot {
     background-color: var(--sc-color-rgb-light);
     border-radius: 50%;
