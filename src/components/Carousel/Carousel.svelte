@@ -36,7 +36,7 @@
       'loaded': () => loaded = value,
     })(key)
   })
- 
+
   const dispatch = createEventDispatcher()
 
   /**
@@ -119,7 +119,7 @@
   export let swiping = true
 
   /**
-   * Number of particles to show 
+   * Number of particles to show
    */
   export let particlesToShow = 1
   $: {
@@ -127,7 +127,7 @@
   }
 
   /**
-   * Number of particles to scroll 
+   * Number of particles to scroll
    */
   export let particlesToScroll = 1
   $: {
@@ -161,7 +161,7 @@
   }) => {
     pageWindowWidth = width
     data.particleWidth = pageWindowWidth / data.particlesToShow
-    
+
     applyParticleSizes({
       particlesContainerChildren: particlesContainer.children,
       particleWidth: data.particleWidth,
@@ -240,10 +240,10 @@
 
   function handleHovered(event) {
     data.focused = event.detail.value
-  } 
+  }
   function handleTapped() {
     methods.toggleFocused()
-  } 
+  }
 
   function showPrevPage() {
     methods.showPrevPage()
