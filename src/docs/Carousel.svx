@@ -129,6 +129,39 @@
 
 <Divider />
 
+## Marquee mode!anchorId:marquee-mode;
+<Carousel
+  autoplayDuration={0}
+  duration={5000}
+  autoplay
+  timingFunction="linear"
+  dots={false}
+  arrows={false}
+  swiping={false}
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+
+```jsx
+<Carousel
+  autoplayDuration={0}
+  duration={5000}
+  autoplay
+  timingFunction="linear"
+  dots={false}
+  arrows={false}
+  swiping={false}
+>
+  {#each colors as { color, text } (color)}
+    <Color {color} {text} />
+  {/each}
+</Carousel>
+```
+
+<Divider />
+
 ## Lazy loading of images!anchorId:features-lazy-loading;
 <Carousel
   let:loaded
