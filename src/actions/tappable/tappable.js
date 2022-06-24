@@ -42,7 +42,6 @@ export function tappable(node) {
   }
 
   function handleTapend(event) {
-    event.preventDefault();
     removeFocusoutEventListener(node, handleTapend)
 
     const touch = event.changedTouches[0]
