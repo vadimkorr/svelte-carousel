@@ -62,28 +62,25 @@ const config = {
 ```jsx
 
 <script>
-  import { onMount } from 'svelte';
+  import Carousel from 'svelte-carousel';
+  import { browser } from '$app/env';
 
-  let Carousel; // for saving Carousel component class
   let carousel; // for calling methods of the carousel instance
-  onMount(async () => {
-    const module = await import('svelte-carousel');
-    Carousel = module.default;
-  });
-
+  
   const handleNextClick = () => {
     carousel.goToNext()
   }
 </script>
 
-<svelte:component
-  this={Carousel}
+{#if browser}
+<Carousel
   bind:this={carousel}
 >
   <div>1</div>
   <div>2</div>
   <div>3</div>
-</svelte:component>
+</Carousel>
+{/if}
 
 <button on:click={handleNextClick}>Next</button>
 ```
