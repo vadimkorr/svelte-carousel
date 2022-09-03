@@ -292,7 +292,7 @@
         "
         bind:this={particlesContainer}
       >
-        <slot {loaded}></slot>
+        <slot {loaded} {currentPageIndex}></slot>
       </div>
       {#if autoplayProgressVisible}
         <div class="sc-carousel-progress__container">
