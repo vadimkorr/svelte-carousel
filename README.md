@@ -73,13 +73,13 @@ const config = {
 </script>
 
 {#if browser}
-<Carousel
-  bind:this={carousel}
->
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</Carousel>
+  <Carousel
+    bind:this={carousel}
+  >
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+  </Carousel>
 {/if}
 
 <button on:click={handleNextClick}>Next</button>
