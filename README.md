@@ -52,7 +52,11 @@ const config = {
   // existing props
   kit: {
     // existing props
-    vite: { optimizeDeps: { include: ['lodash.get', 'lodash.isequal', 'lodash.clonedeep'] } }
+    vite: {
+      optimizeDeps: {
+        include: ['lodash.get', 'lodash.isequal', 'lodash.clonedeep']
+      }
+    }
   }
 }
 ```
@@ -94,7 +98,6 @@ export default defineConfig({
     include: ['lodash.get', 'lodash.isequal', 'lodash.clonedeep']
   }
 })
-
 ```
 
 2. Import and use it:
