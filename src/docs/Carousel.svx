@@ -389,13 +389,16 @@ This slot takes content for the carousel.
 
 Slot props:
 
-| Prop              | Type       | Description                                                          | 
-|-------------------|------------|----------------------------------------------------------------------|
-| `loaded`          | `number[]` | Contains indexes of pages to be loaded. Can be used for lazy loading |
+| Prop               | Type       | Description                                                          | 
+|--------------------|------------|----------------------------------------------------------------------|
+| `loaded`           | `number[]` | Contains indexes of pages to be loaded. Can be used for lazy loading |
+| `currentPageIndex` | `number`   | Represents current page index (start from 0)                         |
+
 
 ```jsx
 <Carousel
   let:loaded
+  let:currentPageIndex
 >
   <div>
     <!-- -->
