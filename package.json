@@ -4,6 +4,7 @@
   "description": "Svelte carousel",
   "main": "src/main.js",
   "author": "vadimkorr",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vadimkorr/svelte-carousel.git"
