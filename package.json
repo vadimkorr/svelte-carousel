@@ -3,6 +3,7 @@
   "version": "1.0.20",
   "description": "Svelte carousel",
   "main": "src/main.js",
+  "module": "src/main.js",
   "author": "vadimkorr",
   "type": "module",
   "repository": {
