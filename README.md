@@ -68,7 +68,7 @@ const config = {
 
 <script>
   import Carousel from 'svelte-carousel';
-  import { browser } from '$app/env';
+  import { browser } from '$app/environment';
 
   let carousel; // for calling methods of the carousel instance
   
