@@ -1,6 +1,6 @@
 {
   "name": "svelte-carousel",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Svelte carousel",
   "main": "src/main.js",
   "module": "src/main.js",
@@ -57,6 +57,6 @@
     "svelte-loader": "^2.13.6"
   },
   "dependencies": {
-    "simply-reactive": "vadimkorr/simply-reactive#1.0.2"
+    "easy-reactive": "^1.0.2"
   }
 }

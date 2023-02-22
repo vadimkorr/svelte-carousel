@@ -1,4 +1,4 @@
-import simplyReactive from 'simply-reactive'
+import easyReactive from 'easy-reactive'
 
 import { NEXT, PREV } from '../../direction'
 import {
@@ -20,7 +20,7 @@ function createCarousel(onChange) {
     },
   })
 
-  const reactive = simplyReactive(
+  const reactive = easyReactive(
     {
       data: {
         particlesCountWithoutClones: 0,
