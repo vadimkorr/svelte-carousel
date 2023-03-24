@@ -4758,10 +4758,10 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-easy-reactive@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/easy-reactive/-/easy-reactive-1.0.2.tgz#54aba8620625980b3cc9da788c9eebea51105253"
-  integrity sha512-mcL3o1qh5LCY1590aRp1cNNNA6ul5+WgNnvonw3eYFDHdy+8wKXO2qzZNBZ1LUY+HrDnGRGA1x1ECRHEIUtsWw==
+easy-reactive@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/easy-reactive/-/easy-reactive-1.0.3.tgz#8ebc36b185496284e22271606dd8144ecbd09501"
+  integrity sha512-ZB5HZNF3pmrrL+tNodtEeGp17LwmbHi2zRVYZWcM7FXSXVQkKw13RYyEURcaZCyVMY37kxTZA1q71pheJHKxUA==
   dependencies:
     lodash.clonedeep "^4.5.0"
     lodash.get "^4.4.2"
