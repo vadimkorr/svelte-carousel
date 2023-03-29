@@ -125,7 +125,6 @@
   /**
    * Responsiveness array
    */
-  let screenWidth = window?.innerWidth;
   export let breakpoints = [];
 
   /**
@@ -212,18 +211,21 @@
 
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }
-    })()
+    })();
 
     const handleResize = () => { //handleresize for responsiveness
       let index_of_closest_breakpoint = 0;
       breakpoints.forEach((breakpoint,i) => {
-        if (window.innerWidth >= breakpoint?.width ?? 0) {
+        if (window.innerWidth >= breakpoint.width) {
           index_of_closest_breakpoint = i;
         }
-      })
-      particlesToShow = breakpoints[index_of_closest_breakpoint]?.particlesToShow 
-                        ?? 
-                        console.error("Please define particlesToShow for all elements in breakpoints array");
+      });
+      if (breakpoints[index_of_closest_breakpoint].particlesToShow) {
+        particlesToShow = breakpoints[index_of_closest_breakpoint].particlesToShow;
+      }
+      else {
+        console.error("Please define particlesToShow for all elements in breakpoints array");
+      }
     };
 
     window.addEventListener('resize', handleResize);
