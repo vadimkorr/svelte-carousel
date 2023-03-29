@@ -123,9 +123,15 @@
   export let swiping = true
 
   /**
+   * Responsiveness array
+   */
+  let screenWidth = window?.innerWidth;
+  export let breakpoints = [];
+
+  /**
    * Number of particles to show
    */
-  export let particlesToShow = 1
+  export let particlesToShow = 1  
   $: {
     data.particlesToShowInit = particlesToShow
   }
@@ -137,6 +143,7 @@
   $: {
     data.particlesToScrollInit = particlesToScroll
   }
+
 
   export async function goTo(pageIndex, options) {
     const animated = get(options, 'animated', true)
@@ -206,6 +213,24 @@
         pageWindowElementResizeObserver.observe(pageWindowElement);
       }
     })()
+
+    const handleResize = () => { //handleresize for responsiveness
+      let index_of_closest_breakpoint = 0;
+      breakpoints.forEach((breakpoint,i) => {
+        if (window.innerWidth >= breakpoint?.width ?? 0) {
+          index_of_closest_breakpoint = i;
+        }
+      })
+      particlesToShow = breakpoints[index_of_closest_breakpoint]?.particlesToShow 
+                        ?? 
+                        console.error("Please define particlesToShow for all elements in breakpoints array");
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   })
 
   onDestroy(() => {

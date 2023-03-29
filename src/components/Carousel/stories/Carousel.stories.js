@@ -2,6 +2,7 @@ import CarouselView from './CarouselView.svelte'
 import CarouselViewCustomDots from './CarouselViewCustomDots.svelte'
 import CarouselViewCustomArrows from './CarouselViewCustomArrows.svelte'
 import CarouselViewMethods from './CarouselViewMethods.svelte'
+import CarouselViewResponsive from './CarouselViewResponsive.svelte';
 
 export default {
   title: 'Carousel',
@@ -31,3 +32,9 @@ const TemplateMethods = ({ ...args }) => ({
   props: args,
 })
 export const WithMethods = TemplateMethods.bind({})
+
+const TemplateBreakpoints = ({ ...args }) => ({
+  Component: CarouselViewResponsive,
+  props: args,
+})
+export const WithBreakpoints = TemplateBreakpoints.bind({})
