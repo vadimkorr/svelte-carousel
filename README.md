@@ -142,6 +142,21 @@ export default defineConfig({
 | `swiping`                 | `boolean`  | `true`          | Enables swiping                               |
 | `particlesToShow`         | `number`   | `1`             | Number of elements to show                    |
 | `particlesToScroll`       | `number`   | `1`             | Number of elements to scroll                  |
+| `breakpoints`             | `array`    | `[]`            | Set responsive behavior of particesToShow on  |
+|                           |            |                 | different screensizes                         |
+
+## Breakpoints/Responsive design
+
+The structure of the array is 
+
+```js
+[
+    { width: 0, particlesToShow: 1 }, //minimum 1 particle
+    { width: 600, particlesToShow: 2 }, //at 600px 2
+    { width: 1000, particlesToShow: 3 }, //1000px, 3
+    { width: 1500, particlesToShow: 4} //1500px and above, 4
+]
+```
 
 ## Events
 
