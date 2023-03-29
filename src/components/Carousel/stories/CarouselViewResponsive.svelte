@@ -64,7 +64,7 @@
   /**
    * Number of particles to show 
    */
-  export let particlesToShow = 1
+  export let particlesToShow = 4
 
   /**
    * Number of particles to scroll 
@@ -89,6 +89,13 @@
     { color: '#ccf3e2', text: '1' },
     { color: '#b2edd3', text: '2' }
   ]
+
+  const breakpoints = [
+    { width: 0, particlesToShow: 1 },
+    { width: 600, particlesToShow: 2 },
+    { width: 1000, particlesToShow: 3 },
+    { width: 1500, particlesToShow: 4}
+  ]
 </script>
 
 <div class="main-container">
@@ -107,6 +114,7 @@
     {swiping}
     {particlesToShow}
     {particlesToScroll}
+    {breakpoints}
     on:pageChange={
       event => console.log(`Current page index: ${event.detail}`)
     }

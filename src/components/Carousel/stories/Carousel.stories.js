@@ -37,4 +37,4 @@ const TemplateBreakpoints = ({ ...args }) => ({
   Component: CarouselViewResponsive,
   props: args,
 })
-export const WithBreakpoints = TemplateBreakpoints.bind({})
+export const WithBreakpoints = TemplateBreakpoints.bind({},{})
