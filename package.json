@@ -57,6 +57,6 @@
     "svelte-loader": "^2.13.6"
   },
   "dependencies": {
-    "easy-reactive": "1.0.3"
+    "easy-reactive": "1.0.4"
   }
 }
