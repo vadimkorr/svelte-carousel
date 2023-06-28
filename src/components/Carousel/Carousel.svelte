@@ -159,10 +159,9 @@
   let pageWindowWidth = 0
   let pageWindowElement
   let particlesContainer
+  let pageWindowElementResizeObserver
 
-  const pageWindowElementResizeObserver = createResizeObserver(({
-    width,
-  }) => {
+  const pageWindowElementResizeObserverHandler = ({ width }) => {
     pageWindowWidth = width
     data.particleWidth = pageWindowWidth / data.particlesToShow
 
@@ -171,7 +170,7 @@
       particleWidth: data.particleWidth,
     })
     methods.offsetPage({ animated: false })
-  })
+  }
 
   function addClones() {
     const {
@@ -191,6 +190,7 @@
 
   onMount(() => {
     (async () => {
+      pageWindowElementResizeObserver = createResizeObserver(pageWindowElementResizeObserverHandler)
       await tick()
       if (particlesContainer && pageWindowElement) {
         data.particlesCountWithoutClones = particlesContainer.children.length
@@ -209,7 +209,9 @@
   })
 
   onDestroy(() => {
-    pageWindowElementResizeObserver.disconnect()
+    if (pageWindowElementResizeObserver) {
+      pageWindowElementResizeObserver.disconnect()
+    }
     progressManager.reset()
   })
 
