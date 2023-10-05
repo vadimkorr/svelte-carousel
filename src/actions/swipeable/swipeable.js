@@ -47,6 +47,16 @@ export function swipeable(node, { thresholdProvider }) {
     dispatch('swipeStart', { x, y })
     addMoveEventListener(window, handleMove)
     addEndEventListener(window, handleUp)
+    // Prevents link text from displaying when content is swiped.
+    event.preventDefault();    
+  }
+
+  function checkShouldOpenLink(node) {
+    if (Math.abs(moved) > 10) {
+      node.addEventListener('click', (event) => event.preventDefault(event), {
+        once: true,
+      });
+    }
   }
 
   function handleMove(event) {
@@ -66,12 +76,14 @@ export function swipeable(node, { thresholdProvider }) {
       dispatch('swipeThresholdReached', { direction: moved > 0 ? PREV : NEXT })
       removeEndEventListener(window, handleUp)
       removeMoveEventListener(window, handleMove)
+      checkShouldOpenLink(node);
     }
   }
 
   function handleUp(event) {
     removeEndEventListener(window, handleUp)
     removeMoveEventListener(window, handleMove)
+    checkShouldOpenLink(node);
 
     isTouching = false
 
