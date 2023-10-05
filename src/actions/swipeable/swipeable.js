@@ -52,7 +52,8 @@ export function swipeable(node, { thresholdProvider }) {
   }
 
   function checkShouldOpenLink(node) {
-    if (Math.abs(moved) > 10) {
+    const linkOpenThreshold = 10;
+    if (Math.abs(moved) > linkOpenThreshold) {
       node.addEventListener('click', (event) => event.preventDefault(event), {
         once: true,
       });
