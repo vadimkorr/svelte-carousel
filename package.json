@@ -5,6 +5,11 @@
   "main": "src/main.js",
   "module": "src/main.js",
   "svelte": "src/main.js",
+  "exports": {
+    ".": {
+      "svelte": "./src/main.js"
+    }
+  },
   "author": "vadimkorr",
   "type": "module",
   "repository": {
